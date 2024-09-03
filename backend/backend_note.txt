@@ -1,0 +1,17 @@
+1. basic setup:
+    django-admin startproject server .
+    add rest_framework, corsheaders to INSTALLED_APPS
+    python manage.py startapp accounts
+    add accounts to INSTALLED_APPS (local apps go lowest)
+    pip install django-environ
+
+2. environment variables:
+    import django-environ
+    create an env instance
+    add default debug value to that instance
+    create a .env file next to server folder
+    make env instance to read from that file
+    move secet_key and debug to .env file
+    update settings.py (secet_key and debug) to read from env instance
+
+3. add custsom user model to accounts
