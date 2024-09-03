@@ -1,9 +1,12 @@
 1. basic setup:
+    pip install django djangorestframework
+    pip install django-cors-headers
     django-admin startproject server .
     add rest_framework, corsheaders to INSTALLED_APPS
     python manage.py startapp accounts
     add accounts to INSTALLED_APPS (local apps go lowest)
     pip install django-environ
+    pip install djangorestframework-simplejwt
 
 2. environment variables:
     import django-environ
@@ -14,4 +17,15 @@
     move secet_key and debug to .env file
     update settings.py (secet_key and debug) to read from env instance
 
-3. add custsom user model to accounts
+3. add configs:
+    add cors headers middleware to MIDDLEWARES above common middleware or whitenoise
+    add REST_FRAMEWORK config to settings.py
+    add SIMPLE_JWT to settings.py (configs for tokens)
+
+4. custom user model
+    add custom user model to accounts (should be called CustomUser to avoid conflict)
+    add OTP model to accounts (could be added later as well)
+    update/add AUTH_USER_MODEL to settings.py
+    add UserManager to managers.py in accounts
+    add CustomUser to admin.py in accounts
+    make and apply migrations
