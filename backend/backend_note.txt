@@ -29,3 +29,11 @@
     add UserManager to managers.py in accounts
     add CustomUser to admin.py in accounts
     make and apply migrations
+    python manage.py makemigrations (optional: accounts)
+    python manage.py migrate
+    create superuser: admin@example.com-Arman-Karimi-shit123*
+    python manage.py createsuperuser
+    add tests
+
+5. adding auth routes:
+    
