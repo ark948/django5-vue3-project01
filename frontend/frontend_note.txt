@@ -23,3 +23,17 @@
 4. adding register feature
     register feature will have a component that will render the registration form
     no need for a seperate registerView, it can be rendered in home view
+
+5. adding a test connection (ok)
+    create a new component called GetData.vue
+    this component will get some sample data from backend using axios
+    and will be rendered in home
+    process:
+    component added,
+    path added,
+    link in HomeVue,
+    create view in backend: done + url
+    need to install axios, done
+    adding .env file with backend api address and port in it
+    creating axios config in api.js
+    need to configure cors in backend

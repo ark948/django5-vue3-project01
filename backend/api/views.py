@@ -11,3 +11,9 @@ class RootAPIView(APIView):
         return Response({
             "auth": reverse("accounts:index", request=request),
         })
+    
+class TestFrontendConnection(APIView):
+    def get(self, request):
+        return Response({
+            "info": "You getting this?"
+        })

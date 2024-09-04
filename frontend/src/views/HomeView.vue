@@ -10,5 +10,8 @@
         <RouterLink to="/register">
             Register
         </RouterLink>
+        <RouterLink to="/get-data">
+            send test request to backend
+        </RouterLink>
     </div>
 </template>

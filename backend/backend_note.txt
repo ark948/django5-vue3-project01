@@ -45,3 +45,7 @@
     adding email verification view
     email verification serializer that only has one field (otp)
     adding url (ok)
+
+6. configuring CORS:
+    corsheaders must exist in INSTALLED_APPS
+    add CORS_ALLOWED_ORIGINS and  CSRF_TRUSTED_ORIGINS to settings.py
