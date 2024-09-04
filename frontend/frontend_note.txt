@@ -1,11 +1,12 @@
-frontend> npm init vue@latest .
-> project name: frontend
-npm install
-npm run dev
+1. initial frontend setup
+    frontend> npm init vue@latest .
+    > project name: frontend
+    npm install
+    npm run dev
 
-delete components folder
-completely clean App.vue
-clear everything in assets/main.css except the import at the top
+    delete components folder
+    completely clean App.vue
+    clear everything in assets/main.css except the import at the top
 
 2. adding router
     npm install vue-router
@@ -17,4 +18,8 @@ clear everything in assets/main.css except the import at the top
 
 3. adding home view (as same time as router, router needs at least one component)
     create views folder, components folder, styles folder
-    createa a HomeView folder in views
+    create a HomeView folder in views
+
+4. adding register feature
+    register feature will have a component that will render the registration form
+    no need for a seperate registerView, it can be rendered in home view
