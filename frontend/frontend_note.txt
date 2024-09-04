@@ -2,3 +2,19 @@ frontend> npm init vue@latest .
 > project name: frontend
 npm install
 npm run dev
+
+delete components folder
+completely clean App.vue
+clear everything in assets/main.css except the import at the top
+
+2. adding router
+    npm install vue-router
+    1. create a router instance inside router folder
+    2. the root path will be using HomeView as component option (although it isn't a component but a view)
+    3. export the router
+    4. register the router in main.js
+    5. use router link in App.vue
+
+3. adding home view (as same time as router, router needs at least one component)
+    create views folder, components folder, styles folder
+    createa a HomeView folder in views
