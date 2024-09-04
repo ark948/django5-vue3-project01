@@ -1,0 +1,4 @@
+frontend> npm init vue@latest .
+> project name: frontend
+npm install
+npm run dev
