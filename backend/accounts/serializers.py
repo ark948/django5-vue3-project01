@@ -38,3 +38,7 @@ class UserRegisterSerializer(ModelSerializer):
             password=validated_data.get('password'),
         )
         return user
+    
+
+class UserOTPSerializer(Serializer):
+    otp = serializers.IntegerField(max_value=999999, min_value=100000, required=True)

@@ -1,1 +1,2 @@
 resending email verification number
+more secure one time passwords
