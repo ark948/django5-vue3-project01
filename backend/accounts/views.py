@@ -36,7 +36,6 @@ class RegisterUserView(GenericAPIView):
                 'data': user,
                 'message': f'Hi, thanks for signing up. please check your email.',
             }, status=status.HTTP_201_CREATED)
-        print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

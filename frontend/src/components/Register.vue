@@ -21,18 +21,27 @@ function handleSubmit(e) {
     try {
         if (!email || !first_name || !last_name || !password || !password2) {
             errorMessage.value = "All inputs are required."
+            console.log("request blocked.")
+            return
         }
     } catch (error) { console.log(error) }
 
     try {
-        const res = api.post('/auth/register/', formdata)
-        if (res.status === 201) {
-            console.log("Good")
-        } else {
-            console.log("Error")
-        }
+        api.post('auth/register/', formdata)
+            .then(response => {
+                if (response.status === 201) {
+                    console.log("Success")
+                    responseMessage.value = response.data.message
+                }
+            })
+            .catch(error => {
+                console.log(error)
+                errorMessage.value = error
+            })
+            .finally(() => console.log(`${'-'.repeat(30)}`))
     } catch (error) {
-        console.log("try-catch-error", error)
+        console.log(error)
+        return
     }
 }
 
