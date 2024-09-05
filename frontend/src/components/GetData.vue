@@ -6,7 +6,7 @@ const message = ref("")
 
 function get_data() {
     try {
-        api.get('/test/')
+        api.get('test/')
             .then((response) => {
                 console.log("Success")
                 message.value = response.data.info
@@ -26,6 +26,13 @@ function get_data() {
         <div class="data">{{ message }}</div>
         <button @click="get_data">Request data</button>
     </div>
+    <div class="container">
+        <RouterLink id="back" to='/'>Back to home</RouterLink>
+    </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+    .container {
+        margin: 50px;
+    }
+</style>

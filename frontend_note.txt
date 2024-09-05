@@ -29,6 +29,9 @@
     (althou i want to see what happens if we don't)
     (quick idea, let's just create a test post request)
     (check if csrf_token is there)
+    testuser02@gmail.com-Max-Payne-home123*
+    fixed huge problem: for data with multiple parts use reactive instead of ref
+    use ref for primitive data structures like int and string
 
 5. adding a test connection - GET (ok)
     create a new component called GetData.vue
@@ -48,3 +51,6 @@
 6. adding a test connection - POST
     first version without using state variable (ok)
     second version using reactive variables (ok)
+
+7. fixing axios api baseURL
+    fixed baseURL, trailing slash was required

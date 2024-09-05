@@ -7,6 +7,7 @@ import axios from 'axios';
 const answer_input = ref("")
 const answer_response = ref("")
 
+// not used
 function handleSubmit(e) {
     e.preventDefault()
     try {
@@ -40,7 +41,7 @@ function sendAsnwer(e) {
     
     // submitting
     try {
-        api.post('http://127.0.0.1:8000/test-post/', {'message': answer_input.value})
+        api.post('test-post/', {'message': answer_input.value})
             .then(response => {
                 answer_response.value = response.data.Answer
             })
@@ -70,4 +71,47 @@ function sendAsnwer(e) {
             <p>{{ answer_response }}</p>
         </div>
     </div>
+    <div class="container">
+        <RouterLink id="back" to='/'>Back to home</RouterLink>
+    </div>
 </template>
+
+<style scoped>
+    .container {
+        display: flex;  
+        justify-content: center;  
+        align-items: center;
+        margin: 20px;
+    }
+    .container h4 {
+        font-weight: 500;
+    }
+
+    .container form {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .container form label {
+        font-weight: 500;
+    }
+    .container input {
+        width: 100%;
+        border-radius: 16px;
+        padding: 10px;
+        border: 2px solid #42B883;
+        margin-top: 20px;
+    }
+    
+    .container button {
+        width: 50%;
+        margin: 20px 100px;
+        border-radius: 16px;
+        height: 30px;
+        color: #35495E;
+        border: 2px solid #35495E;
+        
+    }
+</style>
