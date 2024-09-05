@@ -46,4 +46,5 @@
     the url in env not working
 
 6. adding a test connection - POST
-    first version without using state variable
+    first version without using state variable (ok)
+    second version using reactive variables (ok)

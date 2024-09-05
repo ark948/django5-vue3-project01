@@ -65,4 +65,4 @@
     (i previously tested this using httpie, now use frontend)
     add test view (test this in frontend)
 
-9. added a post test request in api
+9. added a post test request in api (ok)
