@@ -4,9 +4,11 @@ console.log("Register");
 import api from '@/api';
 import { reactive, ref } from 'vue';
 import router from '@/router';
+import { useNotification } from '@kyvg/vue3-notification';
 
 const errorMessage = ref("")
 const responseMessage = ref("")
+const { notify } = useNotification()
 const formdata = reactive({
     first_name: "",
     last_name: "",
@@ -31,7 +33,11 @@ function handleSubmit(e) {
             .then(response => {
                 if (response.status === 201) {
                     console.log("Success")
-                    responseMessage.value = response.data.message
+                    // responseMessage.value = response.data.message
+                    notify({
+                        title: "Registration",
+                        text: 'Successfully registered. Please check your email.'
+                    })
                     router.push({ name: 'verify_email' })
                 }
             })

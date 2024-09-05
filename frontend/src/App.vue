@@ -4,13 +4,11 @@ import { RouterView } from 'vue-router';
 
 <template>
     <div class="container">
+        <notifications position="top" width="400"/>
         <RouterView />
     </div>
 </template>
 
 <style scoped>
-.container {
-    max-width: 1000px;
-    margin: 0 auto;
-}
+
 </style>

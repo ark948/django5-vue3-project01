@@ -57,3 +57,14 @@
 
 7. fixing axios api baseURL
     fixed baseURL, trailing slash was required
+
+8. Email verification process:
+    small problem...
+    after successful registration, we are automatically recirected to email verification page
+    this makes successful registration message moot.
+    need a way to display kind of a floating notification message
+    adding vue3-notification package by @kyvg
+    > npm install --save @kyvg/vue3-notification
+    add it to main.js
+    add global component to App.vue
+    done, but looks terrible and i have not been able to customize it.
