@@ -1,3 +1,6 @@
+bookmarker project + browser extension:
+quickly bookmark any page
+
 1. basic setup:
     pip install django djangorestframework
     pip install django-cors-headers

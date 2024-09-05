@@ -3,7 +3,7 @@ console.log("Register");
 
 import api from '@/api';
 import { reactive, ref } from 'vue';
-import axios from 'axios'
+import router from '@/router';
 
 const errorMessage = ref("")
 const responseMessage = ref("")
@@ -32,13 +32,19 @@ function handleSubmit(e) {
                 if (response.status === 201) {
                     console.log("Success")
                     responseMessage.value = response.data.message
+                    router.push({ name: 'verify_email' })
                 }
             })
             .catch(error => {
                 console.log(error)
                 errorMessage.value = error
             })
-            .finally(() => console.log(`${'-'.repeat(30)}`))
+            .finally(() => {
+                console.log(`${'-'.repeat(30)}`)
+                for (let i in formdata) {
+                    formdata[i] = ""
+                }
+            })
     } catch (error) {
         console.log(error)
         return
@@ -95,12 +101,13 @@ function handleSubmit(e) {
     width: 90%;
     padding: 10px;
     margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border: 2px solid #42B883;
+    border-radius: 8px;
     box-sizing: border-box;
 }
 
 .form-label {
+    font-size: 20px;
     padding: 10px;
 }
 
@@ -114,6 +121,7 @@ function handleSubmit(e) {
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
+    font-size: 18px;
 }
 
 .form-button:hover {

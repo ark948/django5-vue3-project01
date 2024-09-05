@@ -32,6 +32,9 @@
     testuser02@gmail.com-Max-Payne-home123*
     fixed huge problem: for data with multiple parts use reactive instead of ref
     use ref for primitive data structures like int and string
+    done - may need some small cleaning
+    after successful registration, navigate to otp email verification page
+    for that, use router.push({name: ''}) (import the router object)
 
 5. adding a test connection - GET (ok)
     create a new component called GetData.vue
