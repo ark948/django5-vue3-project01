@@ -1,29 +1,23 @@
 <script setup>
-    import api from '@/api';
-    import axios from 'axios';
-    import { ref } from 'vue';
+import api from '@/api';
+import { ref } from 'vue';
 
-    const message = ref("")
+const message = ref("")
 
-    const get_data = () => {
-        try {
-            api.get('/api/test/')
-                .then(function (response) {
-                    console.log("SUCCESS")
-                    message.value = response.data.info
-                })
-                .catch(function (error) {
-                    console.log(error)
-                    message.value = "ERROR"
-                })
-                .finally(() => {
-                    console.log("DONE")
-                })
-        } catch (error) {
-            console.log(error);
-        }
+function get_data() {
+    try {
+        api.get('/api/test/')
+            .then((response) => {
+                console.log("Success")
+                message.value = response.data.info
+            })
+            .catch((error) => console.log(error))
+            .finally(() => console.log("Done"))
+    } catch (error) {
+        console.log(error)
     }
-    
+}
+
 </script>
 
 <template>
@@ -34,6 +28,4 @@
     </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -37,3 +37,4 @@
     adding .env file with backend api address and port in it
     creating axios config in api.js
     need to configure cors in backend
+    the url in env not working
