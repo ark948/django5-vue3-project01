@@ -35,7 +35,7 @@
     python manage.py createsuperuser
     add tests
 
-5. adding auth routes:
+5. adding auth routes (register and verifyEmail):
     added register serializer
     add register view
     added a url path for register
@@ -49,3 +49,20 @@
 6. configuring CORS:
     corsheaders must exist in INSTALLED_APPS
     add CORS_ALLOWED_ORIGINS and  CSRF_TRUSTED_ORIGINS to settings.py
+
+7. adding login:
+    add login serializer
+    add login view to accounts/views.py
+    login serializer uses RefreshToken from djangorestframework_simplejwt to generate...
+    access token and refresh token for user (it is a method in CustomUser model)
+    this requires installation of djangorestframework_simplejwt (if not installed yet)
+    also SIMPLE_JWT and REST_FRAMEWORK (authentication class) config must exist in settings.py
+    add url for login
+    test the login with testuser01@gmail.com-Nick-Tole-home123*
+    test was successful, email, full_name, access and refresh token were returned
+
+8. add test view (accessible to logged in users only)
+    (i previously tested this using httpie, now use frontend)
+    add test view (test this in frontend)
+
+9. added a post test request in api

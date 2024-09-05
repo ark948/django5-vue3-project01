@@ -1,2 +1,3 @@
 resending email verification number
 more secure one time passwords
+admin interface in frontend

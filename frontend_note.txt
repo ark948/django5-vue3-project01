@@ -23,8 +23,14 @@
 4. adding register feature
     register feature will have a component that will render the registration form
     no need for a seperate registerView, it can be rendered in home view
+    register form done,
+    bind input values to state variable (we use v-model to quickly achieve this...)
+    (instead of manully get the event target value)
+    (althou i want to see what happens if we don't)
+    (quick idea, let's just create a test post request)
+    (check if csrf_token is there)
 
-5. adding a test connection (ok)
+5. adding a test connection - GET (ok)
     create a new component called GetData.vue
     this component will get some sample data from backend using axios
     and will be rendered in home
@@ -38,3 +44,6 @@
     creating axios config in api.js
     need to configure cors in backend
     the url in env not working
+
+6. adding a test connection - POST
+    first version without using state variable

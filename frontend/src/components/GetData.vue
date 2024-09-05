@@ -6,7 +6,7 @@ const message = ref("")
 
 function get_data() {
     try {
-        api.get('/api/test/')
+        api.get('/test/')
             .then((response) => {
                 console.log("Success")
                 message.value = response.data.info
