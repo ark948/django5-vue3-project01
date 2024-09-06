@@ -68,4 +68,4 @@
     add it to main.js
     add global component to App.vue
     done, but looks terrible and i have not been able to customize it.
-    done
+    version 2 is better
