@@ -72,3 +72,12 @@
     version 3 using axios' own doc (moving on for now)
 
 9. adding login
+    login component
+    trying to render login component in HomeView (not working)
+    saving user info in localstorage...
+    need a way to create protected routes (only accessible to logged in users)
+    only logged in users should be able to access Profile page
+    using something called navigation gaurds (provided by vue-router)
+    in router file, we are going to protect profile route
+
+    first approach: Per-Route Gaurd
