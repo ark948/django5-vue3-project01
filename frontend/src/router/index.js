@@ -8,6 +8,9 @@ import VerifyEmail_v2 from "@/components/VerifyEmail_v2.vue";
 import Login from "@/components/Login.vue";
 import ProfileView from "@/views/ProfileView.vue";
 import GetData_opt from "@/components/GetData_opt.vue";
+import { useNotification } from "@kyvg/vue3-notification";
+
+const { notify } = useNotification()
 
 const routes = [
     { path: '/', component: HomeView, name: 'home' },
@@ -22,6 +25,7 @@ const routes = [
             let user = JSON.parse(localStorage.getItem('user'))
             if (!user) {
                 console.log("You cannot access this page.")
+                notify({type: 'error', title: "Error", text: "You cannot access this page."})
                 return false
             }
         }

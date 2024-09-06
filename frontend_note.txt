@@ -81,3 +81,4 @@
     in router file, we are going to protect profile route
 
     first approach: Per-Route Gaurd
+    another possible approach: Route Meta Fields

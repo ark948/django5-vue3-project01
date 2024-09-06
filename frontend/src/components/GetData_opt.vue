@@ -1,4 +1,5 @@
 <script>
+    import api from '@/api'
     export default {
         data() {
             return {
@@ -8,8 +9,14 @@
 
         methods: {
             getData() {
-                // axios req
-                this.message += "Button clicked."
+                api.get('test/')
+                    .then(response => {
+                        this.message += response.data.info
+                    })
+                    .catch(error => {
+                        this.message = error
+                    })
+                
             }
         },
     }
