@@ -15,6 +15,7 @@
         <p><RouterLink to="/verify-email">Verify Email address</RouterLink></p>
         <p><RouterLink to="/login">Login</RouterLink></p>
         <p><RouterLink to="/profile">Profile page</RouterLink></p>
+        <p><RouterLink to="/test-auth">Test Authenticated view</RouterLink></p>
     </div>
 </template>
 
