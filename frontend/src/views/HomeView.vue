@@ -11,6 +11,7 @@
         <p><RouterLink to="/get-data">Send get request to backend</RouterLink></p>
         <p><RouterLink to="/post-data">Send test data to backend</RouterLink></p>
         <p><RouterLink to="/verify-email">Verify Email address</RouterLink></p>
+        <p><RouterLink to="/login">Login</RouterLink></p>
     </div>
 </template>
 

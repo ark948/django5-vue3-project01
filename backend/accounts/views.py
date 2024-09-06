@@ -18,7 +18,8 @@ class AccountsIndexView(APIView):
     def get(self, request):
         return Response({
             "register": reverse('accounts:register', request=request),
-            "verify-email": reverse('accounts:verify_email', request=request)
+            "verify-email": reverse('accounts:verify_email', request=request),
+            "login": reverse('accounts:login', request=request)
         })
 
 

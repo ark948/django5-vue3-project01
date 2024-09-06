@@ -69,3 +69,6 @@
     add global component to App.vue
     done, but looks terrible and i have not been able to customize it.
     version 2 is better
+    version 3 using axios' own doc (moving on for now)
+
+9. adding login
