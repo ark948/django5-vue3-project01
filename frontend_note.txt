@@ -82,3 +82,5 @@
 
     first approach: Per-Route Gaurd
     another possible approach: Route Meta Fields
+
+    need to use axios interceptors as well

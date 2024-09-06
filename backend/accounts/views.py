@@ -10,6 +10,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework import status
 from utils.email import send_code_to_user
 from accounts.models import OneTimePassword
+from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 
@@ -69,3 +70,9 @@ class LoginUserView(GenericAPIView):
         serializer.is_valid(raise_exception=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
+
+class TestAuthenticationView(GenericAPIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        return Response({ "msg": "Yo Yo." }, status=status.HTTP_200_OK)
