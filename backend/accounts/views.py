@@ -51,13 +51,13 @@ class VerifyUserEmail(GenericAPIView):
                 user.is_verified = True
                 user.save()
                 return Response({
-                    'message': 'account email verified successfully',
+                    'message': 'Email account verified successfully, Thank you.',
                 }, status=status.HTTP_200_OK)
             return Response({
-                'message': 'code is invalid or user is already verified.'
+                'message': 'Code is invalid/expired or user is already verified.'
             }, status=status.HTTP_204_NO_CONTENT)
         except OneTimePassword.DoesNotExist:
-            return Response({'message': 'passcode not provided'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'This code was not provided.'}, status=status.HTTP_404_NOT_FOUND)
 
 
 class LoginUserView(GenericAPIView):

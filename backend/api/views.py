@@ -11,6 +11,7 @@ from rest_framework import status
 class RootAPIView(APIView):
     def get(self, request):
         return Response({
+            "admin": reverse("admin:index", request=request),
             "auth": reverse("accounts:index", request=request),
             "test": reverse("test", request=request),
             "test-post": reverse("test_post", request=request)
