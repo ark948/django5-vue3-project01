@@ -70,9 +70,9 @@ function sendAsnwer(e) {
         <div class="response">
             <p>{{ answer_response }}</p>
         </div>
-    </div>
-    <div class="container">
-        <RouterLink id="back" to='/'>Back to home</RouterLink>
+        <div class="link-container">
+            <RouterLink id="back" to='/'>Back to home</RouterLink>
+        </div>
     </div>
 </template>
 

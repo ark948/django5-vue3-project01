@@ -24,8 +24,10 @@
 </script>
 
 <template>
-    <button @click="getData">Update message</button>
-    <p>{{ message }}</p>
+    <div class="container">
+        <button @click="getData">Update message</button>
+        <p>{{ message }}</p>
+    </div>
 </template>
 
 <style scoped>

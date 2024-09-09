@@ -1,3 +1,4 @@
 resending email verification number
 more secure one time passwords
 admin interface in frontend
+cryptographically signed sessions instead of saving tokens in localStorage (security risks)

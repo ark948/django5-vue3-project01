@@ -1,3 +1,11 @@
+frontend structure:
+    framework: Vue 3 (node.js)
+    routing: vue-router
+    state management: Pinia
+    form package: Vee-Validate
+    form validation: Yup
+    
+
 1. initial frontend setup
     frontend> npm init vue@latest .
     > project name: frontend
@@ -85,4 +93,34 @@
 
     need to use axios interceptors as well
 
+    we need something else as well, State Management with vuex or Pinia
+
 10. testing TestAuthenticationView from TestAuth.vue
+
+11. setting up Pinia (for State Management)
+    for smaller single page applications, vue itself, does have a global state management solution.
+    it is also possible to implement this, using props and having a shared parent component.
+    but in larger projects and deeper trees of hierarchy, this causes an issue known as Prop Drilling.
+    same goes with using refs or emitted events. all lead to unmaintainable code.
+    - Simple State Management with Reactivity API:
+    we can use reactive for this. Also not recommended.
+    the only recommended approach is using a dedicated state management library such as vuex or Pinia.
+
+    setting up Pinia:
+    > npm install pinia
+    - create pinia instance in main.js
+    - documentation does not explain how to structure store files or even where to put the code
+    - making my own stores folder
+    - adding route protection to router.js
+    (note), upon successful login post request, user info must be saved into localStorage AND pinia state
+    same goes with logout (remove from both)
+    installing vee-validate and yup
+    -login component (v2) will send the information to auth store
+    auth store will do the login request process
+    if login successful, auth store will save the user info in localStorage and pinia global storage
+    from then, if a component needs to check if user is logged in, it can use the pinia global storage
+    logout button will be placed in profile component now, and later will be added to Nav component
+    complete the login v2 later
+    Nothing works.
+    resetting everything, modifying backend to return only a user object
+    and starting over

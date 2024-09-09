@@ -5,7 +5,9 @@
     import router from '@/router';
     import { useNotification } from '@kyvg/vue3-notification';
     import { ref, reactive } from 'vue';
+    // import useUserStore from '../store/user'
 
+    
     const { notify } = useNotification()
     const loadingIndicator = ref("")
     const responseMessage = ref("")
@@ -67,12 +69,12 @@
             <input v-model="logindata.password" type="password">
             <button>Login</button>
         </form>
-    </div>
-    <div class="message-container">
-        <p>{{ responseMessage }}</p>
-    </div>
-    <div class="link-container">
-        <RouterLink id="back" to='/'>Back to home</RouterLink>
+        <div class="message-container">
+            <p>{{ responseMessage }}</p>
+        </div>
+        <div class="link-container">
+            <RouterLink id="back" to='/'>Back to home</RouterLink>
+        </div>
     </div>
 </template>
 

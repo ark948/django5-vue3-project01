@@ -50,12 +50,12 @@
             <input v-model.trim="otp" type="number" name="otp">
             <button>Send</button>
         </form>
-    </div>
-    <div class="container-message">
-        <p>{{ messageResponse }}</p>
-    </div>
-    <div class="container-link">
-        <RouterLink id="back" to='/'>Back to home</RouterLink>
+        <div class="container-message">
+            <p>{{ messageResponse }}</p>
+        </div>
+        <div class="container-link">
+            <RouterLink id="back" to='/'>Back to home</RouterLink>
+        </div>
     </div>
 </template>
 

@@ -83,9 +83,9 @@ function handleSubmit(e) {
         <p class="response-message">
             {{ responseMessage }}
         </p>
-    </div>
-    <div class="container">
-        <RouterLink id="back" to='/'>Back to home</RouterLink>
+        <div class="container">
+            <RouterLink id="back" to='/'>Back to home</RouterLink>
+        </div>
     </div>
 </template>
 
