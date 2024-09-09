@@ -124,3 +124,23 @@ frontend structure:
     Nothing works.
     resetting everything, modifying backend to return only a user object
     and starting over
+    login complete with the help of "Jason Watmore's tutorial"
+
+12. adding authorization headers
+    need to use axios interceptors (on requests)
+    but first, let's test send a request with out any interceptors or hoeaders...
+    to a auth required django view,
+    sending get witout being logged in: returned 401 (UnAuthorized)
+    sending get with being logged in but no header: returned 401 (UnAuthorized)
+    sending get with being logged in and headers: still pending... update:
+    success, but has a very small unexpected behavior, sometimes, even though...
+    user is logged in and token exists, returns 401,
+    but upon refresh, everything works fine.
+    heavily modifying api.js
+
+    (what to do when access token is expired?)
+    we can ask the user to re-login, but this is a terrible idea (UX wise).
+    instead, we should automatically renew the access token by using refresh_token.
+    to implement this, we will use axios interceptors but for responses (implement later)
+
+    (also not let logged in users access login page)

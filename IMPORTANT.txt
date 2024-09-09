@@ -1,0 +1,1 @@
+Saving tokens in localStorage is not a secure.

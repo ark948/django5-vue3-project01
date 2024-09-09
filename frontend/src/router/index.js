@@ -10,6 +10,7 @@ import TestAuth from "@/components/TestAuth.vue";
 import Login_v4 from "@/components/Login_v4.vue";
 import ProfileView from "@/views/ProfileView.vue";
 import { useAuthStore } from '@/stores';
+import TestAuthRequiredView from "@/views/TestAuthRequiredView.vue";
 
 const { notify } = useNotification()
 
@@ -23,6 +24,7 @@ const routes = [
     { path: '/post-data', component: SendData, name: 'post_data' },
     { path: '/login', component: Login_v4, name: 'login' },
     { path: '/profile', component: ProfileView, name: "profile" },
+    { path: '/secret', component: TestAuthRequiredView, name: 'test'},
 ]
 
 const router = createRouter({
@@ -32,7 +34,7 @@ const router = createRouter({
 
 router.beforeEach(async (to) => {
     // redirect to login page if not logged in and trying to access a restricted page
-    const publicPages = ['/login', '/register'];
+    const publicPages = ['/login', '/register', '/secret'];
     const authRequired = !publicPages.includes(to.path);
     const auth = useAuthStore();
 

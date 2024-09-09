@@ -20,7 +20,8 @@ class AccountsIndexView(APIView):
         return Response({
             "register": reverse('accounts:register', request=request),
             "verify-email": reverse('accounts:verify_email', request=request),
-            "login": reverse('accounts:login', request=request)
+            "login": reverse('accounts:login', request=request),
+            "auth-required": reverse('accounts:auth_required', request=request)
         })
 
 
@@ -75,4 +76,4 @@ class TestAuthenticationView(GenericAPIView):
     permission_classes = [IsAuthenticated]
     
     def get(self, request):
-        return Response({ "msg": "Yo Yo." }, status=status.HTTP_200_OK)
+        return Response({ "msg": "Hooooooooooooooooray!!!" }, status=status.HTTP_200_OK)
