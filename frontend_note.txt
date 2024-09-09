@@ -143,4 +143,4 @@ frontend structure:
     instead, we should automatically renew the access token by using refresh_token.
     to implement this, we will use axios interceptors but for responses (implement later)
 
-    (also not let logged in users access login page)
+    (also not let logged in users access login page) (done, maybe later add improved version)

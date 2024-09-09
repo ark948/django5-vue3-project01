@@ -42,6 +42,10 @@ router.beforeEach(async (to) => {
         console.log('[Router] access to a route blocked.')
         auth.returnUrl = to.fullPath;
         return '/login';
+    } else if (auth.email && to.fullPath=='/login') {
+        alert("You are already logged in.")
+        console.log('[Router] Aleardy logged in, next path blocked.')
+        return '/'
     }
 });
 
