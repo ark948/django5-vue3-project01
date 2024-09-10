@@ -11,6 +11,7 @@ import Login_v4 from "@/components/Login_v4.vue";
 import ProfileView from "@/views/ProfileView.vue";
 import { useAuthStore } from '@/stores';
 import TestAuthRequiredView from "@/views/TestAuthRequiredView.vue";
+import ManualTokenRefresh from "@/views/ManualTokenRefresh.vue";
 
 const { notify } = useNotification()
 
@@ -25,6 +26,7 @@ const routes = [
     { path: '/login', component: Login_v4, name: 'login' },
     { path: '/profile', component: ProfileView, name: "profile" },
     { path: '/secret', component: TestAuthRequiredView, name: 'test'},
+    { path: '/manual-refresh', component: ManualTokenRefresh, name: 'manual_refresh' }
 ]
 
 const router = createRouter({
@@ -34,7 +36,7 @@ const router = createRouter({
 
 router.beforeEach(async (to) => {
     // redirect to login page if not logged in and trying to access a restricted page
-    const publicPages = ['/login', '/register', '/secret'];
+    const publicPages = ['/login', '/register', '/secret', '/verify-email'];
     const authRequired = !publicPages.includes(to.path);
     const auth = useAuthStore();
 

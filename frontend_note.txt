@@ -142,5 +142,9 @@ frontend structure:
     we can ask the user to re-login, but this is a terrible idea (UX wise).
     instead, we should automatically renew the access token by using refresh_token.
     to implement this, we will use axios interceptors but for responses (implement later)
+    (nevermind that, just adding a simple date check to see if refresh token is expired)
+    in api.js
+    need to test this by changing access_token lifetime to a very short time.
+    this is not working, token won't expire.
 
     (also not let logged in users access login page) (done, maybe later add improved version)

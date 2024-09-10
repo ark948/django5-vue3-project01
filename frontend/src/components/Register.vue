@@ -107,13 +107,13 @@ function handleSubmit(e) {
     width: 90%;
     padding: 10px;
     margin: 10px 0;
-    border: 2px solid #42B883;
+    border: 1px solid #42B883;
     border-radius: 8px;
     box-sizing: border-box;
 }
 
 .form-label {
-    font-size: 20px;
+    font-size: 15px;
     padding: 10px;
 }
 
@@ -127,7 +127,7 @@ function handleSubmit(e) {
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
-    font-size: 18px;
+    font-size: 15px;
 }
 
 .form-button:hover {

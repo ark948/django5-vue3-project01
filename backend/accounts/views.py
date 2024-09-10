@@ -4,7 +4,8 @@ from rest_framework.reverse import reverse
 from accounts.serializers import (
     UserRegisterSerializer,
     UserOTPSerializer,
-    LoginSerializer
+    LoginSerializer,
+    LogoutUserSerializer
 )
 from rest_framework.generics import GenericAPIView
 from rest_framework import status
@@ -21,7 +22,8 @@ class AccountsIndexView(APIView):
             "register": reverse('accounts:register', request=request),
             "verify-email": reverse('accounts:verify_email', request=request),
             "login": reverse('accounts:login', request=request),
-            "auth-required": reverse('accounts:auth_required', request=request)
+            "auth-required": reverse('accounts:auth_required', request=request),
+            "refresh_token": reverse('accounts:refresh_token', request=request)
         })
 
 
@@ -77,3 +79,14 @@ class TestAuthenticationView(GenericAPIView):
     
     def get(self, request):
         return Response({ "msg": "Hooooooooooooooooray!!!" }, status=status.HTTP_200_OK)
+    
+
+class LogoutUserView(GenericAPIView):
+    serializer_class = LogoutUserSerializer
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"msg": "Logout successful, token blacklisted."}, status=status.HTTP_200_OK)

@@ -31,5 +31,7 @@
             <Field name="password" type="password" />
             <button>Login</button>
         </Form>
+        <h4>Do you want to sign up?</h4>
+        <p><RouterLink to="/register">Link</RouterLink></p>
     </div>
 </template>

@@ -1,5 +1,4 @@
 <script setup>
-    import Login from '@/components/Login.vue';
     import { RouterLink } from 'vue-router'
     console.log("Home");
     import { useAuthStore } from '@/stores';
@@ -20,6 +19,7 @@
         <p><RouterLink to="/profile">Profile page</RouterLink></p>
         <p><RouterLink to="/test-auth">Test Authenticated view</RouterLink></p>
         <p><RouterLink to="/secret">Secret Path</RouterLink></p>
+        <p><RouterLink to="/manual-refresh">Manual token refresh</RouterLink></p>
         <p><a @click="authStore.logout()">Logout</a></p>
     </div>
 </template>

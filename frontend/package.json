@@ -11,6 +11,8 @@
   "dependencies": {
     "@kyvg/vue3-notification": "^3.3.0",
     "axios": "^1.7.7",
+    "dayjs": "^1.11.13",
+    "jwt-decode": "^4.0.0",
     "pinia": "^2.2.2",
     "vee-validate": "^4.13.2",
     "vue": "^3.4.29",

@@ -69,3 +69,6 @@ quickly bookmark any page
     add test view (test this in frontend)
 
 9. added a post test request in api (ok)
+10. logout needs to be added
+    add rest_framework_simplejwt.token_blacklist to isntalled_apps
+    run migrations
