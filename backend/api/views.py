@@ -14,7 +14,8 @@ class RootAPIView(APIView):
             "admin": reverse("admin:index", request=request),
             "auth": reverse("accounts:index", request=request),
             "test": reverse("test", request=request),
-            "test-post": reverse("test_post", request=request)
+            "test-post": reverse("test_post", request=request),
+            'bookmarker': reverse("bookmarker:index", request=request)
         })
     
 class TestFrontendConnection(APIView):
