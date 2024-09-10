@@ -1,5 +1,11 @@
 bookmarker project + browser extension:
 quickly bookmark any page
+(free version) -> only bookmarks + extension
+(paid version) -> bookmarks + folders + categories + 
+    bookmark includes account (email, username, password encrypted), + note + sharing + 
+    csv export and import + export to browser, import from browser +
+    page is up test (status code check)
+
 
 1. basic setup:
     pip install django djangorestframework
