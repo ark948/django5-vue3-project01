@@ -145,6 +145,8 @@ frontend structure:
     (nevermind that, just adding a simple date check to see if refresh token is expired)
     in api.js
     need to test this by changing access_token lifetime to a very short time.
-    this is not working, token won't expire.
+    this is not working, token won't expire. 
+
+    update: token expiration and refreshing works, need to duplicate it.
 
     (also not let logged in users access login page) (done, maybe later add improved version)

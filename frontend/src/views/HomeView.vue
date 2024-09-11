@@ -10,6 +10,7 @@
 <template>
     <div class="container">
         <h1>This is home</h1>
+        <p><RouterLink to="/bookmarks-list">Bookmarks</RouterLink></p>
         <p><RouterLink to="/register">Register</RouterLink></p>
         <p><RouterLink to="/get-data">Send get request to backend</RouterLink></p>
         <p><RouterLink to="/post-data">Send test data to backend</RouterLink></p>

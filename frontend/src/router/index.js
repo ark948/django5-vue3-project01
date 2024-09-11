@@ -12,6 +12,7 @@ import ProfileView from "@/views/ProfileView.vue";
 import { useAuthStore } from '@/stores';
 import TestAuthRequiredView from "@/views/TestAuthRequiredView.vue";
 import ManualTokenRefresh from "@/views/ManualTokenRefresh.vue";
+import Bookmarks from "@/views/Bookmarks.vue";
 
 const { notify } = useNotification()
 
@@ -26,7 +27,8 @@ const routes = [
     { path: '/login', component: Login_v4, name: 'login' },
     { path: '/profile', component: ProfileView, name: "profile" },
     { path: '/secret', component: TestAuthRequiredView, name: 'test'},
-    { path: '/manual-refresh', component: ManualTokenRefresh, name: 'manual_refresh' }
+    { path: '/manual-refresh', component: ManualTokenRefresh, name: 'manual_refresh' },
+    { path: '/bookmarks-list', component: Bookmarks, name: 'bookmarks' },
 ]
 
 const router = createRouter({

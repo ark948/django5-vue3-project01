@@ -4,8 +4,14 @@ from rest_framework.serializers import (
     Serializer,
 )
 
-class BookmarkSerializer(serializers.ModelSerializer):
+class BookmarksSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Bookmark
-        fields = ["title", "url", "icon", "owner"]
+        fields = ["id", "title", "url", "icon", "owner"]
+        extra_keyworkds = {"id": { "write_only": True }}
+
+class BookmarkDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Bookmark
+        extra_keywords = {"owner": {"write_only": True}}

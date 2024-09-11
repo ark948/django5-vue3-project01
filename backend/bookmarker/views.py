@@ -3,14 +3,15 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
 from bookmarker.serializers import (
-    BookmarkSerializer
+    BookmarksSerializer,
+    BookmarkDetailsSerializer
 )
 
 # Create your views here.
 
 class UserBookmarksList(generics.ListAPIView):
-
-    serializer_class = BookmarkSerializer
+    permission_classes = [IsAuthenticated]
+    serializer_class = BookmarksSerializer
 
     def get_queryset(self):
         user = self.request.user
@@ -18,5 +19,15 @@ class UserBookmarksList(generics.ListAPIView):
 
     def list(self, request):
         queryset = self.get_queryset()
-        serializdr = BookmarkSerializer(queryset, many=True)
+        serializdr = BookmarksSerializer(queryset, many=True)
         return Response(serializdr.data)
+    
+class UserBookmarkDetails(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = BookmarkDetailsSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        object_id = self.request.attr.get('id')
+        return Bookmark.objects.get(id=object_id)
+
+    
