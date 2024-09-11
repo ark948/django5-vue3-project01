@@ -1,7 +1,13 @@
 from bookmarker.models import Bookmark
 from rest_framework.response import Response
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import generics
+from bookmarker.permissions import IsOwner
+from rest_framework.generics import (
+    ListAPIView,
+    RetrieveUpdateDestroyAPIView
+)
 from bookmarker.serializers import (
     BookmarksSerializer,
     BookmarkDetailsSerializer
@@ -9,7 +15,7 @@ from bookmarker.serializers import (
 
 # Create your views here.
 
-class UserBookmarksList(generics.ListAPIView):
+class UserBookmarksList(ListAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = BookmarksSerializer
 
@@ -21,13 +27,11 @@ class UserBookmarksList(generics.ListAPIView):
         queryset = self.get_queryset()
         serializdr = BookmarksSerializer(queryset, many=True)
         return Response(serializdr.data)
-    
-class UserBookmarkDetails(generics.RetrieveUpdateDestroyAPIView):
+
+class UserBookmarkDetailView(RetrieveUpdateDestroyAPIView):
     serializer_class = BookmarkDetailsSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = (IsOwner, )
 
-    def get_object(self):
-        object_id = self.request.attr.get('id')
-        return Bookmark.objects.get(id=object_id)
-
-    
+    def get_queryset(self):
+        user = self.request.user
+        return Bookmark.objects.filter(owner=user)

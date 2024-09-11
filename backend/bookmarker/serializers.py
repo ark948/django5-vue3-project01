@@ -1,17 +1,18 @@
 from bookmarker.models import Bookmark
-from rest_framework import serializers
+from rest_framework.serializers import ModelSerializer
 from rest_framework.serializers import (
     Serializer,
 )
 
-class BookmarksSerializer(serializers.ModelSerializer):
+class BookmarksSerializer(ModelSerializer):
 
     class Meta:
         model = Bookmark
         fields = ["id", "title", "url", "icon", "owner"]
-        extra_keyworkds = {"id": { "write_only": True }}
+        extra_keyworkds = {"id": { "read_only": True }}
 
-class BookmarkDetailsSerializer(serializers.ModelSerializer):
+class BookmarkDetailsSerializer(ModelSerializer):
+
     class Meta:
         model = Bookmark
-        extra_keywords = {"owner": {"write_only": True}}
+        fields = ["title", "url", "icon"]

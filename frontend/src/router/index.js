@@ -13,6 +13,7 @@ import { useAuthStore } from '@/stores';
 import TestAuthRequiredView from "@/views/TestAuthRequiredView.vue";
 import ManualTokenRefresh from "@/views/ManualTokenRefresh.vue";
 import Bookmarks from "@/views/Bookmarks.vue";
+import BookmarkEntry from "@/components/BookmarkEntry.vue";
 
 const { notify } = useNotification()
 
@@ -29,6 +30,7 @@ const routes = [
     { path: '/secret', component: TestAuthRequiredView, name: 'test'},
     { path: '/manual-refresh', component: ManualTokenRefresh, name: 'manual_refresh' },
     { path: '/bookmarks-list', component: Bookmarks, name: 'bookmarks' },
+    { path: '/bookmark/:id', component: BookmarkEntry, name: 'bookmark_details' },
 ]
 
 const router = createRouter({

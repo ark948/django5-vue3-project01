@@ -6,7 +6,7 @@ from django.conf import settings
 class Bookmark(models.Model):
     title = models.CharField("Title", max_length=32)
     url = models.URLField("URL")
-    icon = models.ImageField("Icon")
+    icon = models.ImageField("Icon", blank=True, null=True)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='bookmarks')
 
     def __str__(self):

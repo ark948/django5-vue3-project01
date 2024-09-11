@@ -78,3 +78,7 @@ quickly bookmark any page
 10. logout needs to be added
     add rest_framework_simplejwt.token_blacklist to isntalled_apps
     run migrations
+
+11. IMPORTANT: Adding basic and session authentication from official docs:
+(ALONGSIDE current jwt authentication)
+(to be used with browsable api only)

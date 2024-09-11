@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue';
 import api from '@/api';
 
-const props = defineProps(["id"]);
+const props = defineProps(["id", "title", "url"]);
 const bookmark_id = ref(props.id);
 const bookmark_title = ref("");
 const bookmark_url = ref("");
