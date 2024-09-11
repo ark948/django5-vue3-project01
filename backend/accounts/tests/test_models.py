@@ -8,7 +8,7 @@ class CustomUserModelTests(TestCase):
     def test_create_user(self):
         User = get_user_model()
         user = User.objects.create_user(
-            first_name="test",
+            first_name="test",  
             last_name="user",
             email="testuser@test.com", 
             password="testpass123"
