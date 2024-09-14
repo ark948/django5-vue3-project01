@@ -9,18 +9,22 @@ import { useAuthStore } from '@/stores';
 import ManualTokenRefresh from "@/views/ManualTokenRefresh.vue";
 import Bookmarks from "@/views/Bookmarks.vue";
 import BookmarkItem from "@/components/bookmarker/BookmarkItem.vue";
+import NotFound from "@/views/NotFound.vue";
 
-const { notify } = useNotification()
+
+const { notify } = useNotification();
 
 const routes = [
     { path: '/', component: HomeView, name: 'home' },
+    { path: '/home', redirect: '/' },
     { path: '/register', component: Register, name: 'register' },
     { path: '/verify-email', component: VerifyEmail_v2, name: 'verify_email' },
     { path: '/login', component: Login_v4, name: 'login' },
     { path: '/profile', component: ProfileView, name: "profile" },
     { path: '/manual-refresh', component: ManualTokenRefresh, name: 'manual_refresh' },
     { path: '/bookmarks-list', component: Bookmarks, name: 'bookmarks' },
-    { path: '/bookmark/:id', component: BookmarkItem, name: 'bookmark_item' },
+
+    { path: "/:catchall(.*)*", component: NotFound, name: "not_found" },
 ]
 
 const router = createRouter({
@@ -30,7 +34,7 @@ const router = createRouter({
 
 router.beforeEach(async (to) => {
     // redirect to login page if not logged in and trying to access a restricted page
-    const publicPages = ['/login', '/register', '/secret', '/verify-email', '/modal-test', '/'];
+    const publicPages = ['/login', '/register', '/verify-email', '/'];
     const authRequired = !publicPages.includes(to.path);
     const auth = useAuthStore();
 
@@ -43,7 +47,7 @@ router.beforeEach(async (to) => {
         });
         auth.returnUrl = to.fullPath;
         return '/login';
-    } else if (auth.email && to.fullPath=='/login') {
+    } else if (auth.access_token && to.fullPath=='/login') {
         alert("You have already logged in.")
         console.log('[Router] Aleardy logged in, path blocked.');
         return '/';
