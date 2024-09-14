@@ -1,4 +1,0 @@
-exports app:
-    export users,
-           bookmarks,
-           ...
