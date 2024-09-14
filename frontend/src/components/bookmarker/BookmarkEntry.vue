@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import api from '@/api';
+import api from '@/api/api';
 import { onClickOutside } from '@vueuse/core';
 
 const props = defineProps({

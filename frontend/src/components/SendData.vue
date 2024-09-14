@@ -1,7 +1,7 @@
 <script setup>
 console.log("Post (test)")
 import { ref } from 'vue';
-import api from '@/api';
+import api from '@/api/api';
 import axios from 'axios';
 
 const answer_input = ref("")

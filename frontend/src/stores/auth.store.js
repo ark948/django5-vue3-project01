@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import router from "@/router";
-import api from "@/api";
+import api from "@/api/api";
 
 export const useAuthStore = defineStore({
     id: 'auth',

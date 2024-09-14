@@ -2,7 +2,7 @@
     console.log('VerifyEmail');
     
     import { ref } from 'vue'
-    import api from '@/api';
+    import api from '@/api/api';
     import { useNotification } from '@kyvg/vue3-notification';
     import router from '@/router';
 

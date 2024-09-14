@@ -1,7 +1,7 @@
 <script setup>
 console.log("Register");
 
-import api from '@/api';
+import api from '@/api/api';
 import { reactive, ref } from 'vue';
 import router from '@/router';
 import { useNotification } from '@kyvg/vue3-notification';

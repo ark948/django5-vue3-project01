@@ -13,7 +13,7 @@ import { useAuthStore } from '@/stores';
 import TestAuthRequiredView from "@/views/TestAuthRequiredView.vue";
 import ManualTokenRefresh from "@/views/ManualTokenRefresh.vue";
 import Bookmarks from "@/views/Bookmarks.vue";
-import BookmarkEntry from "@/components/BookmarkEntry.vue";
+import BookmarkEntry from "@/components/bookmarker/BookmarkEntry.vue";
 import ModalParent from "@/components/modal/ModalParent.vue";
 import Parent from "@/components/modal_test/Parent.vue";
 
@@ -55,7 +55,12 @@ router.beforeEach(async (to) => {
     } else if (auth.email && to.fullPath=='/login') {
         alert("You are already logged in.")
         console.log('[Router] Aleardy logged in, next path blocked.')
-        return '/'
+        notify({
+            title: "Restricted access.",
+            text: "You need to log in to access this page.",
+            type: "warn",
+        });
+        return '/';
     }
 });
 

@@ -1,7 +1,7 @@
 <script setup>
 console.log("ManualTokenRefresh.vue");
 import { ref } from "vue";
-import api from "@/api";
+import api from "@/api/api"
 import { useAuthStore } from "@/stores";
 
 const refresh_input_value = ref("");
