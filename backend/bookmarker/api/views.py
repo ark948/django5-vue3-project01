@@ -1,4 +1,8 @@
-from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import (
+    ListAPIView, 
+    RetrieveUpdateDestroyAPIView,
+    ListCreateAPIView
+)
 from rest_framework.permissions import IsAuthenticated
 from bookmarker.serializers import BookmarksSerializer, BookmarkDetailsSerializer
 from bookmarker.models import Bookmark
@@ -17,7 +21,7 @@ class BookmarkerHtmlRenderView(APIView):
     def get(self, request):
         return Response({})
 
-class UserBookmarksList(ListAPIView):
+class UserBookmarksList(ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = BookmarksSerializer
 

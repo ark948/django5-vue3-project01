@@ -163,3 +163,6 @@ frontend structure:
                display data in live table
     some refactoring: moving all auth related conponents
     deleting all unused codes and files
+    (refactoring done)
+
+    adding lots of bookmark records to user in backend
