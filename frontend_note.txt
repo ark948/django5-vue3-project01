@@ -150,3 +150,16 @@ frontend structure:
     update: token expiration and refreshing works, need to duplicate it.
 
     (also not let logged in users access login page) (done, maybe later add improved version)
+
+13. frontend for bookmarker app:
+    Bookmarks page will contain bookmarkslist component
+    bookmarkslist will contain nested component of each individual bookmark item
+
+    bookmarkslist will get a list of user's bookmarks, and will use props to pass the id, title, url and ... to bookmark component
+    upon clicking on an individual bookmark component, a modal will open up, displaying item's info for editing
+    maybe item's title can be edited in bookmarkslist with some sort of a editable table component
+
+    two tasks: show modal window (in progress)
+               display data in live table
+    some refactoring: moving all auth related conponents
+    deleting all unused codes and files

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@kyvg/vue3-notification": "^3.3.0",
+    "@vueuse/core": "^11.0.3",
     "axios": "^1.7.7",
     "dayjs": "^1.11.13",
     "jwt-decode": "^4.0.0",

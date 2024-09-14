@@ -21,6 +21,7 @@
         <p><RouterLink to="/test-auth">Test Authenticated view</RouterLink></p>
         <p><RouterLink to="/secret">Secret Path</RouterLink></p>
         <p><RouterLink to="/manual-refresh">Manual token refresh</RouterLink></p>
+        <p><RouterLink to="/modal-section">Modal section</RouterLink></p>
         <p><a @click="authStore.logout()">Logout</a></p>
     </div>
 </template>

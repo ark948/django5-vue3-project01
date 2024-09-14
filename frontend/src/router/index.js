@@ -1,19 +1,21 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "@/views/HomeView.vue";
-import Register from "@/components/Register.vue";
+import Register from "@/components/auth/Register.vue";
 import GetData from "@/components/GetData.vue";
 import SendData from "@/components/SendData.vue";
-import VerifyEmail_v2 from "@/components/VerifyEmail_v2.vue";
+import VerifyEmail_v2 from "@/components/auth/VerifyEmail_v2.vue";
 import GetData_opt from "@/components/GetData_opt.vue";
 import { useNotification } from "@kyvg/vue3-notification";
 import TestAuth from "@/components/TestAuth.vue";
-import Login_v4 from "@/components/Login_v4.vue";
+import Login_v4 from "@/components/auth/Login_v4.vue";
 import ProfileView from "@/views/ProfileView.vue";
 import { useAuthStore } from '@/stores';
 import TestAuthRequiredView from "@/views/TestAuthRequiredView.vue";
 import ManualTokenRefresh from "@/views/ManualTokenRefresh.vue";
 import Bookmarks from "@/views/Bookmarks.vue";
 import BookmarkEntry from "@/components/BookmarkEntry.vue";
+import ModalParent from "@/components/modal/ModalParent.vue";
+import Parent from "@/components/modal_test/Parent.vue";
 
 const { notify } = useNotification()
 
@@ -31,6 +33,8 @@ const routes = [
     { path: '/manual-refresh', component: ManualTokenRefresh, name: 'manual_refresh' },
     { path: '/bookmarks-list', component: Bookmarks, name: 'bookmarks' },
     { path: '/bookmark/:id', component: BookmarkEntry, name: 'bookmark_details' },
+    { path: '/modal-section', component: ModalParent, name: 'modal-section' },
+    { path: '/modal-test', component: Parent, name: 'modal-test' },
 ]
 
 const router = createRouter({
@@ -40,7 +44,7 @@ const router = createRouter({
 
 router.beforeEach(async (to) => {
     // redirect to login page if not logged in and trying to access a restricted page
-    const publicPages = ['/login', '/register', '/secret', '/verify-email'];
+    const publicPages = ['/login', '/register', '/secret', '/verify-email', '/modal-test'];
     const authRequired = !publicPages.includes(to.path);
     const auth = useAuthStore();
 
