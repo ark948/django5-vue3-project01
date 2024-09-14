@@ -10,6 +10,7 @@ import ManualTokenRefresh from "@/views/ManualTokenRefresh.vue";
 import Bookmarks from "@/views/Bookmarks.vue";
 import BookmarkItem from "@/components/bookmarker/BookmarkItem.vue";
 import NotFound from "@/views/NotFound.vue";
+import TestTable from "@/views/testTable.vue";
 
 
 const { notify } = useNotification();
@@ -23,6 +24,7 @@ const routes = [
     { path: '/profile', component: ProfileView, name: "profile" },
     { path: '/manual-refresh', component: ManualTokenRefresh, name: 'manual_refresh' },
     { path: '/bookmarks-list', component: Bookmarks, name: 'bookmarks' },
+    { path: '/test-table', component: TestTable, name: 'test_table' },
 
     { path: "/:catchall(.*)*", component: NotFound, name: "not_found" },
 ]

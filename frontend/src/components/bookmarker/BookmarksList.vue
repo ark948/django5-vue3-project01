@@ -9,6 +9,13 @@ const errorHolder = ref("");
 const all_bookmarks = ref([])
 const insideRouter = useRouter();
 
+// primevue
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import ColumnGroup from 'primevue/columngroup'; // optional
+import Row from 'primevue/row'; // optional
+const selectedItem = ref();
+
 
 onMounted(() => {
     console.log('[BookmarksList.vue] - mounted.')
@@ -33,20 +40,22 @@ async function get_bookmarks() {
     .catch((error) => {
         console.log("ERROR");
         console.log(`[BookmarksList.vue] => ${error.message}`);
-
     })
+    .finally(() => {
+        console.log(`Total of ${all_bookmarks.value.length} items.`);
 
-    const goToItem = (id) => {
-        console.log("Going to item");
-        console.log(id);
-        router.push(`/bookmarker/${id}`);
-    }
+    });
+
 }
 </script>
 
 <template>
-    <div class="container">
-        
+    <div class="card">
+        <DataTable v-model:selection="selectedItem" :value="all_bookmarks" tableStyle="min-width: 50rem">
+            <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
+            <Column field="title" header="Title"></Column>
+            <Column field="url" header="URL"></Column>
+        </DataTable>
     </div>
 </template>
 

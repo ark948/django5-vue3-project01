@@ -1,8 +1,5 @@
 from bookmarker.models import Bookmark
 from rest_framework.serializers import ModelSerializer
-from rest_framework.serializers import (
-    Serializer,
-)
 
 class BookmarksSerializer(ModelSerializer):
 
