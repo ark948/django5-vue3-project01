@@ -1,25 +1,14 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import api from '@/api/api';
-import BookmarkEntry from './BookmarkEntry.vue';
+import BookmarkEntry from './BookmarkItem.vue';
 import { useRouter } from 'vue-router';
 
-const isModalOpened = ref(false);
 const responseHolder = ref("");
 const errorHolder = ref("");
 const all_bookmarks = ref([])
 const insideRouter = useRouter();
 
-const openModal = () => {
-    isModalOpened.value = true;
-    };
-const closeModal = () => {
-    isModalOpened.value = false;
-    };
-
-const modalSubmitHandler = () => {
-    // handle modal submit
-    };
 
 onMounted(() => {
     console.log('[BookmarksList.vue] - mounted.')
@@ -57,21 +46,10 @@ async function get_bookmarks() {
 
 <template>
     <div class="container">
-        <div class="welcome-container">
-            <h3>Your Bookmarks:</h3>
-        </div>
-        <div class="main-container">
-            <div v-for="item in all_bookmarks" class="data-container" :key="item.id">
-                <BookmarkEntry
-                :key="item.id" :id="item.id" :title="item.title" :url="item.url" />
-                <button :isOpen="isModalOpened" @click="openModal" @modal-close="closeModal">open modal</button>
-            </div>
-            <div class="modal-button-container">
-                <button @click="openModal">Opem modal</button>
-            </div>
-            <div class="error-container">
-                <p>{{ errorHolder }}</p>
-            </div>
-        </div>
+        
     </div>
 </template>
+
+<style scoped>
+
+</style>
