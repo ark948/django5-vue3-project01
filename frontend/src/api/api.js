@@ -1,7 +1,7 @@
 import axios from "axios";
 import dayjs from "dayjs";
 import { jwtDecode } from "jwt-decode";
-import { useAuthStore } from "./stores";
+import { useAuthStore } from "@/stores/auth.store";
 
 const token = localStorage.getItem('access_token') ? JSON.parse(localStorage.getItem('access_token')) : "";
 const refresh_token = localStorage.getItem('refresh_token') ? JSON.parse(localStorage.getItem('refresh_token')) : "";
