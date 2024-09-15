@@ -21,7 +21,7 @@ class BookmarkerHtmlRenderView(APIView):
     def get(self, request):
         return Response({})
 
-class UserBookmarksList(ListCreateAPIView):
+class UserBookmarksListNoPagination(ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = BookmarksSerializer
 
@@ -31,8 +31,22 @@ class UserBookmarksList(ListCreateAPIView):
 
     def list(self, request):
         queryset = self.get_queryset()
-        serializdr = BookmarksSerializer(queryset, many=True)
-        return Response(serializdr.data)
+        serializer = BookmarksSerializer(queryset, many=True)
+        return Response(serializer.data)
+    
+class UserBookmarksList(ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = BookmarksSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return Bookmark.objects.filter(owner=user.pk)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        page = self.paginate_queryset(queryset)
+        serializer = BookmarksSerializer(page, many=True)
+        return Response(serializer.data)
 
 
 class UserBookmarkDetailView(RetrieveUpdateDestroyAPIView):

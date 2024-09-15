@@ -88,3 +88,7 @@ deleting the old ones, (for user testuser01)
 adding 10 actual bookmarks.
 problem 01: user should not be able to choose the owner in listcreate api view. [FIXED]
 problem 02: bookmark item title max length too short. [FIXED]
+
+12. Adding pagination to bookmarer
+    add pagination config to settings.py (add to REST_FRAMEWORK config)
+    done, but console gets a small warning about pagination
