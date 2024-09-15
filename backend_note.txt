@@ -92,3 +92,5 @@ problem 02: bookmark item title max length too short. [FIXED]
 12. Adding pagination to bookmarer
     add pagination config to settings.py (add to REST_FRAMEWORK config)
     done, but console gets a small warning about pagination
+    warning in pagination: unordererd list, pagination may yield inconsistent results
+    

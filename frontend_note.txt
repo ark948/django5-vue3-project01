@@ -172,3 +172,6 @@ frontend structure:
     - configure main app to use primevue in main.js
     - using DataTable component in bookmarkslist.vue
     VERY GOOD, need dialog component to add new bookmarks
+
+14. adding pagination,
+    approach 1, get all data, paginate in frontend

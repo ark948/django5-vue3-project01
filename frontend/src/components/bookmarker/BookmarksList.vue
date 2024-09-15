@@ -14,7 +14,12 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import ColumnGroup from 'primevue/columngroup'; // optional
 import Row from 'primevue/row'; // optional
+import Paginator from 'primevue/paginator';
 const selectedItem = ref();
+
+// frontend pagination
+// 
+const page_number = ref(1);
 
 
 onMounted(() => {
@@ -25,7 +30,8 @@ onMounted(() => {
 async function get_bookmarks() {
     console.log("[BookmarksList.vue]");
     console.log("[BookmarksList.vue] Getting the list...");
-    const res = await api.get('bookmarker/api/')
+    // const res = await api.get(`bookmarker/api/?page=${page_number.value}`)
+    const res = await api.get('bookmarker/api/no-paginate/')
     .then((response) => {
         if (response.status === 200) {
             console.log("Response 200")
@@ -51,7 +57,14 @@ async function get_bookmarks() {
 
 <template>
     <div class="card">
-        <DataTable v-model:selection="selectedItem" :value="all_bookmarks" showGridlines stripedRows tableStyle="min-width: 50rem">
+        <DataTable 
+        v-model:selection="selectedItem" 
+        :value="all_bookmarks"
+        paginator
+        :rows="5"
+        showGridlines 
+        stripedRows 
+        tableStyle="min-width: 50rem">
             <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
             <Column field="title" header="Title"></Column>
             <Column field="url" header="URL"></Column>
