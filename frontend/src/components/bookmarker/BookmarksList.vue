@@ -66,7 +66,6 @@ async function handleNewBookmarkSubmit() {
     .then((response) => {
         if (response.status === 201) {
             console.log('[BookmarksList.vue] New item successfully added.');
-            visible.value = false;
         } else {
             console.log("ERROR IN ADDING NEW ITEM.");
             visible.value = false;
@@ -78,6 +77,9 @@ async function handleNewBookmarkSubmit() {
       console.log(`[BookmarksList.vue] => ${error.message}`);
     })
     .finally(() => {
+      console.log("REFRESHING THE TABLE NOW...");
+      all_bookmarks.value.length = 0;
+      get_bookmarks();
       visible.value = false;
     });
 }

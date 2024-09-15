@@ -183,4 +183,4 @@ frontend structure:
     trying to add it to bookmarkslist.vue
     in order to prevent api.js from getting too large, i will move all bookmarker specific logic to its own api file
     (will implement this later)
-    done, but small problem, need to refresh the table
+    done, but small problem, need to refresh the table [FIXED]
