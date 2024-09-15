@@ -184,3 +184,7 @@ frontend structure:
     in order to prevent api.js from getting too large, i will move all bookmarker specific logic to its own api file
     (will implement this later)
     done, but small problem, need to refresh the table [FIXED]
+
+16. Delete functionality
+    need to aquire the id of selected bookmark items, put them in an array.
+    first aquire array list of selected items

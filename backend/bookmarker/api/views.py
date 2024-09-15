@@ -1,7 +1,7 @@
 from rest_framework.generics import (
-    ListAPIView, 
     RetrieveUpdateDestroyAPIView,
-    ListCreateAPIView
+    ListCreateAPIView,
+
 )
 from rest_framework.permissions import IsAuthenticated
 from bookmarker.serializers import BookmarksSerializer, BookmarkDetailsSerializer

@@ -94,3 +94,5 @@ problem 02: bookmark item title max length too short. [FIXED]
     done, but console gets a small warning about pagination
     warning in pagination: unordererd list, pagination may yield inconsistent results
     
+13. Upgrading bookmarks list view from listcreate api to listcreatedestroy api
+    there is not such generic view

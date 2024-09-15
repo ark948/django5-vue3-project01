@@ -29,6 +29,27 @@ const visible = ref(false);
 const new_item_title = ref("");
 const new_item_url = ref("");
 
+// delete functionality
+const selected_items = ref([]);
+import { watch } from "vue";
+
+watch(() => selectedItem.value, async () => {
+    document.getElementById('del_btn').disabled = false;
+    responseHolder.value = "Selected items: ";
+    for (let i in selectedItem.value) {
+      responseHolder.value += `${selectedItem.value[i].id}, `;
+    }
+  }
+)
+
+watch(() => selectedItem.value, async () => {
+    if (selectedItem.value.length === 0) {
+      document.getElementById('del_btn').disabled = true;
+      responseHolder.value = "";
+    }
+  }
+)
+
 onMounted(() => {
   console.log("[BookmarksList.vue] - mounted.");
   get_bookmarks();
@@ -83,6 +104,10 @@ async function handleNewBookmarkSubmit() {
       visible.value = false;
     });
 }
+
+async function handleDelete() {
+  console.log("Performing Delete request.");
+}
 </script>
 
 <template>
@@ -96,11 +121,16 @@ async function handleNewBookmarkSubmit() {
         :rowsPerPageOptions="[5, 10, 20, 50]"
         showGridlines
         stripedRows
+        :size="'small'"
+        dataKey="id"
         tableStyle="min-width: 50rem">
         <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
         <Column field="title" header="Title"></Column>
         <Column field="url" header="URL"></Column>
       </DataTable>
+    </div>
+    <div class="response-message-container">
+      <p>{{ responseHolder }}</p>
     </div>
     <Dialog v-model:visible="visible" modal header="Add new">
         <span>Add new bookmark</span>
@@ -119,6 +149,7 @@ async function handleNewBookmarkSubmit() {
         </div>
     </Dialog>
     <Button label="Add" @click="visible=true" />
+    <Button id="del_btn" label="Delete" disabled></Button>
   </div>
 </template>
 
