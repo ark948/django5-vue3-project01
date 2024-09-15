@@ -87,4 +87,4 @@ user's bookmark list no option to add bookmarks. fixed.
 deleting the old ones, (for user testuser01)
 adding 10 actual bookmarks.
 problem 01: user should not be able to choose the owner in listcreate api view. [FIXED]
-problem 02: bookmark item title max length too short.
+problem 02: bookmark item title max length too short. [FIXED]
