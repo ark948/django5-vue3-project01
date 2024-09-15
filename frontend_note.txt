@@ -173,5 +173,14 @@ frontend structure:
     - using DataTable component in bookmarkslist.vue
     VERY GOOD, need dialog component to add new bookmarks
 
-14. adding pagination,
-    approach 1, get all data, paginate in frontend
+14. Adding pagination,
+    approach 1, get all data, paginate in frontend (done)
+    approach 2, paginate in backend, specify page query param in frontend (skipped...)
+
+15. New bookmark function
+    should be a modal window
+    using dialog component from primevue (also using Button component)
+    trying to add it to bookmarkslist.vue
+    in order to prevent api.js from getting too large, i will move all bookmarker specific logic to its own api file
+    (will implement this later)
+    done, but small problem, need to refresh the table

@@ -44,8 +44,8 @@ function handleClickClear() {
           v-model="refresh_input_value"
           name="refresh_input"
           rows="5"
-          cols="50"
-        ></textarea>
+          cols="50">
+        </textarea>
         <input type="submit" value="Send" />
       </form>
     </div>

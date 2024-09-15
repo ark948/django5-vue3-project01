@@ -1,78 +1,142 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import api from '@/api/api';
-import BookmarkEntry from './BookmarkItem.vue';
-import { useRouter } from 'vue-router';
+import { ref, onMounted } from "vue";
+import api from "@/api/api";
+import BookmarkEntry from "./BookmarkItem.vue";
+import { useRouter } from "vue-router";
 
 const responseHolder = ref("");
 const errorHolder = ref("");
-const all_bookmarks = ref([])
+const all_bookmarks = ref([]);
 const insideRouter = useRouter();
 
 // primevue
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
-import ColumnGroup from 'primevue/columngroup'; // optional
-import Row from 'primevue/row'; // optional
-import Paginator from 'primevue/paginator';
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
+import ColumnGroup from "primevue/columngroup"; // optional
+import Row from "primevue/row"; // optional
+import Paginator from "primevue/paginator";
+
 const selectedItem = ref();
 
 // frontend pagination
 // get all data from backend, paginate in frontend
 const page_number = ref(1);
 
+// new bookmark item functionality
+import Dialog from "primevue/dialog";
+import Button from "primevue/button";
+const visible = ref(false);
+const new_item_title = ref("");
+const new_item_url = ref("");
 
 onMounted(() => {
-    console.log('[BookmarksList.vue] - mounted.')
-    get_bookmarks();
-})
+  console.log("[BookmarksList.vue] - mounted.");
+  get_bookmarks();
+});
 
 async function get_bookmarks() {
-    console.log("[BookmarksList.vue]");
-    console.log("[BookmarksList.vue] Getting the list...");
-    // const res = await api.get(`bookmarker/api/?page=${page_number.value}`)
-    const res = await api.get('bookmarker/api/no-paginate/')
+  console.log("[BookmarksList.vue] Getting the list...");
+  // const res = await api.get(`bookmarker/api/?page=${page_number.value}`)
+  const res = await api
+    .get("bookmarker/api/no-paginate/")
     .then((response) => {
-        if (response.status === 200) {
-            console.log("Response 200")
-            for (let i=0; i < response.data.length; i++) {
-                // console.log(response.data[i]);
-                all_bookmarks.value.push(response.data[i]);
-            }
+      if (response.status === 200) {
+        console.log("Response 200");
+        for (let i = 0; i < response.data.length; i++) {
+          // console.log(response.data[i]);
+          all_bookmarks.value.push(response.data[i]);
+        }
+      } else {
+        console.log("[BookmarksList.vue] Response NOT 200", response.status);
+      }
+    })
+    .catch((error) => {
+      console.log("ERROR");
+      console.log(`[BookmarksList.vue] => ${error.message}`);
+    })
+    .finally(() => {
+      console.log(`Total of ${all_bookmarks.value.length} items.`);
+    });
+};
+
+async function handleNewBookmarkSubmit() {
+    console.log("[BookmarksList.vue] Adding new...");
+    responseHolder.value = "";
+    const res = await api.post('bookmarker/api/no-paginate/', { title: new_item_title.value, url: new_item_url.value })
+    .then((response) => {
+        if (response.status === 201) {
+            console.log('[BookmarksList.vue] New item successfully added.');
+            visible.value = false;
         } else {
-            console.log("[BookmarksList.vue] Response NOT 200", response.status);
+            console.log("ERROR IN ADDING NEW ITEM.");
+            visible.value = false;
+            responseHolder.value = "Something went wrong...";
         }
     })
     .catch((error) => {
-        console.log("ERROR");
-        console.log(`[BookmarksList.vue] => ${error.message}`);
+      console.log("ERROR IN ADDING NEW ITEM (2)");
+      console.log(`[BookmarksList.vue] => ${error.message}`);
     })
     .finally(() => {
-        console.log(`Total of ${all_bookmarks.value.length} items.`);
-
+      visible.value = false;
     });
-
 }
 </script>
 
 <template>
+  <div class="container">
     <div class="card">
-        <DataTable 
-        v-model:selection="selectedItem" 
+      <DataTable
+        v-model:selection="selectedItem"
         :value="all_bookmarks"
         paginator
         :rows="10"
         :rowsPerPageOptions="[5, 10, 20, 50]"
-        showGridlines 
-        stripedRows 
+        showGridlines
+        stripedRows
         tableStyle="min-width: 50rem">
-            <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
-            <Column field="title" header="Title"></Column>
-            <Column field="url" header="URL"></Column>
-        </DataTable>
+        <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
+        <Column field="title" header="Title"></Column>
+        <Column field="url" header="URL"></Column>
+      </DataTable>
     </div>
+    <Dialog v-model:visible="visible" modal header="Add new">
+        <span>Add new bookmark</span>
+        <div class="form-container">
+            <form action="" @submit.prevent="handleNewBookmarkSubmit">
+                <label for="title">Title:</label>
+                <input v-model="new_item_title" type="text" name="title">
+                <label for="url"></label>
+                <textarea v-model="new_item_url" name="url" rows="5" cols="50"></textarea>
+                <input type="submit" value="Add">
+            </form>
+        </div>
+        <div class="flex justify-end gap-2">
+            <Button type="button" label="Cancel" severity="secondary" @click="visible = false"></Button>
+            <Button type="button" label="Save" @click="visible = false"></Button>
+        </div>
+    </Dialog>
+    <Button label="Add" @click="visible=true" />
+  </div>
 </template>
 
 <style scoped>
+.form-container form {
+    padding: 20px;
+    margin: 30px;
+}
 
+.form-container form input[type='text'] {
+    margin: 20px;
+    width: 300px;
+}
+
+.form-container form input textarea {
+    margin: 20px;
+}
+
+.form-container form input[type='submit'] {
+    margin-left: 20px;
+    width: 80px;
+}
 </style>
