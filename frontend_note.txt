@@ -171,3 +171,4 @@ frontend structure:
     > npm install @primevue/themes (theme add-ons)
     - configure main app to use primevue in main.js
     - using DataTable component in bookmarkslist.vue
+    VERY GOOD, need dialog component to add new bookmarks

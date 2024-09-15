@@ -30,7 +30,7 @@ async function get_bookmarks() {
         if (response.status === 200) {
             console.log("Response 200")
             for (let i=0; i < response.data.length; i++) {
-                console.log(response.data[i]);
+                // console.log(response.data[i]);
                 all_bookmarks.value.push(response.data[i]);
             }
         } else {
@@ -51,7 +51,7 @@ async function get_bookmarks() {
 
 <template>
     <div class="card">
-        <DataTable v-model:selection="selectedItem" :value="all_bookmarks" tableStyle="min-width: 50rem">
+        <DataTable v-model:selection="selectedItem" :value="all_bookmarks" showGridlines stripedRows tableStyle="min-width: 50rem">
             <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
             <Column field="title" header="Title"></Column>
             <Column field="url" header="URL"></Column>

@@ -14,7 +14,8 @@ const api = axios.create({
 });
 
 api.interceptors.request.use(async req => {
-    console.log("[api.js] Calling interceptor...")
+    console.log("[api.js] Calling interceptor...");
+    const authStore = useAuthStore();
     if (token) {
         console.log("[api.js] Token was found.")
         req.headers.Authorization = `Bearer ${token}`;
@@ -30,12 +31,14 @@ api.interceptors.request.use(async req => {
                 refresh: refresh_token
             })
             .catch((e) => {
+                console.log('[api.js] was unable to refresh the token automatically.');
                 console.log(e);
+                alert("We are sorry, Please login again.");
+                authStore.logout();
             });
             if (res.status === 200) {
                 console.log('[api.js]: New Token aquired. Setting it now...');
                 localStorage.setItem('access_token', JSON.stringify(res.data.access))
-                const authStore = useAuthStore();
                 authStore.access_token = res.data.access
                 req.headers.Authorization = `Bearer ${res.data.access}`;
                 console.log("[api.js] Token Refresh complete.")
@@ -46,6 +49,7 @@ api.interceptors.request.use(async req => {
                 .catch((e) => {
                     console.log("[api.js] Logout request failed.");
                     console.log(e);
+                    authStore.logout();
                 });
                 if (res.status === 200) {
                     const authStore = useAuthStore();
