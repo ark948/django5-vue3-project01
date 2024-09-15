@@ -18,7 +18,7 @@ import Paginator from 'primevue/paginator';
 const selectedItem = ref();
 
 // frontend pagination
-// 
+// get all data from backend, paginate in frontend
 const page_number = ref(1);
 
 
@@ -61,7 +61,8 @@ async function get_bookmarks() {
         v-model:selection="selectedItem" 
         :value="all_bookmarks"
         paginator
-        :rows="5"
+        :rows="10"
+        :rowsPerPageOptions="[5, 10, 20, 50]"
         showGridlines 
         stripedRows 
         tableStyle="min-width: 50rem">
