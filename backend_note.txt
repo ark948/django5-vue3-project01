@@ -96,3 +96,5 @@ problem 02: bookmark item title max length too short. [FIXED]
     
 13. Upgrading bookmarks list view from listcreate api to listcreatedestroy api
     there is not such generic view
+    trying to utilize viewset + router
+    in viewset views, we can use action decorator to create a multiple delete items action by setting detail to false

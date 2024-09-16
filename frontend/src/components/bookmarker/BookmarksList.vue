@@ -40,7 +40,7 @@ watch(() => selectedItem.value, async () => {
       responseHolder.value += `${selectedItem.value[i].id}, `;
     }
   }
-)
+);
 
 watch(() => selectedItem.value, async () => {
     if (selectedItem.value.length === 0) {
@@ -48,7 +48,7 @@ watch(() => selectedItem.value, async () => {
       responseHolder.value = "";
     }
   }
-)
+);
 
 onMounted(() => {
   console.log("[BookmarksList.vue] - mounted.");
@@ -106,7 +106,29 @@ async function handleNewBookmarkSubmit() {
 }
 
 async function handleDelete() {
-  console.log("Performing Delete request.");
+  console.log("Performing Delete request...");
+  for (let i in selectedItem.value) {
+    console.log(`Deleting item ${selectedItem.value[i].id}`)
+    const res = await api.delete(`bookmarker/api/${selectedItem.value[i].id}/`)
+    .then((response) => {
+      if (response.status === 204) {
+        console.log("Delete OK");
+      } else {
+        console.log("Delete Not OK");
+      }
+    })
+    .catch((e) => {
+      console.log("Delete Error");
+      console.log(e.message);
+    })
+    .finally(() => {
+      console.log("Delete process complete for one item.");
+    });
+  }
+    console.log("REFRESHING THE TABLE NOW...");
+    all_bookmarks.value.length = 0;
+    get_bookmarks();
+    visible.value = false;
 }
 </script>
 
@@ -127,6 +149,8 @@ async function handleDelete() {
         <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
         <Column field="title" header="Title"></Column>
         <Column field="url" header="URL"></Column>
+        <Column field="icon" header="Icon"></Column>
+        <Column field="action" header="Delete"></Column>
       </DataTable>
     </div>
     <div class="response-message-container">
@@ -149,7 +173,7 @@ async function handleDelete() {
         </div>
     </Dialog>
     <Button label="Add" @click="visible=true" />
-    <Button id="del_btn" label="Delete" disabled></Button>
+    <Button @click="handleDelete" id="del_btn" label="Delete" disabled></Button>
   </div>
 </template>
 
