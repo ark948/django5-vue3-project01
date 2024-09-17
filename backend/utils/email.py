@@ -6,7 +6,6 @@ from utils.otp import generateOtp
 def send_code_to_user(email):
     Subject = "One Time passcode for email verification"
     otp_code = generateOtp()
-    print(otp_code)
     user = CustomUser.objects.get(email=email)
     current_site = "MyAuth.com"
     email_body = f'Hi {user.first_name}, thanks for signing up on {current_site}. \n plese verify your email with this one time password {otp_code}'
