@@ -30,6 +30,9 @@ class AccountsIndexView(APIView):
 class RegisterUserView(GenericAPIView):
     serializer_class = UserRegisterSerializer
 
+    def get(self, request):
+        return Response({}, status=status.HTTP_200_OK)
+
     def post(self, request):
         user_data = request.data
         serializer = self.serializer_class(data=user_data)
