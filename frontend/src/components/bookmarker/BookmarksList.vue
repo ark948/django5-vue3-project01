@@ -130,6 +130,13 @@ async function handleDelete() {
     get_bookmarks();
     visible.value = false;
 }
+
+const dt = ref();
+
+const exportCSV = async () => {
+  dt.value.exportCSV();
+}
+
 </script>
 
 <template>
@@ -138,6 +145,7 @@ async function handleDelete() {
       <DataTable
         v-model:selection="selectedItem"
         :value="all_bookmarks"
+        ref="dt"
         paginator
         :rows="10"
         :rowsPerPageOptions="[5, 10, 20, 50]"
@@ -151,6 +159,11 @@ async function handleDelete() {
         <Column field="url" header="URL"></Column>
         <Column field="icon" header="Icon"></Column>
         <Column field="action" header="Delete"></Column>
+        <template #footer>
+          <div style="text-align: right">
+            <Button icon="pi pi-external-link" label="Export" @click="exportCSV($event)" />
+          </div>
+        </template>
       </DataTable>
     </div>
     <div class="response-message-container">
@@ -178,6 +191,9 @@ async function handleDelete() {
 </template>
 
 <style scoped>
+Button {
+  height: 30px;
+}
 .form-container form {
     padding: 20px;
     margin: 30px;

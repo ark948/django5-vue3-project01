@@ -35,3 +35,11 @@ class CustomUserModelTests(TestCase):
         self.assertTrue(admin_user.is_active)
         self.assertTrue(admin_user.is_staff)
         self.assertTrue(admin_user.is_superuser)
+
+class UserMethodTest(TestCase):
+    def test_get_full_name(self):
+        User = get_user_model()
+        user = User.objects.create(email='test@example.com', first_name='Test', last_name='User')
+        
+        self.assertEqual(user.get_full_name, "Test User")
+        self.assertFalse(user.is_staff)
