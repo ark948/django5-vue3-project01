@@ -186,5 +186,9 @@ frontend structure:
     done, but small problem, need to refresh the table [FIXED]
 
 16. Delete functionality
-    need to aquire the id of selected bookmark items, put them in an array.
-    first aquire array list of selected items
+    single delete function is done,
+    by using the checkboxes in table, bulk delete can also be achieved.
+    in this way, for every selected item, one delete request will be sent to backend
+    this may cause traffic issues
+
+    i will put in a separate view in backend so it can be fully differentiated

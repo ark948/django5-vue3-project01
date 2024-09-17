@@ -98,3 +98,8 @@ problem 02: bookmark item title max length too short. [FIXED]
     there is not such generic view
     trying to utilize viewset + router
     in viewset views, we can use action decorator to create a multiple delete items action by setting detail to false
+
+14. according to some docs and notes online, deleting multiple objects is not a good idea
+    in restful design, since delete http verb should be used with one object only
+    but we can use a post request to collect a multiple ids from request body
+    then perform the delete in backend.

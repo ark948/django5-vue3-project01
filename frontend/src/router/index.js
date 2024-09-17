@@ -8,7 +8,6 @@ import ProfileView from "@/views/ProfileView.vue";
 import { useAuthStore } from '@/stores';
 import ManualTokenRefresh from "@/views/ManualTokenRefresh.vue";
 import Bookmarks from "@/views/Bookmarks.vue";
-import BookmarkItem from "@/components/bookmarker/BookmarkItem.vue";
 import NotFound from "@/views/NotFound.vue";
 
 

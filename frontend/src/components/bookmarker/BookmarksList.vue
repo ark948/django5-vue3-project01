@@ -1,7 +1,6 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import api from "@/api/api";
-import BookmarkEntry from "./BookmarkItem.vue";
 import { useRouter } from "vue-router";
 
 const responseHolder = ref("");
@@ -153,7 +152,8 @@ const exportCSV = async () => {
         stripedRows
         :size="'small'"
         dataKey="id"
-        tableStyle="min-width: 50rem">
+        tableStyle="min-width: 50rem"
+        steteStorage="local">
         <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
         <Column field="title" header="Title"></Column>
         <Column field="url" header="URL"></Column>

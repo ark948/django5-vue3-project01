@@ -1,5 +1,7 @@
 from bookmarker.models import Bookmark
 from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import Serializer
+from rest_framework import serializers
 
 class BookmarksSerializer(ModelSerializer):
 
@@ -24,3 +26,20 @@ class BookmarkDetailsSerializer(ModelSerializer):
     class Meta:
         model = Bookmark
         fields = ["title", "url", "icon"]
+
+
+class BookmarkMultipleDeleteSerializer(Serializer):
+    list_of_ids = serializers.CharField(required=True)
+    
+    def validate(self, attrs):
+        new_list = []
+        my_list = attrs.get('list_of_ids').split(',')
+        for i in my_list:
+            try:
+                int(i.strip())
+            except ValueError:
+                continue
+            new_list.append(int(i.strip()))
+        if len(new_list) == 0:
+            raise serializers.ValidationError('Validation failed.')
+        return new_list

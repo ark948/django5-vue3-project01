@@ -1,5 +1,4 @@
 from rest_framework.permissions import IsAuthenticated
-from bookmarker.serializers import BookmarksSerializer, BookmarkDetailsSerializer
 from bookmarker.models import Bookmark
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -9,10 +8,17 @@ from rest_framework.decorators import action
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework import status
 from rest_framework.request import Request
+from django.shortcuts import get_object_or_404
+from bookmarker.serializers import (
+    BookmarksSerializer, 
+    BookmarkDetailsSerializer,
+    BookmarkMultipleDeleteSerializer
+    )
 from rest_framework.generics import (
     RetrieveUpdateDestroyAPIView,
     ListCreateAPIView,
-)
+    GenericAPIView
+    )
 
 # views
 
@@ -74,3 +80,40 @@ class BookmarkViewSet(viewsets.ModelViewSet):
         except:
             print("multiple delete error")
             return Response({'msg': "error occurred."}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class BookmarksMultipleDelete(APIView):
+    # unused, no url
+    def get(self, request, pk_ids):
+        ids = [int(pk) for pk in pk_ids.split(',')]
+        BookmarkObject = Bookmark.objects.filter(id__in=ids)
+        serializeBookmarkObject = BookmarksSerializer(BookmarkObject, many=True)
+        return Response(serializeBookmarkObject.data)
+    
+    def delete(self, request, pk_ids):
+        ids = [int(pk) for pk in pk_ids.split(',')]
+        for i in ids:
+            get_object_or_404(Bookmark, pk=i).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class BookmarkMultipleDeleteUsingPost(GenericAPIView):
+    serializer_class = BookmarkMultipleDeleteSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response({}, status=status.HTTP_200_OK)
+    
+    def post(self, request, format=None):
+        ids_list = request.data
+        serializer = self.serializer_class(data=ids_list)
+        if serializer.is_valid(raise_exception=True):
+            for i in serializer.validated_data:
+                try:
+                    bookmark_object = Bookmark.objects.get(id=i)
+                except Bookmark.DoesNotExist:
+                    continue
+                if bookmark_object.owner == self.request.user:
+                    bookmark_object.delete()
+            return Response({'msg': 'multiple records deleted.'}, status=status.HTTP_200_OK)
+        return Response({'msg': 'data is not valid'})
