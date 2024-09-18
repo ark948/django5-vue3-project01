@@ -142,7 +142,6 @@ async function handleMultipleDeletion() {
     selected.push(selectedItem.value[i]['id'])
   }
   selected = selected.toString();
-  console.log(typeof(selected))
   const res = api.post('bookmarker/api/multiple-delete/', { list_of_ids: selected })
     .then((response) => {
       console.log("Sending request...");
@@ -221,9 +220,10 @@ const exportCSV = async () => {
         </div>
     </Dialog>
     <Dialog v-model:visible="confirm">
-        <span>Delete mulitple records?</span>
+        <span>Are you sure about this?</span>
         <div class="flex justify-end gap-2">
           <Button type="button" label="Confirm" @click="handleMultipleDeletion"></Button>
+          <Button type="button" label="Cancel" severity="secondary" @click="confirm = false"></Button>
         </div>
     </Dialog>
     <Button label="Add" @click="visible=true" />

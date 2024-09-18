@@ -194,4 +194,4 @@ frontend structure:
     i will put in a separate view in backend so it can be fully differentiated
 
     multiple delete feature in frontend complete. needs a confirm dialog.
-    confirm dialog added. (confirm dialog should not be displayed if only one item is selected.)
+    confirm dialog added.
