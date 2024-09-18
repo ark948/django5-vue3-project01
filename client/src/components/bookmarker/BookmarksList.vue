@@ -170,6 +170,7 @@ const exportCSV = async () => {
   dt.value.exportCSV();
 }
 
+const shit = ref('fuck');
 </script>
 
 <template>
@@ -187,12 +188,15 @@ const exportCSV = async () => {
         :size="'small'"
         dataKey="id"
         tableStyle="min-width: 50rem"
-        steteStorage="local">
+        steteStorage="local"
+        >
         <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
         <Column field="title" header="Title"></Column>
         <Column field="url" header="URL"></Column>
         <Column field="icon" header="Icon"></Column>
         <Column field="action" header="Delete"></Column>
+        <Column header="edit">
+        </Column>
         <template #footer>
           <div style="text-align: right">
             <Button icon="pi pi-external-link" label="Export" @click="exportCSV($event)" />

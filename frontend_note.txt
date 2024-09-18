@@ -195,3 +195,9 @@ frontend structure:
 
     multiple delete feature in frontend complete. needs a confirm dialog.
     confirm dialog added.
+
+17. edit feature
+    is bulk edit possible? don't think so,
+    maybe quick edit using primevue table?
+    or a link for all records to open their detail dialog window.
+    need to add a custom column to bookmarks table
