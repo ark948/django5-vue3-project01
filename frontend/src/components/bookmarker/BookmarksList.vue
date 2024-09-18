@@ -101,11 +101,13 @@ async function handleNewBookmarkSubmit() {
       all_bookmarks.value.length = 0;
       get_bookmarks();
       visible.value = false;
+      new_item_title.value = "";
+      new_item_url.value = "";
     });
 }
 
-async function handleDelete() {
-  console.log("Performing Delete request...");
+async function handleSingleDeletion() {
+  console.log("Performing Delete request (Single)...");
   for (let i in selectedItem.value) {
     console.log(`Deleting item ${selectedItem.value[i].id}`)
     const res = await api.delete(`bookmarker/api/${selectedItem.value[i].id}/`)
@@ -128,6 +130,36 @@ async function handleDelete() {
     all_bookmarks.value.length = 0;
     get_bookmarks();
     visible.value = false;
+}
+
+async function handleMultipleDeletion() {
+  console.log("Performing mulitple deletion...");
+  let selected = [];
+  for (let i in selectedItem.value) {
+    selected.push(selectedItem.value[i]['id'])
+  }
+  selected = selected.toString();
+  console.log(typeof(selected))
+  const res = api.post('bookmarker/api/multiple-delete/', { list_of_ids: selected })
+    .then((response) => {
+      console.log("Sending request...");
+      if (response.status === 200) {
+        console.log("Multiple Delete OK");
+      } else {
+        console.log("Response code not 200")
+      }
+    })
+    .catch((e) => {
+      console.log("Delete Error");
+      console.log(e.message);
+    })
+    .finally(() => {
+      console.log("Request complete.");
+      console.log("REFRESHING THE TABLE NOW...");
+      all_bookmarks.value.length = 0;
+      get_bookmarks();
+      visible.value = false;
+    });
 }
 
 const dt = ref();
@@ -186,7 +218,7 @@ const exportCSV = async () => {
         </div>
     </Dialog>
     <Button label="Add" @click="visible=true" />
-    <Button @click="handleDelete" id="del_btn" label="Delete" disabled></Button>
+    <Button @click="handleMultipleDeletion" id="del_btn" label="Delete" disabled></Button>
   </div>
 </template>
 
