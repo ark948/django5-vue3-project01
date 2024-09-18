@@ -32,6 +32,9 @@ const new_item_url = ref("");
 const selected_items = ref([]);
 import { watch } from "vue";
 
+// delete confirm dialog
+const confirm = ref(false);
+
 watch(() => selectedItem.value, async () => {
     document.getElementById('del_btn').disabled = false;
     responseHolder.value = "Selected items: ";
@@ -158,7 +161,7 @@ async function handleMultipleDeletion() {
       console.log("REFRESHING THE TABLE NOW...");
       all_bookmarks.value.length = 0;
       get_bookmarks();
-      visible.value = false;
+      confirm.value = false;
     });
 }
 
@@ -217,8 +220,14 @@ const exportCSV = async () => {
             <Button type="button" label="Save" @click="visible = false"></Button>
         </div>
     </Dialog>
+    <Dialog v-model:visible="confirm">
+        <span>Delete mulitple records?</span>
+        <div class="flex justify-end gap-2">
+          <Button type="button" label="Confirm" @click="handleMultipleDeletion"></Button>
+        </div>
+    </Dialog>
     <Button label="Add" @click="visible=true" />
-    <Button @click="handleMultipleDeletion" id="del_btn" label="Delete" disabled></Button>
+    <Button @click="confirm=true" id="del_btn" label="Delete" disabled></Button>
   </div>
 </template>
 
