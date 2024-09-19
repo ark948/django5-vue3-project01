@@ -9,6 +9,7 @@ import { useAuthStore } from '@/stores';
 import ManualTokenRefresh from "@/views/ManualTokenRefresh.vue";
 import Bookmarks from "@/views/Bookmarks.vue";
 import NotFound from "@/views/NotFound.vue";
+import BookmarksListV2 from "@/components/bookmarker/bookmarks_list_v2/BookmarksListV2.vue";
 
 
 const { notify } = useNotification();
@@ -22,6 +23,7 @@ const routes = [
     { path: '/profile', component: ProfileView, name: "profile" },
     { path: '/manual-refresh', component: ManualTokenRefresh, name: 'manual_refresh' },
     { path: '/bookmarks-list', component: Bookmarks, name: 'bookmarks' },
+    { path: '/bookmarks-list-v2', component: BookmarksListV2, name: 'bookmarksv2' },
 
     { path: "/:catchall(.*)*", component: NotFound, name: "not_found" },
 ]

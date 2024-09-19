@@ -1,4 +1,5 @@
 <script setup>
+// this component uses PrimeVue library
 import { ref, onMounted } from "vue";
 import api from "@/api/api";
 import { useRouter } from "vue-router";

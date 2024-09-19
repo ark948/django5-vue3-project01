@@ -201,3 +201,6 @@ frontend structure:
     maybe quick edit using primevue table?
     or a link for all records to open their detail dialog window.
     need to add a custom column to bookmarks table
+    i can't add a custom column with a link to primevue DataTable component
+    trying another library, Vuetify
+    > npm i vuetify

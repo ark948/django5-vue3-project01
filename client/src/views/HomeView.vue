@@ -12,6 +12,7 @@
         <h1>This is home</h1>
         <div v-if="authStore.access_token" class="link-container">
             <p><RouterLink to="/bookmarks-list">Bookmarks</RouterLink></p>
+            <p><RouterLink to="/bookmarks-list-v2">Bookmarks (v2)</RouterLink></p>
             <p><RouterLink to="/profile">Profile page</RouterLink></p>
             <p><RouterLink to="/manual-refresh">Manual token refresh</RouterLink></p>
             <p>
