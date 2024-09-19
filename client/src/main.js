@@ -24,10 +24,10 @@ const vuetify = createVuetify({
 app.use(Notifications);
 app.use(createPinia());
 app.use(router);
+app.use(vuetify);
 app.use(PrimeVue, {
     theme: {
         preset: Aura
     }
 });
-app.use(vuetify);
 app.mount('#app');
