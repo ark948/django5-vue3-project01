@@ -9,11 +9,12 @@ import { VaDataTable } from "vuestic-ui/web-components";
 // bookmarks state variables
 const all_bookmarks = ref([]); // used
 const selected_item = ref([]);
-const test_data_holder = ref("");
+const message_holder = ref("");
 const display_selected_items = ref("");
 const modal_visible = ref(false);
 const edit_modal_visible = ref(false);
 const edit_item = reactive({
+  id: 0,
   title: "",
   url: ""
 });
@@ -55,6 +56,7 @@ watch(
 
 // functions
 async function get_all_bookmark_items() {
+  all_bookmarks.value = [];
     console.log("Aquiring list...");
     const res = await api
       .get("bookmarker/api/no-paginate/")
@@ -82,8 +84,8 @@ function openModalToEditItemById(id) {
   // open modal (done)
   // aquire the entire item using the id (done)
   // pre-fill the modal content using the entire id (done)
-  // let user edit
-  // send patch request upon confirm
+  // let user edit -> handleEdit
+  // send put/patch request upon confirm ()
   const item_id = id['rowData']['id'];;
   let entire_item = null;
   edit_modal_visible.value = true;
@@ -94,8 +96,30 @@ function openModalToEditItemById(id) {
     }
   }
 
+  edit_item.id = item_id;
   edit_item.title = entire_item.title;
   edit_item.url = entire_item.url;
+}
+
+function handleEdit() {
+  console.log("Invoking update...");
+  const res = api.put(`bookmarker/api/${edit_item.id}/`, { title: edit_item.title, url: edit_item.url})
+  .then((response) => {
+    if (response.status === 200) {
+      console.log("UPDATE SUCCESSFUL.");
+      message_holder.value = "Update successful.";
+      get_all_bookmark_items();
+    } else {
+      console.log("NOT 200");
+      alert("An error occurred");
+    }
+  })
+  .catch((error) => {
+    console.log(error.message);
+  })
+  .finally(() => {
+    edit_modal_visible.value = false;
+  });
 }
 
 </script>
@@ -131,7 +155,7 @@ function openModalToEditItemById(id) {
     </div>
     <div class="edit-item-modal-container">
       <VaModal v-model="edit_modal_visible" close-button ok-text="OK">
-        <form action="">
+        <form action="" @submit.prevent="handleEdit">
           <label for="title">Title:</label>
           <input type="text" name="title" v-model="edit_item.title">
           <label for="url">URL:</label>
@@ -144,7 +168,7 @@ function openModalToEditItemById(id) {
       <p>{{ display_selected_items }}</p>
     </div>
     <div class="test-message-container">
-      <p></p>
+      <p>{{ message_holder }}</p>
     </div>
   </div>
 </template>
