@@ -12,6 +12,11 @@ const selected_item = ref([]);
 const test_data_holder = ref("");
 const display_selected_items = ref("");
 const modal_visible = ref(false);
+const edit_modal_visible = ref(false);
+const edit_item = reactive({
+  title: "",
+  url: ""
+});
 
 const columns = [
   { key: "id" },
@@ -57,7 +62,7 @@ async function get_all_bookmark_items() {
         if (response.status === 200) {
             console.log('SUCCESS-200')
           for (let i = 0; i < response.data.length; i++) {
-            console.log(response.data[i]);
+            console.log("data added.");
             all_bookmarks.value.push(response.data[i]);
           }
         } else {
@@ -73,7 +78,24 @@ async function get_all_bookmark_items() {
   }
 
 function openModalToEditItemById(id) {
-  console.log(id['rowData']['id']);
+  // aquire item id upon selection (done)
+  // open modal (done)
+  // aquire the entire item using the id (done)
+  // pre-fill the modal content using the entire id (done)
+  // let user edit
+  // send patch request upon confirm
+  const item_id = id['rowData']['id'];;
+  let entire_item = null;
+  edit_modal_visible.value = true;
+
+  for (let i in all_bookmarks.value) {
+    if (all_bookmarks.value[i].id == item_id) {
+      entire_item = all_bookmarks.value[i];
+    }
+  }
+
+  edit_item.title = entire_item.title;
+  edit_item.url = entire_item.url;
 }
 
 </script>
@@ -106,6 +128,17 @@ function openModalToEditItemById(id) {
         some stuff
       </VaModal>
       <VaButton @click="modal_visible = true">Open Modal</VaButton>
+    </div>
+    <div class="edit-item-modal-container">
+      <VaModal v-model="edit_modal_visible" close-button ok-text="OK">
+        <form action="">
+          <label for="title">Title:</label>
+          <input type="text" name="title" v-model="edit_item.title">
+          <label for="url">URL:</label>
+          <textarea name="url" id="url" rows="5" cols="50" v-model="edit_item.url"></textarea>
+          <input type="submit" value="Confirm">
+        </form>
+      </VaModal>
     </div>
     <div class="selected-items-container">
       <p>{{ display_selected_items }}</p>
