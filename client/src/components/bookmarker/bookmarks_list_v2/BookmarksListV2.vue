@@ -72,6 +72,10 @@ async function get_all_bookmark_items() {
       });
   }
 
+function openModalToEditItemById(id) {
+  console.log(id['rowData']['id']);
+}
+
 </script>
 
 
@@ -83,11 +87,18 @@ async function get_all_bookmark_items() {
           <VaDataTable 
           :items="all_bookmarks" 
           :columns="columns" 
-          selectable
           :select-mode="'multiple'"
+          selectable
           v-model="selected_item"
           >
-        </VaDataTable>
+          <template #cell(edit)="selected_item">
+            <VaButton
+              preset="plain"
+              icon="edit"
+              @click="openModalToEditItemById(selected_item)"
+            />
+          </template>
+          </VaDataTable>
         </div>
     </div>
     <div class="add-item-modal-container">
