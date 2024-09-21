@@ -204,3 +204,32 @@ frontend structure:
     i can't add a custom column with a link to primevue DataTable component
     trying another library, Vuetify
     > npm i vuetify
+
+
+    Huge problem: text boxes and check boxes not displaying at all.
+    (in all pages)
+    - attempting to remove eslint.config.js (not working)
+    - attempting to remove vuetify instance (not working)
+    - attempting to hard reload from browser (not working)
+    tried edge browser, problem persists
+    - found what causing problem, vueitfy imports (there are 4)
+    - trying to find exactly which one of them
+    exactly the first one: // import 'vuetify/styles'; (it conflicts with other styles)
+    - trying to move this line to the only component that needs it
+    there are some sorts of mentions in vuetify doc, something about css reset
+    and a link to disable this, but that link is 404
+
+    - While trying to fix this issue, found another problem...
+    going to bookmarks page, manual refresh is required to load the table data
+
+
+18. trying another ui library (Vuestic UI)
+    this will be the last ui library i am going to try, if this does not work either,
+    i will revert back to primevue
+    > installing
+    npm install vuestic-ui
+    download the css file and link it in main html file (index.html) in head element
+    modify the main entry point main.js (globally, it can also be installed per-component)
+    (but that requires further steps)
+    - this step did change some stuff globally, like font
+    

@@ -20,6 +20,7 @@
     "vee-validate": "^4.13.2",
     "vue": "^3.4.29",
     "vue-router": "^4.4.3",
+    "vuestic-ui": "^1.10.1",
     "vuetify": "^3.7.2",
     "yup": "^1.4.0"
   },

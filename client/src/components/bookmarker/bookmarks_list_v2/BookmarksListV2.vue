@@ -1,24 +1,52 @@
 <script setup>
-// this component uses Vuetify.js library
+
 // imports
-import { onMounted } from "vue";
+import { onMounted, reactive, watch } from "vue";
 import { ref } from 'vue';
 import api from "@/api/api";
-import * as data from '@/components/bookmarker/bookmarks_list_v2/data';
-import * as components from 'vuetify/components'
-import * as directives from 'vuetify/directives'
+import { VaDataTable } from "vuestic-ui/web-components";
 
 // bookmarks state variables
-const all_bookmarks = ref([]);
-const selected_item = ref(null);
-const selected_items = ref([]);
+const all_bookmarks = ref([]); // used
+const selected_item = ref([]);
 const test_data_holder = ref("");
+const display_selected_items = ref("");
+const modal_visible = ref(false);
 
+const columns = [
+  { key: "id" },
+  { key: "title" },
+  { key: "url" },
+  { key: 'edit' },
+  { key: 'delete'}
+]
 
 onMounted(() => {
   console.log("[bookmarksListV2 mounted.]");
   get_all_bookmark_items();
 });
+
+watch(
+  () => selected_item.value,
+  () => {
+    console.log(selected_item.value);
+    display_selected_items.value = 'Selected items: '
+    for (let i in selected_item.value) {
+      display_selected_items.value += `${selected_item.value[i]['id']}, `;
+      // maybe sort this later
+    }
+  },
+);
+
+watch(
+  () => selected_item.value,
+  () => {
+    if (selected_item.value.length === 0) {
+      display_selected_items.value = '';
+    }
+  },
+);
+
 
 // functions
 async function get_all_bookmark_items() {
@@ -52,8 +80,24 @@ async function get_all_bookmark_items() {
     <div class="items-container">
       <h3>Your bookmarks:</h3>
         <div class="items-table-container">
-          <v-data-table :items="all_bookmarks"></v-data-table>
+          <VaDataTable 
+          :items="all_bookmarks" 
+          :columns="columns" 
+          selectable
+          :select-mode="'multiple'"
+          v-model="selected_item"
+          >
+        </VaDataTable>
         </div>
+    </div>
+    <div class="add-item-modal-container">
+      <VaModal v-model="modal_visible" close-button ok-text="Submit">
+        some stuff
+      </VaModal>
+      <VaButton @click="modal_visible = true">Open Modal</VaButton>
+    </div>
+    <div class="selected-items-container">
+      <p>{{ display_selected_items }}</p>
     </div>
     <div class="test-message-container">
       <p></p>

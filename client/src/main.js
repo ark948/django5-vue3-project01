@@ -9,25 +9,29 @@ import PrimeVue from 'primevue/config';
 import Aura from '@primevue/themes/aura';
 
 // Vuetify
-import 'vuetify/styles';
-import { createVuetify } from 'vuetify';
-import * as components from 'vuetify/components';
-import * as directives from 'vuetify/directives';
+
+// import { createVuetify } from 'vuetify';
+// import * as components from 'vuetify/components';
+// import * as directives from 'vuetify/directives';
+// import 'vuetify/styles';
+
+// Vuestic UI
+import { createVuestic } from 'vuestic-ui';
+import 'vuestic-ui/css';
 
 const app = createApp(App)
-
-const vuetify = createVuetify({
-    components,
-    directives,
-});
 
 app.use(Notifications);
 app.use(createPinia());
 app.use(router);
-app.use(vuetify);
+// const vuetify = createVuetify({
+//     components,
+//     directives,
+// });
+// app.use(vuetify);
 app.use(PrimeVue, {
     theme: {
         preset: Aura
     }
 });
-app.mount('#app');
+app.use(createVuestic()).mount('#app');
