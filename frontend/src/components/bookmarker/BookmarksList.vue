@@ -172,6 +172,16 @@ const exportCSV = async () => {
 }
 
 const shit = ref('fuck');
+import { FilterMatchMode } from '@primevue/core/api';
+import { useToast } from 'primevue/usetoast';
+
+function getstuff(item) {
+  console.log(item);
+}
+
+function editProduct(item) {
+  console.log(item);
+}
 </script>
 
 <template>
@@ -195,8 +205,11 @@ const shit = ref('fuck');
         <Column field="title" header="Title"></Column>
         <Column field="url" header="URL"></Column>
         <Column field="icon" header="Icon"></Column>
-        <Column field="action" header="Delete"></Column>
-        <Column header="edit">
+        <Column :exportable="false" style="min-width: 12rem">
+          <template #body="slotProps">
+            <Button label="Edit" outlined rounded class="mr-2" @click="editProduct(slotProps.data)" />
+            <Button label="Delete" outlined rounded severity="danger" @click="confirmDeleteProduct(slotProps.data)" />
+          </template>
         </Column>
         <template #footer>
           <div style="text-align: right">
