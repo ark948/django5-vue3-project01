@@ -96,7 +96,7 @@ function openModalToEditItemById(id) {
   // open modal (done)
   // pre-fill the modal content using the entire id (done)
   // let user edit -> handleEdit
-  // send put/patch request upon confirm ()
+  // send put/patch request upon confirm
   const item_id = id['rowData']['id'];
   let entire_item = null;
   edit_modal_visible.value = true;
