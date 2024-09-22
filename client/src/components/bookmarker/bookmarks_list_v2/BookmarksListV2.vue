@@ -13,6 +13,7 @@ const message_holder = ref("");
 const display_selected_items = ref("");
 const add_modal_visible = ref(false);
 const edit_modal_visible = ref(false);
+const delete_modal_visible = ref(false);
 const edit_item = reactive({
   id: 0,
   title: "",
@@ -23,6 +24,12 @@ const add_item = reactive({
   title: "",
   url: "",
 });
+
+const delete_item = reactive({
+  id: 0,
+  title: "",
+  url: "",
+})
 
 const columns = [
   { key: "id" },
@@ -87,11 +94,11 @@ async function get_all_bookmark_items() {
 function openModalToEditItemById(id) {
   // aquire item id upon selection (done)
   // open modal (done)
-  // aquire the entire item using the id (done)
+  // aquire the entire item using the id (done) (THIS NEEDS TO BE FIXED)
   // pre-fill the modal content using the entire id (done)
   // let user edit -> handleEdit
   // send put/patch request upon confirm ()
-  const item_id = id['rowData']['id'];;
+  const item_id = id['rowData']['id'];
   let entire_item = null;
   edit_modal_visible.value = true;
 
@@ -104,6 +111,15 @@ function openModalToEditItemById(id) {
   edit_item.id = item_id;
   edit_item.title = entire_item.title;
   edit_item.url = entire_item.url;
+}
+
+function openModalToDeleteItemById(id) {
+  console.log("Deleting item...");
+  const item_id = id['rowData']['id'];
+  delete_item.id = item_id;
+  delete_item.title = id['rowData']['title'];
+  delete_item.url = id['rowData']['url'];
+  delete_modal_visible.value = true;
 }
 
 function handleEdit() {
@@ -143,9 +159,32 @@ function handleAdd() {
   })
   .catch((error) => {
     console.log(error.message);
+    message_holder.value = "There was a problem.";
   })
   .finally(() => {
     add_modal_visible.value = false;
+  })
+}
+
+function handleDelete() {
+  console.log("Deleting item...");
+  const res = api.delete(`bookmarker/api/${delete_item.id}/`)
+  .then((response) => {
+    if (response.status === 204) {
+      console.log("DELETE SUCCESS");
+      message_holder.value = "Item successfully deleted.";
+      get_all_bookmark_items();
+    } else {
+      console.log("NOT 200");
+      message_holder.value = "An error occurred. sorry.";
+    }
+  })
+  .catch((error) => {
+    console.log(error.message);
+    message_holder.value = "There was a problem.";
+  })
+  .finally(() => {
+    delete_modal_visible.value = false;
   })
 }
 
@@ -171,6 +210,13 @@ function handleAdd() {
               @click="openModalToEditItemById(selected_item)"
             />
           </template>
+          <template #cell(delete)="selected_item">
+            <VaButton
+            preset="plain"
+            icon="delete"
+            @click="openModalToDeleteItemById(selected_item)"
+            />
+          </template>
           </VaDataTable>
         </div>
     </div>
@@ -193,6 +239,16 @@ function handleAdd() {
           <input type="text" name="title" v-model="edit_item.title">
           <label for="url">URL:</label>
           <textarea name="url" id="url" rows="5" cols="50" v-model="edit_item.url"></textarea>
+          <input type="submit" value="Confirm">
+        </form>
+      </VaModal>
+    </div>
+    <div class="delete-item-modal-container">
+      <VaModal v-model="delete_modal_visible" close-button ok-text="OK">
+        <form action="" @submit.prevent="handleDelete">
+          <h4>Are you sure about this?</h4>
+          <p>{{ delete_item.title }}</p>
+          <p>{{ delete_item.url }}</p>
           <input type="submit" value="Confirm">
         </form>
       </VaModal>
