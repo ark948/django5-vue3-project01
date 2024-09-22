@@ -94,7 +94,6 @@ async function get_all_bookmark_items() {
 function openModalToEditItemById(id) {
   // aquire item id upon selection (done)
   // open modal (done)
-  // aquire the entire item using the id (done) (THIS NEEDS TO BE FIXED)
   // pre-fill the modal content using the entire id (done)
   // let user edit -> handleEdit
   // send put/patch request upon confirm ()
@@ -102,11 +101,7 @@ function openModalToEditItemById(id) {
   let entire_item = null;
   edit_modal_visible.value = true;
 
-  for (let i in all_bookmarks.value) {
-    if (all_bookmarks.value[i].id == item_id) {
-      entire_item = all_bookmarks.value[i];
-    }
-  }
+  entire_item = id['rowData'];
 
   edit_item.id = item_id;
   edit_item.title = entire_item.title;
