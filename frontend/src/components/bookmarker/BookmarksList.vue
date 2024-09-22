@@ -1,6 +1,6 @@
 <script setup>
 // this component uses PrimeVue library
-import { ref, onMounted } from "vue";
+import { ref, onMounted, reactive } from "vue";
 import api from "@/api/api";
 import { useRouter } from "vue-router";
 
@@ -179,8 +179,40 @@ function getstuff(item) {
   console.log(item);
 }
 
-function editProduct(item) {
-  console.log(item);
+const edit_modal_visible = ref(false);
+const edit_item = reactive({
+  id: 0,
+  title: "",
+  url: ""
+});
+function editItem(item) {
+  edit_item.id = item.id;
+  edit_item.title = item.title;
+  edit_item.url = item.url;
+  edit_modal_visible.value = true;
+}
+
+function handleEdit() {
+  console.log("Invoking update...");
+  const res = api.put(`bookmarker/api/${edit_item.id}/`, { title: edit_item.title, url: edit_item.url})
+  .then((response) => {
+    if (response.status === 200) {
+      console.log("UPDATE SUCCESSFUL.");
+      responseHolder.value = "Update successful.";
+    } else {
+      console.log("NOT 200");
+      responseHolder.value = "An error occurred. sorry.";
+    }
+  })
+  .catch((error) => {
+    console.log(error.message);
+  })
+  .finally(() => {
+    console.log("Edit complete. Refreshing now...");
+    all_bookmarks.value.length = 0;
+    get_bookmarks();
+    edit_modal_visible.value = false;
+  });
 }
 </script>
 
@@ -207,7 +239,7 @@ function editProduct(item) {
         <Column field="icon" header="Icon"></Column>
         <Column :exportable="false" style="min-width: 12rem">
           <template #body="slotProps">
-            <Button label="Edit" outlined rounded class="mr-2" @click="editProduct(slotProps.data)" />
+            <Button label="Edit" outlined rounded class="mr-2" @click="editItem(slotProps.data)" />
             <Button label="Delete" outlined rounded severity="danger" @click="confirmDeleteProduct(slotProps.data)" />
           </template>
         </Column>
@@ -243,6 +275,15 @@ function editProduct(item) {
           <Button type="button" label="Confirm" @click="handleMultipleDeletion"></Button>
           <Button type="button" label="Cancel" severity="secondary" @click="confirm = false"></Button>
         </div>
+    </Dialog>
+    <Dialog v-model:visible="edit_modal_visible">
+      <form action="" @submit.prevent="handleEdit">
+          <label for="title">Title:</label>
+          <input type="text" name="title" v-model="edit_item.title">
+          <label for="url">URL:</label>
+          <textarea name="url" id="url" rows="5" cols="50" v-model="edit_item.url"></textarea>
+          <input type="submit" value="Confirm">
+        </form>
     </Dialog>
     <Button label="Add" @click="visible=true" />
     <Button @click="confirm=true" id="del_btn" label="Delete" disabled></Button>
