@@ -6,6 +6,10 @@ import { ref } from 'vue';
 import api from "@/api/api";
 import { VaDataTable } from "vuestic-ui/web-components";
 
+// primevue button for multiple deletion
+import Button from 'primevue/button';
+const delete_dialog_visible = ref(false);
+
 // bookmarks state variables
 const all_bookmarks = ref([]); // used
 const selected_item = ref([]);
@@ -46,9 +50,10 @@ onMounted(() => {
 
 watch(
   () => selected_item.value,
-  () => {
+  async () => {
     console.log(selected_item.value);
     display_selected_items.value = 'Selected items: '
+    document.getElementById('del_btn').disabled = false;
     for (let i in selected_item.value) {
       display_selected_items.value += `${selected_item.value[i]['id']}, `;
       // maybe sort this later
@@ -58,8 +63,9 @@ watch(
 
 watch(
   () => selected_item.value,
-  () => {
+  async () => {
     if (selected_item.value.length === 0) {
+      document.getElementById('del_btn').disabled = true;
       display_selected_items.value = '';
     }
   },
@@ -183,6 +189,34 @@ function handleDelete() {
   })
 }
 
+function handleMulitpleDeletion() {
+  let selected_to_delete = [];
+  for (let i in selected_item.value) {
+    selected_to_delete.push(selected_item.value[i]['id']);
+  }
+
+  selected_to_delete = selected_to_delete.toString();
+
+  const res = api.post('bookmarker/api/multiple-delete/', { list_of_ids: selected_to_delete })
+    .then((response) => {
+      console.log("Sending request...");
+      if (response.status === 200) {
+        console.log("Multiple Delete OK");
+      } else {
+        console.log("NOT 200")
+      }
+    })
+    .catch((e) => {
+      console.log("Mulitple Deletion Error");
+      console.log(e.message);
+    })
+    .finally(() => {
+      console.log("Request complete. Refreshing table...");
+      delete_dialog_visible.value = false;
+      get_all_bookmark_items();
+    });
+}
+
 </script>
 
 
@@ -226,6 +260,13 @@ function handleDelete() {
         </form>
       </VaModal>
       <VaButton @click="add_modal_visible = true">Add manually</VaButton>
+      <VaModal v-model="delete_dialog_visible" close-button ok-text="Submit">
+        <form action="" @submit.prevent="handleMulitpleDeletion">
+          <h3>You are about to delete multiple records, Are you sure about this?</h3>
+          <input type="submit" value="Confirm">
+        </form>
+      </VaModal>
+      <Button @click="delete_dialog_visible=true" id="del_btn" label="Delete" disabled></Button>
     </div>
     <div class="edit-item-modal-container">
       <VaModal v-model="edit_modal_visible" close-button ok-text="OK">
