@@ -11,12 +11,17 @@ const all_bookmarks = ref([]); // used
 const selected_item = ref([]);
 const message_holder = ref("");
 const display_selected_items = ref("");
-const modal_visible = ref(false);
+const add_modal_visible = ref(false);
 const edit_modal_visible = ref(false);
 const edit_item = reactive({
   id: 0,
   title: "",
   url: ""
+});
+
+const add_item = reactive({
+  title: "",
+  url: "",
 });
 
 const columns = [
@@ -111,7 +116,7 @@ function handleEdit() {
       get_all_bookmark_items();
     } else {
       console.log("NOT 200");
-      alert("An error occurred");
+      message_holder.value = "An error occurred. sorry.";
     }
   })
   .catch((error) => {
@@ -120,6 +125,28 @@ function handleEdit() {
   .finally(() => {
     edit_modal_visible.value = false;
   });
+}
+
+function handleAdd() {
+  console.log("Adding item...")
+  message_holder.value = "";
+  const res = api.post('bookmarker/api/', { title: add_item.title, url: add_item.url })
+  .then((response) => {
+    if (response.status === 201) {
+      console.log("ADD SUCCESS");
+      message_holder.value = "Successfully added item.";
+      get_all_bookmark_items();
+    } else {
+      console.log("NOT 200");
+      message_holder.value = "An error occurred. sorry.";
+    }
+  })
+  .catch((error) => {
+    console.log(error.message);
+  })
+  .finally(() => {
+    add_modal_visible.value = false;
+  })
 }
 
 </script>
@@ -148,10 +175,16 @@ function handleEdit() {
         </div>
     </div>
     <div class="add-item-modal-container">
-      <VaModal v-model="modal_visible" close-button ok-text="Submit">
-        some stuff
+      <VaModal v-model="add_modal_visible" close-button ok-text="Submit">
+        <form action="" @submit.prevent="handleAdd">
+          <label for="title">Title:</label>
+          <input type="text" name="title" v-model="add_item.title">
+          <label for="url">URL:</label>
+          <textarea name="url" id="url" rows="5" cols="50" v-model="add_item.url"></textarea>
+          <input type="submit" value="Add">
+        </form>
       </VaModal>
-      <VaButton @click="modal_visible = true">Open Modal</VaButton>
+      <VaButton @click="add_modal_visible = true">Add manually</VaButton>
     </div>
     <div class="edit-item-modal-container">
       <VaModal v-model="edit_modal_visible" close-button ok-text="OK">
