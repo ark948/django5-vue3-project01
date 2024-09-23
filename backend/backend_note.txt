@@ -5,7 +5,8 @@ quickly bookmark any page
     bookmark includes account (email, username, password encrypted), + note + sharing + 
     csv export and import + export to browser, import from browser +
     page is up test (status code check)
-
+    
+Saving tokens in localStorage is not a secure.
 
 1. basic setup:
     pip install django djangorestframework

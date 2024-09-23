@@ -4,6 +4,15 @@ frontend structure:
     state management: Pinia
     form package: Vee-Validate
     form validation: Yup
+
+vue-router
+pinia
+VueUse
+veevalidate
+primevue
+vuetify
+shadcn - shadcn-vue
+
     
 
 1. initial frontend setup

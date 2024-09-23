@@ -1,7 +1,0 @@
-vue-router
-pinia
-VueUse
-veevalidate
-primevue
-vuetify
-shadcn - shadcn-vue
