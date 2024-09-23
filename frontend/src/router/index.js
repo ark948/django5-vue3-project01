@@ -23,7 +23,7 @@ const routes = [
     { path: '/profile', component: ProfileView, name: "profile" },
     { path: '/manual-refresh', component: ManualTokenRefresh, name: 'manual_refresh' },
     { path: '/bookmarks-list', component: Bookmarks, name: 'bookmarks' },
-    { path: '/bookmarks-list-v2', component: BookmarksListV2, name: 'bookmarksv2' },
+    // { path: '/bookmarks-list-v2', component: BookmarksListV2, name: 'bookmarksv2' },
 
     { path: "/:catchall(.*)*", component: NotFound, name: "not_found" },
 ]

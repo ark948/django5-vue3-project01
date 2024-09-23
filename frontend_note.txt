@@ -233,3 +233,6 @@ frontend structure:
     (but that requires further steps)
     - this step did change some stuff globally, like font
     
+
+19. Came back to Primevue, made it work
+    removing all other libraries, vuestic ui, vueitfy

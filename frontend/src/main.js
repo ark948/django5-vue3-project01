@@ -14,8 +14,7 @@ import Aura from '@primevue/themes/aura';
 // Vuetify was deleted
 
 // Vuestic UI
-import { createVuestic } from 'vuestic-ui';
-import 'vuestic-ui/css';
+// vuestic ui was removed
 
 const app = createApp(App)
 
@@ -27,4 +26,4 @@ app.use(PrimeVue, {
         preset: Aura
     }
 });
-app.use(createVuestic()).mount('#app');
+app.mount('#app');
