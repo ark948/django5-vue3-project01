@@ -214,6 +214,26 @@ function handleEdit() {
     edit_modal_visible.value = false;
   });
 }
+
+function confirmDeleteProduct(item) {
+  const res = api.delete(`bookmarker/api/${item['id']}/`)
+    .then((response) => {
+      if (response.status === 204 || response.status === 200) {
+        console.log("Delete successful = 200 or 204");
+      } else {
+        console.log("NOT 200 or 204");
+        responseHolder.value = 'An error occurred.';
+      }
+    })
+    .catch((e) => {
+      console.log(e.message);
+    })
+    .finally(() => {
+      console.log("Single delete complete. Refreshing now...");
+      all_bookmarks.value.length = 0;
+      get_bookmarks();
+    })
+}
 </script>
 
 <template>
