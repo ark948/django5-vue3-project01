@@ -15,6 +15,7 @@ import Column from "primevue/column";
 import ColumnGroup from "primevue/columngroup"; // optional
 import Row from "primevue/row"; // optional
 import Paginator from "primevue/paginator";
+import FileUpload from "primevue/fileupload";
 
 const selectedItem = ref();
 
@@ -171,13 +172,7 @@ const exportCSV = async () => {
   dt.value.exportCSV();
 }
 
-const shit = ref('fuck');
-import { FilterMatchMode } from '@primevue/core/api';
 import { useToast } from 'primevue/usetoast';
-
-function getstuff(item) {
-  console.log(item);
-}
 
 const edit_modal_visible = ref(false);
 const edit_item = reactive({
@@ -232,6 +227,38 @@ function confirmDeleteProduct(item) {
       console.log("Single delete complete. Refreshing now...");
       all_bookmarks.value.length = 0;
       get_bookmarks();
+    })
+}
+
+const fileInput = ref(null);
+const files = ref();
+function handleFileChange() {
+  files.value = fileInput.value?.files
+}
+
+function handleCSVImport() {
+  // const file = files.value[0];
+  const formData = new FormData();
+  formData.append("uploaded_file", files.value[0]);
+  console.log("Sending file...");
+  const res = api.post('bookmarker/api/file-upload/', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+    .then((response) => {
+      if (response.status === 200) {
+        console.log("SUCCESS");
+      } else {
+        console.log("NOT 200");
+      }
+    })
+    .catch((e) => {
+      console.log("ERROR");
+      console.log(e.message);
+    })
+    .finally(() => {
+      console.log("done.");
     })
 }
 </script>
@@ -307,6 +334,13 @@ function confirmDeleteProduct(item) {
     </Dialog>
     <Button label="Add" @click="visible=true" />
     <Button @click="confirm=true" id="del_btn" label="Delete" disabled></Button>
+    <div class="file-upload-form-container">
+      <form @submit.prevent="handleCSVImport" enctype="multipart/form-data">
+        Import csv:
+        <input ref="fileInput" @change="handleFileChange" type="file" id="file" accept=".csv">
+        <input type="submit" value="submit">
+      </form>
+    </div>
   </div>
 </template>
 

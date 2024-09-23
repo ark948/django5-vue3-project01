@@ -236,3 +236,5 @@ frontend structure:
 
 19. Came back to Primevue, made it work
     removing all other libraries, vuestic ui, vueitfy
+
+20. sending csv file to server entirely or read it in frontend and then send it as a long data

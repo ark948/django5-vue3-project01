@@ -103,3 +103,6 @@ problem 02: bookmark item title max length too short. [FIXED]
     in restful design, since delete http verb should be used with one object only
     but we can use a post request to collect a multiple ids from request body
     then perform the delete in backend.
+
+15. csv export is done in frontend, for csv import some backend code is required.
+    i want to get the file, read its data, and not store it in database or filesystem

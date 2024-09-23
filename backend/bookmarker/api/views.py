@@ -9,10 +9,12 @@ from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework import status
 from rest_framework.request import Request
 from django.shortcuts import get_object_or_404
+from rest_framework.parsers import FormParser, MultiPartParser, FileUploadParser
 from bookmarker.serializers import (
     BookmarksSerializer, 
     BookmarkDetailsSerializer,
-    BookmarkMultipleDeleteSerializer
+    BookmarkMultipleDeleteSerializer,
+    FileUploadSerializer
     )
 from rest_framework.generics import (
     RetrieveUpdateDestroyAPIView,
@@ -117,3 +119,30 @@ class BookmarkMultipleDeleteUsingPost(GenericAPIView):
                     bookmark_object.delete()
             return Response({'msg': 'multiple records deleted.'}, status=status.HTTP_200_OK)
         return Response({'msg': 'data is not valid'})
+    
+import csv
+import codecs
+import io
+class UserBookmarksCSVImport(APIView):
+    # gets csv file and reads the content
+    parser_classes = (FormParser, MultiPartParser)
+    seralizer_class = FileUploadSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response({}, status=status.HTTP_200_OK)
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.seralizer_class(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            uploaded_file = serializer.validated_data['uploaded_file']
+            f = uploaded_file.read().decode('utf-8-sig')
+            # with open(uploaded_file, 'r', encoding='UTF8') as f:
+            csv_reader = csv.DictReader(io.StringIO(f))
+            for line in csv_reader:
+                Bookmark.objects.create(title=line['Title'], url=line['URL'], owner=self.request.user)
+                print("ITEM ADDED.")
+            return Response({'msg': 'ok'}, status=status.HTTP_200_OK)
+        return Response({'msg': "Not valid"}, status=status.HTTP_400_BAD_REQUEST)
+
+

@@ -5,13 +5,15 @@ from bookmarker.api.views import (
     UserBookmarkDetailView,
     UserBookmarksListNoPagination,
     BookmarkViewSet,
-    BookmarkMultipleDeleteUsingPost
+    BookmarkMultipleDeleteUsingPost,
+    UserBookmarksCSVImport
 )
 
 app_name='api'
 router = DefaultRouter()
 router.register(r'bookmarks', BookmarkViewSet, basename='bookmark')
 urlpatterns = [
+    path('file-upload/', UserBookmarksCSVImport.as_view(), name='file_upload'),
     path('multiple-delete/', BookmarkMultipleDeleteUsingPost.as_view(), name='multiple_delete'),
     path('<int:pk>/', UserBookmarkDetailView.as_view(), name='item'),
     path('no-paginate/', UserBookmarksListNoPagination.as_view(), name='list_no_pagination'),

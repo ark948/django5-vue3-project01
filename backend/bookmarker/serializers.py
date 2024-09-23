@@ -1,6 +1,5 @@
 from bookmarker.models import Bookmark
-from rest_framework.serializers import ModelSerializer
-from rest_framework.serializers import Serializer
+from rest_framework.serializers import ModelSerializer, Serializer, FileField
 from rest_framework import serializers
 
 class BookmarksSerializer(ModelSerializer):
@@ -43,3 +42,9 @@ class BookmarkMultipleDeleteSerializer(Serializer):
         if len(new_list) == 0:
             raise serializers.ValidationError('Validation failed.')
         return new_list
+    
+class FileUploadSerializer(Serializer):
+    uploaded_file = serializers.FileField()
+
+    class Meta:
+        fields = ['file_upload']
