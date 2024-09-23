@@ -1,5 +1,5 @@
 <script>
-    import BookmarksList from '@/components/bookmarker/BookmarksList.vue';
+    import BookmarksList from '@/components/bookmarker/bookmarks_list/BookmarksList.vue';
 
     export default {
         components: {
