@@ -258,7 +258,9 @@ function handleCSVImport() {
       console.log(e.message);
     })
     .finally(() => {
-      console.log("done.");
+      console.log("CSV import done. Refreshing table now...");
+      all_bookmarks.value.length = 0;
+      get_bookmarks();
     })
 }
 </script>
