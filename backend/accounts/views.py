@@ -11,7 +11,7 @@ from accounts.serializers import (
 )
 from rest_framework.generics import GenericAPIView
 from rest_framework import status
-from utils.email import send_code_to_user
+from accounts.utils.email import send_code_to_user
 from accounts.models import OneTimePassword
 from rest_framework.permissions import IsAuthenticated
 from django.utils.encoding import smart_str, DjangoUnicodeDecodeError

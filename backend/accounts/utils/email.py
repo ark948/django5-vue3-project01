@@ -1,7 +1,7 @@
 from accounts.models import CustomUser, OneTimePassword
 from django.conf import settings
 from django.core.mail import EmailMessage
-from utils.otp import generateOtp
+from accounts.utils.otp import generateOtp
 
 def send_code_to_user(email):
     Subject = "One Time passcode for email verification"
