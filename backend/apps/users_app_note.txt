@@ -1,0 +1,10 @@
+serializers: 
+    one serializer - UserSerializer
+
+views:
+    starting with RegistrationView
+
+
+utils:
+    
+
