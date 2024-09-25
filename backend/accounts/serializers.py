@@ -8,7 +8,7 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import smart_bytes, force_str
 from django.contrib.sites.shortcuts import get_current_site
-from utils.email import send_code_to_user
+from utils.email import send_code_to_user, send_normal_email
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError
 
@@ -91,3 +91,61 @@ class LogoutUserSerializer(Serializer):
             token.blacklist()
         except TokenError:
             return self.fail('bad_token')
+        
+class PasswordResetRequestSerializer(Serializer):
+    email = serializers.EmailField(max_length=255)
+
+    class Meta:
+        fields = ['email']
+
+    def validate(self, attrs):
+        email = attrs.get('email')
+        if CustomUser.objects.filter(email=email).exists():
+            user = CustomUser.objects.get(email=email)
+            uidb64 = urlsafe_base64_encode(smart_bytes(user.id))
+            token = PasswordResetTokenGenerator().make_token(user)
+            request = self.context.get('request')
+            site_domain = get_current_site(request).domain
+            relative_link = reverse('accounts:password_reset_confirm', kwargs={ 'uidb64': uidb64, 'token': token })
+            abslink = f'http://{site_domain}{relative_link}'
+            email_body = f'Hi, Please use the following link to reset your password.\n {abslink}'
+            data = {
+                'email_body': email_body,
+                'email_subject': "Reset your password.",
+                'to_email': user.email
+            }
+            send_normal_email(data)
+        else:
+            raise serializers.ValidationError("User with email not found.")
+        return super().validate(attrs)
+    
+
+class SetNewPasswordSerializer(Serializer):
+    password = serializers.CharField(max_length=100, min_length=6, write_only=True)
+    confirm_password = serializers.CharField(max_length=100, min_length=6, write_only=True)
+    uidb64 = serializers.CharField(write_only=True)
+    token = serializers.CharField(write_only=True)
+
+    class Meta:
+        fields = ['password', 'confirm_password', 'uidb64', 'token']
+
+    def validate(self, attrs):
+        try:
+            token = attrs.get('token')
+            uidb64 = attrs.get('uidb64')
+            password = attrs.get('password')
+            confirm_password=attrs.get('confirm_password')
+
+            user_id = force_str(urlsafe_base64_decode(uidb64))
+            # force_str similar to smart_str, converts byte string to regular strings
+            user = CustomUser.objects.get(id=user_id)
+            if not PasswordResetTokenGenerator().check_token(user, token):
+                raise AuthenticationFailed('Reset link is invalid or has expired.', 401)
+            if password != confirm_password:
+                raise AuthenticationFailed('Passwords do not match.')
+            user.set_password(password)
+            user.save()
+            return user
+        except Exception as e:
+            return AuthenticationFailed('Link is invalid or has expired.')
+        

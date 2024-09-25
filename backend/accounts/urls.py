@@ -6,7 +6,10 @@ from accounts.views import (
     VerifyUserEmail,
     LoginUserView,
     TestAuthenticationView,
-    LogoutUserView
+    LogoutUserView,
+    PasswordResetRequestView,
+    PasswordResetConfirmView,
+    SetNewPasswordView,
 )
 
 app_name = 'accounts'
@@ -17,5 +20,8 @@ urlpatterns = [
     path('logout/', LogoutUserView.as_view(), name='logout'),
     path('auth-required/', TestAuthenticationView.as_view(), name='auth_required'),
     path('token/refresh/', TokenRefreshView.as_view(), name='refresh_token'),
+    path('password-reset/', PasswordResetRequestView.as_view(), name='password_reset'),
+    path('password-reset-confirm/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('set-new-password/', SetNewPasswordView.as_view(), name='set_new_password'),
     path('', AccountsIndexView.as_view(), name='index'),
 ]

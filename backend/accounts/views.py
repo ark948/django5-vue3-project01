@@ -5,13 +5,19 @@ from accounts.serializers import (
     UserRegisterSerializer,
     UserOTPSerializer,
     LoginSerializer,
-    LogoutUserSerializer
+    LogoutUserSerializer,
+    PasswordResetRequestSerializer,
+    SetNewPasswordSerializer
 )
 from rest_framework.generics import GenericAPIView
 from rest_framework import status
 from utils.email import send_code_to_user
 from accounts.models import OneTimePassword
 from rest_framework.permissions import IsAuthenticated
+from django.utils.encoding import smart_str, DjangoUnicodeDecodeError
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from accounts.models import CustomUser
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
 # Create your views here.
 
@@ -23,7 +29,9 @@ class AccountsIndexView(APIView):
             "verify-email": reverse('accounts:verify_email', request=request),
             "login": reverse('accounts:login', request=request),
             "auth-required": reverse('accounts:auth_required', request=request),
-            "refresh_token": reverse('accounts:refresh_token', request=request)
+            "refresh_token": reverse('accounts:refresh_token', request=request),
+            "password_reset_request": reverse('accounts:password_reset', request=request),
+            "set_new_password": reverse('accounts:set_new_password', request=request),
         })
 
 
@@ -93,3 +101,46 @@ class LogoutUserView(GenericAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({"msg": "Logout successful, token blacklisted."}, status=status.HTTP_200_OK)
+    
+
+class PasswordResetRequestView(GenericAPIView):
+    serializer_class = PasswordResetRequestSerializer
+
+    def post(self, request):
+        serializer = self.serializer_class(
+            data=request.data,
+            context={'request': request})
+        if serializer.is_valid(raise_exception=True):
+            return Response({'message': 'A link containing password reset link has been sent to your email.'}, 
+                            status=status.HTTP_200_OK)
+    
+
+class PasswordResetConfirmView(GenericAPIView):
+    def get(self, request, uidb64, token):
+        try:
+            user_id = smart_str(urlsafe_base64_decode(uidb64))
+            user = CustomUser.objects.get(id=user_id)
+            if not PasswordResetTokenGenerator().check_token(user, token):
+                return Response({
+                    'msg': "Token is invalid or has expired."
+                }, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({
+                'success': True,
+                'msg': 'Credentials are valid',
+                'uidb64': uidb64,
+                'token': token
+            }, status=status.HTTP_200_OK)
+        except DjangoUnicodeDecodeError:
+            return Response({
+                'msg': "Token is invalid or has expired."
+            }, status=status.HTTP_401_UNAUTHORIZED)
+        
+
+class SetNewPasswordView(GenericAPIView):
+    serializer_class = SetNewPasswordSerializer
+    def patch(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response({
+            'msg': 'Password reset successful.'
+        }, status=status.HTTP_200_OK)

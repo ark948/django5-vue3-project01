@@ -51,7 +51,7 @@ Saving tokens in localStorage is not a secure.
     added a url path for register
     requires utils (send_otp_to_user and generate_otp) (not working-email not sending) (fixed)
     email backend needed to be set in settings.py (set to console backend)
-    testuser01@gmail.com-Nick-Tole-home123*
+    testuser01@gmail.com-Nick-Tole-home123* UPDATE PASSWORD using reset password feature: home123
     adding email verification view
     email verification serializer that only has one field (otp)
     adding url (ok)
