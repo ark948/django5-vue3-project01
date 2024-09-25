@@ -24,6 +24,7 @@
             <p><RouterLink to="/register">Register</RouterLink></p>
             <p><RouterLink to="/verify-email">Verify Email address</RouterLink></p>
             <p><RouterLink to="/login">Login</RouterLink></p>
+            <p><RouterLink to="/forgot-password">Forgot Password?</RouterLink></p>
         </div>
         <div class="user-status-container">
             

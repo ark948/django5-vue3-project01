@@ -9,7 +9,7 @@ import { useAuthStore } from '@/stores';
 import ManualTokenRefresh from "@/views/ManualTokenRefresh.vue";
 import Bookmarks from "@/views/Bookmarks.vue";
 import NotFound from "@/views/NotFound.vue";
-import BookmarksListV2 from "@/components/bookmarker/bookmarks_list_v2/BookmarksListV2.vue";
+import ForgotPassword from "@/views/ForgotPassword.vue";
 
 
 const { notify } = useNotification();
@@ -23,6 +23,7 @@ const routes = [
     { path: '/profile', component: ProfileView, name: "profile" },
     { path: '/manual-refresh', component: ManualTokenRefresh, name: 'manual_refresh' },
     { path: '/bookmarks-list', component: Bookmarks, name: 'bookmarks' },
+    { path: '/forgot-password', component: ForgotPassword, nam: 'forgot_password' },
     // { path: '/bookmarks-list-v2', component: BookmarksListV2, name: 'bookmarksv2' },
 
     { path: "/:catchall(.*)*", component: NotFound, name: "not_found" },
@@ -35,7 +36,7 @@ const router = createRouter({
 
 router.beforeEach(async (to) => {
     // redirect to login page if not logged in and trying to access a restricted page
-    const publicPages = ['/login', '/register', '/verify-email', '/'];
+    const publicPages = ['/login', '/register', '/verify-email', '/forgot-password', '/'];
     const authRequired = !publicPages.includes(to.path);
     const auth = useAuthStore();
 
