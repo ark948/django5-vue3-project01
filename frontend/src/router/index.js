@@ -1,15 +1,15 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "@/views/HomeView.vue";
+import HomeView from "@/views/public/HomeView.vue"
 import Register from "@/components/auth/Register.vue";
 import VerifyEmail_v2 from "@/components/auth/VerifyEmail_v2.vue";
 import { useNotification } from "@kyvg/vue3-notification";
 import Login_v4 from "@/components/auth/Login_v4.vue";
-import ProfileView from "@/views/ProfileView.vue";
+import ProfileView from "@/views/protected/ProfileView.vue"
 import { useAuthStore } from '@/stores';
-import ManualTokenRefresh from "@/views/ManualTokenRefresh.vue";
-import Bookmarks from "@/views/Bookmarks.vue";
-import NotFound from "@/views/NotFound.vue";
-import ForgotPassword from "@/views/ForgotPassword.vue";
+import ManualTokenRefresh from "@/views/protected/ManualTokenRefresh.vue";
+import Bookmarks from "@/views/protected/Bookmarks.vue";
+import NotFound from "@/views/public/NotFound.vue";
+import ForgotPassword from "@/views/public/ForgotPassword.vue";
 
 
 const { notify } = useNotification();
