@@ -32,6 +32,7 @@
             <button>Login</button>
         </Form>
         <h4>Do you want to sign up?</h4>
-        <p><RouterLink to="/register">Link</RouterLink></p>
+        <p><RouterLink to="/register">Register</RouterLink></p>
+        <p><RouterLink to="/forgot-password">Forgot passsword?</RouterLink></p>
     </div>
 </template>

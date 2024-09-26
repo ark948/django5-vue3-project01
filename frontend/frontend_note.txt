@@ -252,7 +252,9 @@ shadcn - shadcn-vue
     send email to backend,
     if email is correct,
     uidb64 and token will be returned,
-    store them,
+    store them (either in store or in a variable) - since no other component really needs this, i think using state store is unnecessary,
     send new password and password confirm along with uidb64 and token to baceknd
+    ERROR: i completely forgot that uidb64 and token will be send to email and not frontend
+    we can modify the link in email body to contain a link to frontend and not the backend
 
 eslint.config.js not working

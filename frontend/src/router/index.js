@@ -10,6 +10,18 @@ import ManualTokenRefresh from "@/views/protected/ManualTokenRefresh.vue";
 import Bookmarks from "@/views/protected/Bookmarks.vue";
 import NotFound from "@/views/public/NotFound.vue";
 import ForgotPassword from "@/views/public/ForgotPassword.vue";
+import PasswordResetConfirm from "@/components/auth/password_reset/PasswordResetConfirm.vue";
+
+function removeQueryParams(to) {
+    if (Object.keys(to.query).length)
+        console.log(path);
+        return { path: to.path, query: {}, hash: to.hash }
+}
+
+function removeHash(to) {
+    console.log(path);
+    if (to.hash) return { path: to.path, query: to.query, hash: '' }
+}
 
 
 const { notify } = useNotification();
@@ -24,6 +36,7 @@ const routes = [
     { path: '/manual-refresh', component: ManualTokenRefresh, name: 'manual_refresh' },
     { path: '/bookmarks-list', component: Bookmarks, name: 'bookmarks' },
     { path: '/forgot-password', component: ForgotPassword, nam: 'forgot_password' },
+    { path: '/reset-password/:uidb64/:token/', component: PasswordResetConfirm, name: 'reset_password' },
     // { path: '/bookmarks-list-v2', component: BookmarksListV2, name: 'bookmarksv2' },
 
     { path: "/:catchall(.*)*", component: NotFound, name: "not_found" },
@@ -35,8 +48,12 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to) => {
+    if (to.name == 'reset_password') {
+        // special route (password reset)
+        return
+    }
     // redirect to login page if not logged in and trying to access a restricted page
-    const publicPages = ['/login', '/register', '/verify-email', '/forgot-password', '/'];
+    const publicPages = ['/', '/login', '/register', '/verify-email', '/forgot-password'];
     const authRequired = !publicPages.includes(to.path);
     const auth = useAuthStore();
 

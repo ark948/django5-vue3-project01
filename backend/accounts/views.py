@@ -23,7 +23,7 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
 
 class AccountsIndexView(APIView):
-    def get(self, request):
+    def get(self, request) -> Response:
         return Response({
             "register": reverse('accounts:register', request=request),
             "verify-email": reverse('accounts:verify_email', request=request),

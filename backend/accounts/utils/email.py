@@ -3,7 +3,7 @@ from django.conf import settings
 from django.core.mail import EmailMessage
 from accounts.utils.otp import generateOtp
 
-def send_code_to_user(email):
+def send_code_to_user(email: str) -> None:
     Subject = "One Time passcode for email verification"
     otp_code = generateOtp()
     user = CustomUser.objects.get(email=email)
@@ -20,7 +20,7 @@ def send_code_to_user(email):
     )
     d_email.send(fail_silently=True)
 
-def send_normal_email(data):
+def send_normal_email(data: set) -> None:
     email = EmailMessage(
         subject=data['email_subject'],
         body=data['email_body'],
