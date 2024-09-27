@@ -61,8 +61,10 @@ class LoginSerializer(ModelSerializer):
         request = self.context.get('request')
         user = authenticate(request, email=email, password=password)
         if not user:
+            # test this
             raise AuthenticationFailed("Invalid credentials, try again.")
         if not user.is_verified:
+            # test this
             raise AuthenticationFailed("Email is not verified.")
         
         user_tokens = user.tokens()
@@ -148,7 +150,7 @@ class SetNewPasswordSerializer(Serializer):
                 print("\nToken BAD\n")
                 raise serializers.ValidationError("Token invalid")
             if password != confirm_password:
-                raise AuthenticationFailed('Passwords do not match.')
+                raise serializers.ValidationError("Passwords do not match.")
             user.set_password(password)
             user.save()
             return user

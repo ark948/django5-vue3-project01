@@ -1,0 +1,16 @@
+django uses unittest, class based approach.
+
+when tests are ran, all files beginning with 'test_' will be selected as test files.
+
+to cancel running a test 'gracefully', press ctrl+c once. (gracefully: will wait for the current test to complete.)
+twice will exit and halt the testing process immeidately.
+
+tests that require a database: a temporary database will be created, that can be heavily modified.
+
+order of tests: all TestCase tests will run first. then any other django-based tests (e.g. SimpleTestCase...)
+then any other unittest.TestCase
+
+if tests are properly isolated, they can be ran in parallel to improve speed, using test --parallel option
+
+the default password hasher is slow by design, if many users exists in test, use a custom one.
+

@@ -111,3 +111,25 @@ problem 02: bookmark item title max length too short. [FIXED]
 16. added password reset feature
     main authentication app: accounts
     backup authentication app (education purposes only)
+    PROBLEM: token validation not working, i think the problem is with "AuthenticationFailed"
+
+
+17. parsers and renderers:
+    (i will apply this to accounts app)
+    parsers: allows to accept requests with various media types
+    renderers: allows to return responses with various media types
+
+    all views perform content-negotiation:
+    1. examine the request 'Accept' header to determine which media type to expect in response
+    2. format suffixes may be used for this
+
+    1. setting the renderer
+    can be done global level or per-view level, done in accounts>api>views
+    TemplateHTMLRenderer no need for serialzier.
+    serializer can be used, but data will need to be wrapped in a dict
+    should use a template_name
+    
+    You can use TemplateHTMLRenderer either to return regular HTML pages using REST framework, 
+    or to return both HTML and API responses from a single endpoint.
+
+    
