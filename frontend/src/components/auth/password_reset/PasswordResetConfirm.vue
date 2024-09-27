@@ -42,7 +42,7 @@
         .then((response) => {
             if (response.status === 200) {
                 console.log("Success.");
-                responseHolder.value = "Your password has been successfully changed. \nPlease login with your new password.";
+                responseHolder.value = "Your password has been successfully changed. Please login with your new password.";
             } else {
                 console.log("NOT 200");
                 responseHolder.value = "An error occurred.";
@@ -75,7 +75,7 @@
         <div class="info-container">
             <p>uidb64 {{ $route.params.uidb64 }}</p>
             <p>Token: {{ $route.params.token }}</p>
-            ----------------***----------------
+            --------------------------------
             <p>uidb64 {{ uidb64 }}</p>
             <p>Token: {{  token }}</p>
         </div>

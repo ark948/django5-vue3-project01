@@ -108,39 +108,39 @@ class PasswordResetRequestView(GenericAPIView):
 
     def post(self, request):
         serializer = self.serializer_class(
-            data=request.data,
-            context={'request': request})
-        if serializer.is_valid(raise_exception=True):
-            return Response({'message': 'A link containing password reset link has been sent to your email.'}, 
-                            status=status.HTTP_200_OK)
+            data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        return Response({
+            'message': 'A link containing password reset link has been sent to you.'
+        }, status=status.HTTP_200_OK)
     
 
 class PasswordResetConfirmView(GenericAPIView):
+
     def get(self, request, uidb64, token):
         try:
             user_id = smart_str(urlsafe_base64_decode(uidb64))
             user = CustomUser.objects.get(id=user_id)
             if not PasswordResetTokenGenerator().check_token(user, token):
                 return Response({
-                    'msg': "Token is invalid or has expired."
+                    'message': "Token is invalid or has expired"
                 }, status=status.HTTP_401_UNAUTHORIZED)
             return Response({
                 'success': True,
-                'msg': 'Credentials are valid',
+                'message': 'Credentials is valid',
                 'uidb64': uidb64,
                 'token': token
             }, status=status.HTTP_200_OK)
         except DjangoUnicodeDecodeError:
-            return Response({
-                'msg': "Token is invalid or has expired."
-            }, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({'message': "Token is invalid or has expired"}, status=status.HTTP_401_UNAUTHORIZED)
         
 
 class SetNewPasswordView(GenericAPIView):
     serializer_class = SetNewPasswordSerializer
+    
     def patch(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         return Response({
-            'msg': 'Password reset successful.'
+            'message': 'Password reset successful.'
         }, status=status.HTTP_200_OK)

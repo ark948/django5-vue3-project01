@@ -85,7 +85,7 @@ class LogoutUserSerializer(Serializer):
         self.token = attrs.get('refresh_token')
         return attrs
     
-    def save(self, **kwargs):
+    def save(self, *args, **kwargs):
         try:
             token = RefreshToken(self.token)
             token.blacklist()
@@ -137,16 +137,21 @@ class SetNewPasswordSerializer(Serializer):
             password = attrs.get('password')
             confirm_password=attrs.get('confirm_password')
 
+            print("\nTOKEN ====> ", token)
+
             user_id = force_str(urlsafe_base64_decode(uidb64))
             # force_str similar to smart_str, converts byte string to regular strings
             user = CustomUser.objects.get(id=user_id)
-            if not PasswordResetTokenGenerator().check_token(user, token):
-                raise AuthenticationFailed('Reset link is invalid or has expired.', 401)
+            if PasswordResetTokenGenerator().check_token(user, token) == True:
+                print("\nToken GOOD\n")
+            else:
+                print("\nToken BAD\n")
+                raise serializers.ValidationError("Token invalid")
             if password != confirm_password:
                 raise AuthenticationFailed('Passwords do not match.')
             user.set_password(password)
             user.save()
             return user
         except Exception as e:
-            return AuthenticationFailed('Link is invalid or has expired.')
+            raise serializers.ValidationError("Validation Failed.")
         
