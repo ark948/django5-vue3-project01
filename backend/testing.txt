@@ -14,3 +14,102 @@ if tests are properly isolated, they can be ran in parallel to improve speed, us
 
 the default password hasher is slow by design, if many users exists in test, use a custom one.
 
+test database is destroyed after testing, but it can be preserved if needed. test --keepdb
+media files can be prevented from accessing disk by using InMemoryStorage
+
+using the test client:
+test client can: simulate get and post requests and observe the response (result headers, status codes) and page content
+    observe the chain of redirects, and check the url and status code in each step
+    test if correct template is rendered and tempalte context contains certain values
+
+not a replacement for selenium or other in-browser frameworks (LiveServerTestCase should be studied for this)
+
+using Client:
+cannot get pages from outside project (for that use urllib)
+uses ROOT_URLCONF setting (which is the root of the project)
+by default, test client will disable CSRF protection, if it is deliberately required, use enforce_csrf_checks arg
+
+when making Client class, several arguments can be provided to customize the behaviour
+headers, query_params and arbitrary keyword args for WSGI stuff
+
+clients can raise exceptions (raise_request_exception is True by default)
+
+json_encoder arg allows for setting custom json encoder for json serialization
+setting follow arg to true, will follow all redirects and all redirects will be recorded in redirect_chain attribute (list)
+
+files can also be added to POST requests, using either using with context manager or file-like objects (StringIO, or BytesIO)
+
+by setting secure arg to true, client will emulate HTTPS request
+
+other Client object methods:
+get, post,
+head, options, put, patch, delete, trace, login, alogin
+login uses whatever that is configured by AUTHENTICATION_BACKEND setting
+if login was successful, returns True
+
+remember to create users before running test, since test database is temporary.
+also make sure to sue set_password (password cannot be set directly)
+
+force_login and aforce_login: this method loggs the user in, regardless of the details of how is it performed.
+this method skips authentication and verification process, and even inactive users are permitted, and credentials...
+don't need to be provided.
+this method is faster than login, since password hasing is skipped.
+
+logout and alogout: logs the user out, clears sessions and cookies to default, subsequent requets will have AnonymousUser
+
+the Response object that is returned by the Client is NOT the same as regular HttpResponse returned by django views.
+it has additional data useful for testing.
+
+Client response has: client, content (body of response as bytesting), context (tmeplate context)
+
+exc_info: [type, value, traceback] (information about unhandled exeption)
+
+json: the body of response parsed as json (extra args are passed to json.loads())
+(for this, application/json must be set, otherwise ValueError will be raised)
+
+request: request data that simulated the response
+
+wsgi_request: WSGIRequest
+
+status_code
+
+templates: list of Template instances used to render the content
+
+resolver_match: instance of ResolverMatch
+(use resolver_match.func to get the view that served the response):
+self.assertEqual(response.resolver_match.func, my_view) # for function based views
+self.assertIs(response.resolver_match.func.view_class, MyView) # for class based views
+
+also headers
+
+to handle exceptions:
+    set raise_request_exception to true,
+    then use try except block or assertRaises()
+
+The only exceptions that are not visible to the test client are Http404, PermissionDenied, SystemExit, and SuspiciousOperation. Django catches these exceptions internally and converts them into the appropriate HTTP response codes. In these cases, you can check response.status_code in your test.
+
+If Client.raise_request_exception is False, the test client will return a 500 response as would be returned to a browser. The response has the attribute exc_info to provide information about the unhandled exception.
+
+Persistant state:
+test client is stateful, cookies and stuff will remain. (but can be deleted if needed)
+(using cookies and session methods)
+
+for apps with internationalization, Client can be modified accordingly.
+
+django extends unitest.TestCase to three different classes: 
+    (TestCase) -> works with database - the most common
+    SimpleTestCase -> used when database is not needed
+    TransactionTestCase -> for some database specific stuff
+    LiveServerTestCase -> launches a live django server in background (can be used with Selenium- for more advanced tests)
+
+    there is also:
+    StaticLiveServerTestCase -> (not sure yet, but i think does not need static files to be set)
+
+to serve data in testing: fixtures can be used
+fixtures are files that contain serialized content of database. usually in .json format
+
+
+setUpTestData() -> runs once for the entire class (will not be refreshed)
+setUp() -> runs once for every test method
+
+to run tests for one app: python manage.py test <appName>

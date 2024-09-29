@@ -1,10 +1,10 @@
 # api views that will return html parsed responses
 
-# register
+# register (ok)
 # verify account
-# login
+# login (ok)
 # test authenticated view
-# logout
+# logout (ok)
 # password reset request
 # password reset confirm
 # set new password
@@ -50,7 +50,7 @@ def html_register_view(request):
     return Response({'form': form}, template_name='accounts/register.html')
 
 
-
+# OK
 @api_view(['GET', 'POST'])
 @renderer_classes([TemplateHTMLRenderer])
 def html_login_view(request):
@@ -72,6 +72,7 @@ def html_login_view(request):
         return Response({'form': form}, template_name='accounts/login.html')
     
 
+# OK
 @api_view(['GET', 'POST'])
 @renderer_classes([TemplateHTMLRenderer])
 def html_logout_view(request):
