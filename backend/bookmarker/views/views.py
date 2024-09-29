@@ -6,7 +6,4 @@ from rest_framework.reverse import reverse
 
 class BookmarkerRootAPIView(APIView):
     def get(self, request):
-        return Response({
-            'api': reverse('bookmarker:api:list', request=request),
-            'web': reverse('bookmarker:web:index', request=request)
-        })
+        return Response({'message': "This is root."})

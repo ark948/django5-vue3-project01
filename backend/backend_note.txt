@@ -132,4 +132,30 @@ problem 02: bookmark item title max length too short. [FIXED]
     You can use TemplateHTMLRenderer either to return regular HTML pages using REST framework, 
     or to return both HTML and API responses from a single endpoint.
 
+    project structure update:
+        apps will have three type of views, regular views that will render html templates and 
+        api views. api views will have two type of views, with json responses, and with html responses
+        (using parsers, renderers, and content negotiation)
+        each app will have only one urls.py file.
     
+    in order to understand the entire django testing topics, i will implement regular html views as well
+    installed django crispy forms (no template pack)
+    also do not forget to add template caching to entire django project and django crispy forms
+    django-crispy-forms uses something called FormHelpers
+
+    to add authentication: 
+    there are two common ways: django's built-in auth, or django-allauth package
+    i will implement both, in separate urls
+
+    1. explicitly specify authentication backend
+
+    builtin UserCreationForm and UserChangeForm cannot be used with our CustomUser model, no username field
+    unless exclude is used to remove username field
+
+    IMPORTANT: use function based views for html responses with api
+    and class-based views for regular views in views/views.py
+
+    three authentication methods:
+    basic authentication (every time a request is made, auth headers must be sent - NOT USED)
+    tokens (using jwt - currently django rest framework uses this)
+    sessions and cookies (our html views in accounts app uses this)

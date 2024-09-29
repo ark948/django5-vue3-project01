@@ -6,7 +6,7 @@
     const responseMessage = ref("");
 
     async function handleSubmit() {
-        api.get('auth/auth-required')
+        api.get('auth/api/auth-required')
             .then(res => {
                 if (res.status === 200) {
                     console.log("[TestAuthRequiredView.vue] Response code 200")

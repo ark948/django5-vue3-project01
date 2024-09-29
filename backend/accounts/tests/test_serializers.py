@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from rest_framework.test import APITestCase
-from accounts.serializers import *
+from accounts.api.serializers import *
 
 class UserRegisterSerializerTest(APITestCase):
     def test_user_register_serializer_valid_data(self):

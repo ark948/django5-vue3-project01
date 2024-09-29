@@ -1,8 +1,5 @@
-from django.urls import reverse
-from rest_framework import status
 from rest_framework.test import APITestCase
 from bookmarker.models import Bookmark
-from accounts.managers import UserManager
 from django.contrib.auth import get_user_model
 
 class BookmarkerSerializersTests(APITestCase):

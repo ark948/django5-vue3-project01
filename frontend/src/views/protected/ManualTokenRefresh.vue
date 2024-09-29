@@ -12,7 +12,7 @@ const refresh_token = localStorage.getItem('refresh_token') ? JSON.parse(localSt
 async function handleSubmit() {
   console.log("[..MnTknRrf..vue] Manual refresh form called.");
   const res = await api
-    .post("auth/token/refresh/", { refresh: refresh_input_value.value })
+    .post("auth/api/token/refresh/", { refresh: refresh_input_value.value })
     .then((res) => {
       if (res.status === 200) {
         console.log("SUCCESS")

@@ -1,7 +1,12 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView
-from accounts.views.html_views import HTMLUserRegisterView
-from accounts.views.json_views import (
+from accounts.api.html_views import (
+    HTMLIndexView,
+    html_register_view,
+    html_login_view,
+    html_logout_view
+)
+from accounts.api.json_views import (
     AccountsIndexView,
     RegisterUserView,
     VerifyUserEmail,
@@ -15,16 +20,20 @@ from accounts.views.json_views import (
 
 app_name = 'accounts'
 urlpatterns = [
-    path('register/', RegisterUserView.as_view(), name='register'),
-    path('verify-email/', VerifyUserEmail.as_view(), name='verify_email'),
-    path('login/', LoginUserView.as_view(), name='login'),
-    path('logout/', LogoutUserView.as_view(), name='logout'),
-    path('auth-required/', TestAuthenticationView.as_view(), name='auth_required'),
-    path('token/refresh/', TokenRefreshView.as_view(), name='refresh_token'),
-    path('password-reset/', PasswordResetRequestView.as_view(), name='password_reset'),
-    path('password-reset-confirm/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
-    path('set-new-password/', SetNewPasswordView.as_view(), name='set_new_password'),
-    
-    path('html-register/', HTMLUserRegisterView.as_view(), name='html_register'),
+    path('api/register/', RegisterUserView.as_view(), name='register'),
+    path('api/verify-email/', VerifyUserEmail.as_view(), name='verify_email'),
+    path('api/login/', LoginUserView.as_view(), name='login'),
+    path('api/logout/', LogoutUserView.as_view(), name='logout'),
+    path('api/auth-required/', TestAuthenticationView.as_view(), name='auth_required'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='refresh_token'),
+    path('api/password-reset/', PasswordResetRequestView.as_view(), name='password_reset'),
+    path('api/password-reset-confirm/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('api/set-new-password/', SetNewPasswordView.as_view(), name='set_new_password'),
+
+    path('html-logout/', html_logout_view, name='html_logout'),
+    path('html-login/', html_login_view, name='html_login'),
+    path('html-register/', html_register_view, name='html_register'),
+    path('html-index/', HTMLIndexView.as_view(), name='html_index'),
+
     path('', AccountsIndexView.as_view(), name='index'),
 ]

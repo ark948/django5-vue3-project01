@@ -1,9 +1,5 @@
-from django.urls import reverse
-from rest_framework import status
 from rest_framework.test import APITestCase
-from bookmarker.models import Bookmark
-from accounts.managers import UserManager
-from backend.bookmarker.api.serializers import BookmarksSerializer
+from bookmarker.api.serializers import BookmarksSerializer
 from accounts.models import CustomUser
 
 

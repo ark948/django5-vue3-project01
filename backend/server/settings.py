@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     "corsheaders",
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
+    "crispy_forms",
+    "crispy_bootstrap5",
     "accounts.apps.AccountsConfig",
     "api.apps.ApiConfig",
     "bookmarker.apps.BookmarkerConfig",
@@ -175,3 +177,13 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5137",
     "http://127.0.0.1:5137"
 ]
+
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+)
+
+LOGIN_REDIRECT_URL = "accounts:index"
+LOGOUT_REDIRECT_URL = "accounts:index"
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"

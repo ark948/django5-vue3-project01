@@ -1,11 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    Register page with html renderer
-</body>
-</html>
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+This is register page
+{% if form %}
+    <h3>Please register:</h3>
+    <form method="post">
+        {{ form.as_p }}
+        <input type="submit" value="Register">
+    </form>
+{% endif %}
+
+{% if message %}
+    {{ message }}
+{% endif %}
+
+{% if user_id %}
+    <h3>New user with {{ user_id }} created successfully</h3>
+{% endif %}
+{% endblock content %}

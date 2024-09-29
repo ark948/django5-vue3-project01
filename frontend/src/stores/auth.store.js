@@ -14,7 +14,7 @@ export const useAuthStore = defineStore({
     actions: {
         async login(email, password) {
             console.log('[auth.store.js] login called.')
-            const res = await api.post('auth/login/', { email, password })
+            const res = await api.post('auth/api/login/', { email, password })
             if (res.status === 200) {
                 console.log('[auth.store.js] Response 200. Setting data...')
                 console.log(`[auth.store.js] Email: ${res.data.email}`)

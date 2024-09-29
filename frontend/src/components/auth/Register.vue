@@ -29,7 +29,7 @@ function handleSubmit(e) {
     } catch (error) { console.log(error) }
 
     try {
-        api.post('auth/register/', formdata)
+        api.post('auth/api/register/', formdata)
             .then(response => {
                 if (response.status === 201) {
                     console.log("Success")

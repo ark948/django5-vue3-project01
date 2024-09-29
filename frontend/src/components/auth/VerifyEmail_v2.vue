@@ -21,7 +21,7 @@
             return
         }
 
-        const response = await api.post('auth/verify-email/', { 'otp' : otp_value })
+        const response = await api.post('auth/api/verify-email/', { 'otp' : otp_value })
         if (response.status === 200) {
             notify({
                 title: "Thank you.",
