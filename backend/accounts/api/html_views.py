@@ -38,12 +38,9 @@ def html_register_view(request):
     if request.method == 'POST':
         form = BuiltinUserRegistrationForm(data=request.POST)
         if form.is_valid():
-            print("for IS valid")
             new_user = form.save()
-            print("form SAVED")
             return Response({'message': "success", "user_id": new_user.id}, template_name='accounts/register.html')
         else:
-            print("form NOT valid")
             print(f'\n{form.errors}\n')
             return Response({'message': "error"}, template_name='accounts/register.html')
     form = BuiltinUserRegistrationForm()
