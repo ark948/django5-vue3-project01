@@ -100,3 +100,12 @@ class UserLoginForm(forms.Form):
     
 class VerifyAccountForm(forms.Form):
     otp = forms.IntegerField(min_value=100_000, max_value=999_999, required=True)
+
+
+class PasswordResetRequestForm(forms.Form):
+    email = forms.EmailField(required=True)
+
+    def validate(self, attr):
+        for email in attr:
+            validate_email(email)
+        return attr

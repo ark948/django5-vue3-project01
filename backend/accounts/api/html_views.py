@@ -3,28 +3,37 @@
 # register (ok)
 # verify account (ok)
 # login (ok)
-# test authenticated view - profile (ok)
+# auth required - profile (ok)
 # logout (ok)
-# password reset request
+# password reset request (ok)
 # password reset confirm
 # set new password
+# change password
+# edit profile (first and last name)
 
+from django.urls import reverse
 from rest_framework import status
+from django.utils.encoding import smart_bytes
+from django.utils.http import urlsafe_base64_encode
 from django.http import HttpRequest
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect
+from accounts.models import CustomUser
 from django.contrib import messages
-from accounts.utils.email import send_code_to_user
+from accounts.utils.email import send_code_to_user, send_normal_email
 from accounts.models import OneTimePassword
 from django.contrib.auth.decorators import login_required
+from django.contrib.sites.shortcuts import get_current_site
 from accounts.forms import (
     BuiltinUserRegistrationForm,
     UserLoginForm,
-    VerifyAccountForm
+    VerifyAccountForm,
+    PasswordResetRequestForm
 )
 
 class HTMLIndexView(GenericAPIView):
@@ -138,3 +147,46 @@ def html_verify_account(request) -> Response:
             return redirect('accounts:html_index')
         form = VerifyAccountForm()
         return Response({'form': form}, status=status.HTTP_200_OK, template_name='accounts/verify.html')
+    
+
+@api_view(['GET', 'POST'])
+@renderer_classes([TemplateHTMLRenderer])
+def html_password_reset_request(request):
+    form = PasswordResetRequestForm()
+    if request.method == 'POST':
+        form = PasswordResetRequestForm(data=request.POST)
+        if form.is_valid():
+            user_email = form.cleaned_data['email']
+            if CustomUser.objects.filter(email=user_email).exists():
+                user = CustomUser.objects.get(email=user_email)
+                uidb64 = urlsafe_base64_encode(smart_bytes(user.id))
+                token = PasswordResetTokenGenerator().make_token(user)
+                site_domain = get_current_site(request).domain
+                relative_link = reverse('accounts:html_reset_confirm', kwargs={ 'uidb64': uidb64, 'token': token })
+                abslink = f'http://{site_domain}{relative_link}'
+                email_body = f'Hi, Please use the following link to reset your password.\n {abslink}'
+                data = {
+                    'email_body': email_body,
+                    'email_subject': "Reset your password.",
+                    'to_email': user.email
+                }
+                send_normal_email(data)
+                messages.success(request, "Reset link sent to your email.")
+                return redirect(reverse('accounts:html_index'))
+            else:
+                return Response({'message': "Email was not found."}, template_name='accounts/reset_request.html')
+    else:
+        if request.user.is_authenticated:
+            message = "You are logged in.\nIf you have lost your password, please logout and use the reset link."
+            return Response({'message': message}, template_name='accounts/reset_request.html', status=status.HTTP_200_OK)
+        else:
+            return Response({'form': form}, template_name='accounts/reset_request.html', status=status.HTTP_200_OK)
+    
+
+@api_view(['GET', 'POST'])
+@renderer_classes([TemplateHTMLRenderer])
+def html_password_reset_confirm(request):
+    if request.method == 'POST':
+        pass
+    else:
+        return Response(template_name='accounts/reset_confirm.html')

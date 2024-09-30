@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if form %}
+    <p>Use this form to reset your password:</p>
+    <p>Your email needs to have been verified for this.</p>
+    <form action="{% url 'accounts:html_reset_request' %}" method="post">
+        {{ form.as_p }}
+        <input type="submit" value="Send reset link">
+    </form>
+{% endif %}
+
+{% if message %}
+    <h3>
+        {{ message }}
+    </h3>
+{% endif %}
+
+{% endblock content %}
