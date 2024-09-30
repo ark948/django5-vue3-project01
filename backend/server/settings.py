@@ -182,8 +182,9 @@ AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
 )
 
-LOGIN_REDIRECT_URL = "accounts:index"
-LOGOUT_REDIRECT_URL = "accounts:index"
+LOGIN_URL = "/auth/html-login/"
+# LOGIN_REDIRECT_URL = "accounts:html_index"
+# LOGOUT_REDIRECT_URL = "accounts:html_index"
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"

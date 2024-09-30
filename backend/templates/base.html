@@ -7,6 +7,35 @@
 </head>
 <body>
     Base
+
+    {% if user.is_authenticated %}
+        <p>Welcome, {{ user.email }}</p>
+        <form action="{% url 'accounts:html_logout' %}" method="post">
+            {% csrf_token %}
+            <input type="submit" value="Logout">
+        </form>
+        <p>
+            <a href="{% url 'accounts:html_profile' %}">Profile page</a>
+        </p>
+        <a href="{% url 'accounts:html_index' %}">Index</a>
+        <a href="{% url 'accounts:html_register' %}">Register</a>
+        <a href="{% url 'accounts:html_login' %}">Login</a>
+        <a href="{% url 'accounts:html_profile' %}">Profile</a>
+    {% else %}
+        <a href="{% url 'accounts:html_index' %}">Index</a>
+        <a href="{% url 'accounts:html_register' %}">Register</a>
+        <a href="{% url 'accounts:html_login' %}">Login</a>
+        <a href="{% url 'accounts:html_profile' %}">Profile</a>
+    {% endif %}
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    
     {% block content %}
     {% endblock content %}
 </body>

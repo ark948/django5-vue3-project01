@@ -9,20 +9,21 @@
 # password reset confirm
 # set new password
 
+from django.urls import reverse
 from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
+from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import redirect
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.conf import settings
 from accounts.forms import (
     BuiltinUserRegistrationForm,
     CustomUserRegistrationForm,
     UserLoginForm
 )
-from accounts.managers import UserManager
-from accounts.models import CustomUser
-from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import redirect
 
 class HTMLIndexView(GenericAPIView):
     renderer_classes = [TemplateHTMLRenderer]
@@ -43,11 +44,15 @@ def html_register_view(request):
         else:
             print(f'\n{form.errors}\n')
             return Response({'message': "error"}, template_name='accounts/register.html')
-    form = BuiltinUserRegistrationForm()
-    return Response({'form': form}, template_name='accounts/register.html')
+    else:
+        if request.user.is_authenticated:
+            messages.warning(request, 'You have already logged in.')
+            return redirect('accounts:html_index')
+        form = BuiltinUserRegistrationForm()
+        return Response({'form': form}, template_name='accounts/register.html')
 
 
-# OK
+# OK (redirect upon faiiled login requires polishing)
 @api_view(['GET', 'POST'])
 @renderer_classes([TemplateHTMLRenderer])
 def html_login_view(request):
@@ -59,10 +64,13 @@ def html_login_view(request):
             user = authenticate(request, email=email, password=password)
             if user != None:
                 login(request, user)
-                # return redirect(f"{settings.LOGIN_URL}?next={request.path}")
-                return redirect('accounts:html_index')
+                return redirect(request.GET.get('next', '/auth/html-index/'))
+            else:
+                messages.warning(request, "Incorrect credentials.")
+                return redirect(reverse('accounts:html_index'))
         else:
             print(f'\n{form.errors}\n')
+            messages.error(request, "Please check the credentials.")
             return Response({'message': "failure"}, template_name='accounts/login.html')
     else:
         form = UserLoginForm()
@@ -76,3 +84,10 @@ def html_logout_view(request):
     if request.method == 'POST':
         logout(request)
         return redirect('accounts:html_index')
+    
+
+@login_required
+@api_view(['GET'])
+@renderer_classes([TemplateHTMLRenderer])
+def html_profile_page_view(request):
+    return Response(template_name='accounts/profile.html')

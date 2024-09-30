@@ -160,7 +160,8 @@ problem 02: bookmark item title max length too short. [FIXED]
     tokens (using jwt - currently django rest framework uses this)
     sessions and cookies (our html views in accounts app uses this)
 
-
+    next url upon successful login added successfully
+    
 
 
 
