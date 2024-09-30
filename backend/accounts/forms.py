@@ -109,3 +109,12 @@ class PasswordResetRequestForm(forms.Form):
         for email in attr:
             validate_email(email)
         return attr
+    
+class SetNewPasswordForm(forms.Form):
+    password1 = forms.CharField(label='New Password:', widget=forms.PasswordInput, required=True)
+    password2 = forms.CharField(label='Repeat Password:', widget=forms.PasswordInput, required=True)
+
+    def validate(self, attr):
+        if attr.get('password1') != attr.get('password2'):
+            raise ValidationError("Passwords do not match.")
+        return attr

@@ -9,6 +9,7 @@ from accounts.api.html_views import (
     html_verify_account,
     html_password_reset_request,
     html_password_reset_confirm,
+    html_set_new_password
 )
 from accounts.api.json_views import (
     AccountsIndexView,
@@ -34,8 +35,9 @@ urlpatterns = [
     path('api/password-reset-confirm/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('api/set-new-password/', SetNewPasswordView.as_view(), name='set_new_password'),
 
-    path('html-reset-confirm/<uidb64>/<token>/', html_password_reset_confirm, name='html_reset_confirm'),
-    path('html-reset-request/', html_password_reset_request, name='html_reset_request'),
+    path('html-set-new-password', html_set_new_password, name='html_set_new_password'),
+    path('html-password-reset-confirm/<uidb64>/<token>/', html_password_reset_confirm, name='html_password_reset_confirm'),
+    path('html-password-reset-request/', html_password_reset_request, name='html_password_reset_request'),
     path('html-verify/', html_verify_account, name='html_verify'),
     path('html-profile/', html_profile_page_view, name='html_profile'),
     path('html-logout/', html_logout_view, name='html_logout'),

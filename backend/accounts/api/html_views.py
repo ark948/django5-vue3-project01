@@ -13,8 +13,8 @@
 
 from django.urls import reverse
 from rest_framework import status
-from django.utils.encoding import smart_bytes
-from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import smart_bytes, smart_str, force_str
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.http import HttpRequest
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from rest_framework.decorators import api_view, renderer_classes
@@ -33,7 +33,8 @@ from accounts.forms import (
     BuiltinUserRegistrationForm,
     UserLoginForm,
     VerifyAccountForm,
-    PasswordResetRequestForm
+    PasswordResetRequestForm,
+    SetNewPasswordForm,
 )
 
 class HTMLIndexView(GenericAPIView):
@@ -162,7 +163,7 @@ def html_password_reset_request(request):
                 uidb64 = urlsafe_base64_encode(smart_bytes(user.id))
                 token = PasswordResetTokenGenerator().make_token(user)
                 site_domain = get_current_site(request).domain
-                relative_link = reverse('accounts:html_reset_confirm', kwargs={ 'uidb64': uidb64, 'token': token })
+                relative_link = reverse('accounts:html_password_reset_confirm', kwargs={'uidb64': uidb64, 'token': token})
                 abslink = f'http://{site_domain}{relative_link}'
                 email_body = f'Hi, Please use the following link to reset your password.\n {abslink}'
                 data = {
@@ -183,10 +184,66 @@ def html_password_reset_request(request):
             return Response({'form': form}, template_name='accounts/reset_request.html', status=status.HTTP_200_OK)
     
 
+# this has a huge problem
 @api_view(['GET', 'POST'])
 @renderer_classes([TemplateHTMLRenderer])
-def html_password_reset_confirm(request):
+def html_password_reset_confirm(request, uidb64, token):
     if request.method == 'POST':
         pass
     else:
-        return Response(template_name='accounts/reset_confirm.html')
+        if request.user.is_authenticated:
+            return redirect(reverse('accounts:html_index'))
+        try:
+            # this will raise exception, neither will work
+            uidb64 = request.params['uidb64'] or request.GET.get('uidb64')
+        except Exception as error_getting_uridb64:
+            print("ERROR")
+        try:
+            # this will raise exception, neither will work
+            token = request.params['token'] or request.GET.get('token')
+        except Exception as error_getting_token:
+            print("ERROR2")
+        print("uidb64", uidb64)
+        print("token", token)
+        user_id = force_str(urlsafe_base64_decode(uidb64))
+        print('user_id --> ', user_id)
+        user = CustomUser.objects.get(id=user_id)
+        form = SetNewPasswordForm()
+        if PasswordResetTokenGenerator().check_token(user, token):
+            return Response({'uidb64': uidb64, 'token': token, 'form': form}, template_name='accounts/set_new_password.html')
+        else:
+            messages.error(request, "Link is invalid or expired.")
+            return redirect(reverse('accounts:html_index'))
+        
+
+@api_view(['POST'])
+@renderer_classes([TemplateHTMLRenderer])
+def html_set_new_password(request):
+    if request.method == 'POST':
+        form = SetNewPasswordForm(data=request.POST)
+        if form.is_valid():
+            uidb64 = request.POST.get('uid')
+            token = request.POST.get('tkn')
+            password1 = form.cleaned_data['password1']
+            password2 = form.cleaned_data['password2']
+        else:
+            messages.error(request, "Form was not valid.")
+            return redirect(reverse('accounts:html_index'))
+        user_id = force_str(urlsafe_base64_decode(uidb64))
+        try:
+            user = CustomUser.objects.get(id=user_id)
+        except Exception as getting_user:
+            messages.error(request, "User not found.")
+            return redirect(reverse('accounts:html_index'))
+        if PasswordResetTokenGenerator().check_token(user, token):
+            if password1 == password2:
+                user.set_password(password1)
+                user.save()
+                messages.success(request, "Password reset successful, login with new password.")
+                return redirect(reverse('accounts:html_login'))
+            else:
+                messages.error(request, "Passwords do not match.")
+                return redirect(reverse('accounts:html_index'))
+        else:
+            messages.error(request, "Token is invalid.")
+            return redirect(reverse('accounts:html_index'))
