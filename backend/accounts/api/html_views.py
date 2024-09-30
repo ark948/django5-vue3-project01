@@ -63,7 +63,7 @@ def html_register_view(request) -> Response:
     else:
         if request.user.is_authenticated:
             messages.warning(request, 'You have already registered.')
-            return redirect('accounts:html_index')
+            return redirect(reverse('accounts:html_index'))
         form = BuiltinUserRegistrationForm()
         return Response({'form': form}, template_name='accounts/register.html', status=status.HTTP_200_OK)
 
@@ -94,7 +94,7 @@ def html_login_view(request) -> Response:
     else:
         if request.user.is_authenticated:
             messages.warning(request, "You have already logged in.")
-            return redirect('accounts:html_index')
+            return redirect(reverse('accounts:html_index'))
         form = UserLoginForm()
         return Response({'form': form}, template_name='accounts/login.html', status=status.HTTP_200_OK)
     
@@ -106,7 +106,7 @@ def html_logout_view(request) -> Response:
     if request.method == 'POST':
         logout(request)
         messages.success(request, "Logout successful.")
-        return redirect('accounts:html_index')
+        return redirect(reverse('accounts:html_index'))
     
 
 # OK
@@ -145,7 +145,7 @@ def html_verify_account(request) -> Response:
     else:
         if request.user.is_verified:
             messages.warning(request, "You have already verified your account.")
-            return redirect('accounts:html_index')
+            return redirect(reverse('accounts:html_index'))
         form = VerifyAccountForm()
         return Response({'form': form}, status=status.HTTP_200_OK, template_name='accounts/verify.html')
     
