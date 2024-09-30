@@ -10,6 +10,7 @@
 # set new password
 
 from rest_framework import status
+from django.http import HttpRequest
 from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
@@ -29,36 +30,38 @@ from accounts.forms import (
 class HTMLIndexView(GenericAPIView):
     renderer_classes = [TemplateHTMLRenderer]
     
-    def get(self, request, *args, **kwargs) -> Response:
+    def get(self, request: HttpRequest, *args, **kwargs) -> Response:
         if request.accepted_renderer.format == 'html':
-            return Response(template_name='accounts/index.html')
+            return Response(template_name='accounts/index.html', status=status.HTTP_200_OK)
         
 # OK
 @api_view(['GET', 'POST'])
 @renderer_classes([TemplateHTMLRenderer])
-def html_register_view(request):
+def html_register_view(request) -> Response:
     if request.method == 'POST':
         form = BuiltinUserRegistrationForm(data=request.POST)
         if form.is_valid():
             new_user = form.save()
             send_code_to_user(new_user.email)
             messages.success(request, "Registration successful. Check your email.")
-            return Response({'message': "success", "user_id": new_user.id}, template_name='accounts/register.html')
+            return Response({'message': "success"}, template_name='accounts/register.html', 
+            status=status.HTTP_201_CREATED)
         else:
             print(f'\n{form.errors}\n')
-            return Response({'message': "error"}, template_name='accounts/register.html')
+            return Response({'message': "error"}, template_name='accounts/register.html', 
+            status=status.HTTP_400_BAD_REQUEST)
     else:
         if request.user.is_authenticated:
-            messages.warning(request, 'You have already logged in.')
+            messages.warning(request, 'You have already registered.')
             return redirect('accounts:html_index')
         form = BuiltinUserRegistrationForm()
-        return Response({'form': form}, template_name='accounts/register.html')
+        return Response({'form': form}, template_name='accounts/register.html', status=status.HTTP_200_OK)
 
 
 # OK (redirect upon faiiled login requires polishing)
 @api_view(['GET', 'POST'])
 @renderer_classes([TemplateHTMLRenderer])
-def html_login_view(request):
+def html_login_view(request) -> Response:
     if request.method == 'POST':
         form = UserLoginForm(data=request.POST)
         if form.is_valid():
@@ -67,40 +70,48 @@ def html_login_view(request):
             user = authenticate(request, email=email, password=password)
             if user != None:
                 login(request, user)
+                messages.success(request, "Login successful. Welcome")
                 return redirect(request.GET.get('next', '/auth/html-index/'))
             else:
                 messages.warning(request, "Invalid credentials.")
-                return Response({'message': "failure"}, template_name='accounts/login.html')
+                return Response({'message': "failure"}, template_name='accounts/login.html', 
+                status=status.HTTP_401_UNAUTHORIZED)
         else:
             print(f'\n{form.errors}\n')
             messages.error(request, "Please check the credentials.")
-            return Response({'message': "failure"}, template_name='accounts/login.html')
+            return Response({'message': "failure"}, template_name='accounts/login.html',
+            status=status.HTTP_401_UNAUTHORIZED)
     else:
+        if request.user.is_authenticated:
+            messages.warning(request, "You have already logged in.")
+            return redirect('accounts:html_index')
         form = UserLoginForm()
-        return Response({'form': form}, template_name='accounts/login.html')
+        return Response({'form': form}, template_name='accounts/login.html', status=status.HTTP_200_OK)
     
 
 # OK
 @api_view(['GET', 'POST'])
 @renderer_classes([TemplateHTMLRenderer])
-def html_logout_view(request):
+def html_logout_view(request) -> Response:
     if request.method == 'POST':
         logout(request)
+        messages.success(request, "Logout successful.")
         return redirect('accounts:html_index')
     
 
+# OK
 @login_required
 @api_view(['GET'])
 @renderer_classes([TemplateHTMLRenderer])
-def html_profile_page_view(request):
-    return Response(template_name='accounts/profile.html')
+def html_profile_page_view(request) -> Response:
+    return Response(template_name='accounts/profile.html', status=status.HTTP_200_OK)
 
 
-
+# OK
 @login_required
 @api_view(['GET', 'POST'])
 @renderer_classes([TemplateHTMLRenderer])
-def html_verify_account(request):     
+def html_verify_account(request) -> Response:     
     if request.method == 'POST':
         form = VerifyAccountForm(data=request.POST)
         if form.is_valid():
