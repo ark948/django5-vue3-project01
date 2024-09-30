@@ -18,9 +18,8 @@
             <a href="{% url 'accounts:html_profile' %}">Profile page</a>
         </p>
         <a href="{% url 'accounts:html_index' %}">Index</a>
-        <a href="{% url 'accounts:html_register' %}">Register</a>
-        <a href="{% url 'accounts:html_login' %}">Login</a>
         <a href="{% url 'accounts:html_profile' %}">Profile</a>
+        <a href="{% url 'accounts:html_verify' %}">Verify</a>
     {% else %}
         <a href="{% url 'accounts:html_index' %}">Index</a>
         <a href="{% url 'accounts:html_register' %}">Register</a>

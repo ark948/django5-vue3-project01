@@ -32,8 +32,6 @@ class AccountsIndexView(APIView):
             "refresh_token": reverse('accounts:refresh_token', request=request),
             "password_reset_request": reverse('accounts:password_reset', request=request),
             "set_new_password": reverse('accounts:set_new_password', request=request),
-            "html_view_register": reverse('accounts:html_register', request=request),
-            "html_login": reverse("accounts:html_login", request=request),
             "html_index": reverse("accounts:html_index", request=request),
         })
 
