@@ -6,8 +6,8 @@
 # auth required - profile (ok)
 # logout (ok)
 # password reset request (ok)
-# password reset confirm
-# set new password
+# password reset confirm (ok)
+# set new password (ok)
 # change password
 # edit profile (first and last name)
 
@@ -35,6 +35,7 @@ from accounts.forms import (
     VerifyAccountForm,
     PasswordResetRequestForm,
     SetNewPasswordForm,
+    UpdatePasswordForm
 )
 
 class HTMLIndexView(GenericAPIView):
@@ -114,7 +115,8 @@ def html_logout_view(request) -> Response:
 @api_view(['GET'])
 @renderer_classes([TemplateHTMLRenderer])
 def html_profile_page_view(request) -> Response:
-    return Response(template_name='accounts/profile.html', status=status.HTTP_200_OK)
+    form1 = UpdatePasswordForm()
+    return Response({'form1': form1}, template_name='accounts/profile.html', status=status.HTTP_200_OK)
 
 
 # OK
@@ -247,3 +249,30 @@ def html_set_new_password(request):
         else:
             messages.error(request, "Token is invalid.")
             return redirect(reverse('accounts:html_index'))
+
+
+@login_required
+@api_view(['POST'])
+@renderer_classes([TemplateHTMLRenderer])
+def html_update_password(request):
+    if request.method == 'POST':
+        form = UpdatePasswordForm(data=request.POST)
+        if form.is_valid():
+            current_password = form.cleaned_data['current_password']
+            new_password = form.cleaned_data['new_password']
+            repeat_password = form.cleaned_data['repeat_password']
+            user = CustomUser.objects.get(id=request.user.id)
+            if user.check_password(current_password):
+                if new_password == repeat_password:
+                    user.set_password(new_password)
+                    user.save()
+                else:
+                    messages.error(request, "Passwords do not match.")
+                    return redirect(reverse('accounts:html_index'))
+            else:
+                messages.error(request, "Current password is incorrect.")
+                return redirect(reverse('accounts:html_index'))
+        else:
+            messages.error(request, "Form was not valid.")
+            return redirect(reverse('accounts:html_index'))
+    return redirect(reverse('accounts:html_profile'))

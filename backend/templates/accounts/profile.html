@@ -3,4 +3,13 @@
 {% block content %}
     <h3>Your profile page</h3>
     {{ user.email }}
+
+    {% if form1 %}
+        <h4>Use this form to update your password:</h4>
+        <form action="{% url 'accounts:html_update_password' %}" method="POST">
+            {% csrf_token %}
+            {{ form1.as_p }}
+            <input type="submit" value="Confirm">
+        </form>
+    {% endif %}
 {% endblock content %}

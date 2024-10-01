@@ -118,3 +118,13 @@ class SetNewPasswordForm(forms.Form):
         if attr.get('password1') != attr.get('password2'):
             raise ValidationError("Passwords do not match.")
         return attr
+    
+class UpdatePasswordForm(forms.Form):
+    current_password = forms.CharField(label="Current Password:", widget=forms.PasswordInput, required=True)
+    new_password = forms.CharField(label="New Password:", widget=forms.PasswordInput, required=True)
+    repeat_password = forms.CharField(label="Repeat Password:", widget=forms.PasswordInput, required=True)
+
+    def validate(self, attr):
+        if attr.get('new_password') != attr.get('repeat_password'):
+            raise ValidationError("New Passwords do not match.")
+        return attr
