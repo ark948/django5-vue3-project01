@@ -128,3 +128,7 @@ class UpdatePasswordForm(forms.Form):
         if attr.get('new_password') != attr.get('repeat_password'):
             raise ValidationError("New Passwords do not match.")
         return attr
+
+class EditProfileForm(forms.Form):
+    first_name = forms.CharField(label="First Name:", min_length=2, max_length=30, required=False)
+    last_name = forms.CharField(label="Last Name:", min_length=2, max_length=50, required=False)

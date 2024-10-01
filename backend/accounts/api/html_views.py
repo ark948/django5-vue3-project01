@@ -35,7 +35,8 @@ from accounts.forms import (
     VerifyAccountForm,
     PasswordResetRequestForm,
     SetNewPasswordForm,
-    UpdatePasswordForm
+    UpdatePasswordForm,
+    EditProfileForm
 )
 
 class HTMLIndexView(GenericAPIView):
@@ -116,7 +117,8 @@ def html_logout_view(request) -> Response:
 @renderer_classes([TemplateHTMLRenderer])
 def html_profile_page_view(request) -> Response:
     form1 = UpdatePasswordForm()
-    return Response({'form1': form1}, template_name='accounts/profile.html', status=status.HTTP_200_OK)
+    form2 = EditProfileForm()
+    return Response({'form1': form1, 'form2': form2}, template_name='accounts/profile.html', status=status.HTTP_200_OK)
 
 
 # OK
@@ -151,7 +153,7 @@ def html_verify_account(request) -> Response:
         form = VerifyAccountForm()
         return Response({'form': form}, status=status.HTTP_200_OK, template_name='accounts/verify.html')
     
-
+# OK
 @api_view(['GET', 'POST'])
 @renderer_classes([TemplateHTMLRenderer])
 def html_password_reset_request(request):
@@ -218,6 +220,7 @@ def html_password_reset_confirm(request, uidb64, token):
             return redirect(reverse('accounts:html_index'))
         
 
+# OK
 @api_view(['POST'])
 @renderer_classes([TemplateHTMLRenderer])
 def html_set_new_password(request):
@@ -250,7 +253,7 @@ def html_set_new_password(request):
             messages.error(request, "Token is invalid.")
             return redirect(reverse('accounts:html_index'))
 
-
+# OK
 @login_required
 @api_view(['POST'])
 @renderer_classes([TemplateHTMLRenderer])
@@ -276,3 +279,31 @@ def html_update_password(request):
             messages.error(request, "Form was not valid.")
             return redirect(reverse('accounts:html_index'))
     return redirect(reverse('accounts:html_profile'))
+
+
+# OK
+@login_required
+@api_view(['POST'])
+@renderer_classes([TemplateHTMLRenderer])
+def html_edit_profile(request):
+    if request.method == 'POST':
+        form = EditProfileForm(data=request.POST)
+        if form.is_valid():
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            user = CustomUser.objects.get(id=request.user.id)
+            if first_name:
+                user.first_name = first_name
+            else:
+                pass
+            if last_name:
+                user.last_name = last_name
+            else:
+                pass
+            user.save()
+            messages.success(request, "Profile successfully updated.")
+            return redirect(reverse('accounts:html_profile'))
+        else:
+            messages.success(request, "There was an error.")
+            return redirect(reverse('accounts:html_profile'))
+    return redirect(reverse('accounts:html_index'))

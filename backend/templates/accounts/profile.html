@@ -2,13 +2,33 @@
 
 {% block content %}
     <h3>Your profile page</h3>
-    {{ user.email }}
+    <p>Your email:{{ user.email }}</p>
+    {% if user.first_name %}
+        <p>First Name: {{ user.first_name }}</p>
+        {% else %}
+        <p>First Name: (not set yet)</p>
+    {% endif %}
+    {% if user.last_name %}
+        <p>First Name: {{ user.last_name }}</p>
+        {% else %}
+        <p>Last Name: (not set yet)</p>
+    {% endif %}
+
 
     {% if form1 %}
         <h4>Use this form to update your password:</h4>
         <form action="{% url 'accounts:html_update_password' %}" method="POST">
             {% csrf_token %}
             {{ form1.as_p }}
+            <input type="submit" value="Confirm">
+        </form>
+    {% endif %}
+
+    {% if form2 %}
+        <h4>Use this form to add or edit your first and last name:</h4>
+        <form action="{% url 'accounts:html_edit_profile' %}" method="POST">
+            {% csrf_token %}
+            {{ form2.as_p }}
             <input type="submit" value="Confirm">
         </form>
     {% endif %}
