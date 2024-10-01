@@ -1,16 +1,9 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
-from accounts.api.serializers import (
-    UserRegisterSerializer,
-    UserOTPSerializer,
-    LoginSerializer,
-    LogoutUserSerializer,
-    PasswordResetRequestSerializer,
-    SetNewPasswordSerializer
-)
 from rest_framework.generics import GenericAPIView
 from rest_framework import status
+from django.http import HttpResponseRedirect
 from accounts.utils.email import send_code_to_user
 from accounts.models import OneTimePassword
 from rest_framework.permissions import IsAuthenticated
@@ -18,13 +11,32 @@ from django.utils.encoding import smart_str, DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from accounts.models import CustomUser
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from accounts.api.serializers import (
+    UserRegisterSerializer,
+    UserOTPSerializer,
+    LoginSerializer,
+    LogoutUserSerializer,
+    PasswordResetRequestSerializer,
+    SetNewPasswordSerializer,
+    EditProfileSerializer
+)
 
 # Create your views here.
 
+# register (ok)
+# verify (ok)
+# login (ok)
+# auth-required (profile) (ok)
+# password reset request (ok)
+# password reset confirm (ok)
+# set new password (ok)
+# edit profile 
+# update password
 
 class AccountsIndexView(APIView):
     def get(self, request) -> Response:
         return Response({
+            "edit-profile": reverse('accounts:edit_profile', request=request),
             "register": reverse('accounts:register', request=request),
             "verify-email": reverse('accounts:verify_email', request=request),
             "login": reverse('accounts:login', request=request),
@@ -145,3 +157,30 @@ class SetNewPasswordView(GenericAPIView):
         return Response({
             'message': 'Password reset successful.'
         }, status=status.HTTP_200_OK)
+    
+
+class EditProfileView(GenericAPIView):
+    serializer_class = EditProfileSerializer
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        return Response({
+            'Current First Name': request.user.first_name,
+            'Current Last Name': request.user.last_name,
+        }, status=status.HTTP_200_OK)
+    
+    def post(self, request):
+        self.user = self.request.user
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            first_name = self.request.data.get('first_name')
+            last_name = self.request.data.get('last_name')
+            if first_name:
+                self.user.first_name = first_name
+            else:
+                pass
+            if last_name:
+                self.user.last_name = last_name
+            else:
+                pass
+            self.user.save()
+            return HttpResponseRedirect(reverse('accounts:edit_profile'))

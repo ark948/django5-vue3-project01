@@ -157,3 +157,7 @@ class SetNewPasswordSerializer(Serializer):
         except Exception as e:
             raise serializers.ValidationError("Validation Failed.")
         
+
+class EditProfileSerializer(Serializer):
+    first_name = serializers.CharField(min_length=2, max_length=30, required=False)
+    last_name = serializers.CharField(min_length=2, max_length=50, required=False)

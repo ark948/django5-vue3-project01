@@ -226,3 +226,8 @@ class HTMLProfilePageViewTestCase(TestCase):
         self.assertIsInstance(response.context['form1'], UpdatePasswordForm)
         self.assertIsInstance(response.context['form2'], EditProfileForm)
         self.assertIsInstance(response.context['form3'], EmailChangeForm)
+
+    def test_view_is_not_accessible_without_login(self):
+        self.client.logout()
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 302)
