@@ -10,7 +10,7 @@
 # set new password (ok)
 # change password (ok)
 # edit profile (first and last name) (ok)
-# edit email - requires re-verification
+# edit email - requires re-verification (ok)
 
 from django.urls import reverse
 from rest_framework import status

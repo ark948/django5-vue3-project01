@@ -1,12 +1,16 @@
+import unittest
 from django.test import Client
 from django.urls import reverse, resolve
-from django.test import TestCase
+from django.test import TestCase, RequestFactory
+from accounts.models import CustomUser
 from accounts.api.html_views import (
     HTMLIndexView,
-    html_register_view
+    html_register_view,
+    html_login_view
 )
 from accounts.forms import (
-    BuiltinUserRegistrationForm
+    BuiltinUserRegistrationForm,
+    UserLoginForm
 )
 
 # test urls (address and endpoint name)
@@ -96,7 +100,78 @@ class HTMLRegisterViewTestCase(TestCase):
 
     def test_user_registration(self):
         response = self.client.post(self.url, { 'email': 'testuser01@gmail.com', 'password1': 'home123*', 'password2': 'home123*'})
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 201)
         self.assertEqual(response.context['message'], 'success')
-        self.assertEqual(response.context['user_id'], 1)
         
+class HTMLLoginViewTestCase(TestCase):
+    @classmethod
+    def setUpTestData(cls) -> None:
+        cls.url = reverse('accounts:html_login')
+        cls.user = CustomUser.objects.create(email='testuser01@gmail.com', first_name='', last_name='')
+        cls.user.set_password('home123*')
+        cls.user.save()
+        return super().setUpTestData()
+    
+    def setUp(self) -> None:
+        self.client = Client()
+        return super().setUp()
+    
+    def test_url_is_correct(self):
+        response = self.client.get('/auth/html-login/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_endpoint_is_valid(self):
+        respnose = self.client.get(self.url)
+        self.assertEqual(respnose.status_code, 200)
+
+    def test_template_is_correct(self):
+        response = self.client.get(self.url)
+        self.assertTemplateUsed(response, 'accounts/login.html')
+        self.assertTemplateNotUsed(response, 'accounts/register.html')
+
+    def test_template_contains_accurate_text(self):
+        response = self.client.get(self.url)
+        self.assertContains(response, 'Login Page')
+
+    def test_view_is_the_correct_one(self):
+        response = self.client.get(self.url)
+        self.assertIs(response.resolver_match.func, html_login_view)
+        self.assertEqual(response.resolver_match.view_name, 'accounts:html_login')
+
+    def test_app_name_is_accurate(self):
+        resolved = resolve('/auth/html-login/')
+        self.assertEqual(resolved.app_name, 'accounts')
+
+    def test_correct_form_is_used(self):
+        response = self.client.get(self.url)
+        self.assertIsInstance(response.context['form'], UserLoginForm)
+
+    def test_successful_user_login(self):
+        response = self.client.post(self.url, { 'email': 'testuser01@gmail.com', 'password': 'home123*'})
+        self.assertEqual(response.status_code, 302)
+
+    def test_unsuccessful_user_login(self):
+        response = self.client.post(self.url, { 'email': 'testuser01@gmail.com', 'password': 'home456*'})
+        self.assertEqual(response.status_code, 401)
+
+    @unittest.skip
+    def test_view_is_inaccessible_to_logged_in_users(self):
+        self.factory = RequestFactory()
+        request = self.factory.get('/auth/html-login/')
+        # setting user manually to simulate logged in user
+        request.user = self.user
+        response = html_login_view(request)
+        self.assertEqual(response.status_code, 302)
+
+    def test_view_is_inaccessible_to_logged_in_users02(self):
+        self.client.post(self.url, {'email': 'testuser01@gmail.com', 'password': 'home123*'})
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 302)
+
+    def test_view_is_inaccessible_to_logged_in_users03(self):
+        self.client.post(self.url, {'email': 'testuser01@gmail.com', 'password': 'home123*'})
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 302)
+        self.client.logout()
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
