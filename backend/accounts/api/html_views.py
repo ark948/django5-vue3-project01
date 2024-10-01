@@ -139,6 +139,8 @@ def html_verify_account(request) -> Response:
                 if not user.is_verified:
                     user.is_verified = True
                     user.save()
+                    user_code_obj.delete()
+                    # Delete verification code after successful use
                     return Response({'message': "Verification successful. Thank you for signing up."}, 
                     status=status.HTTP_200_OK,
                     template_name='accounts/verify.html')
