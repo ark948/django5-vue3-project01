@@ -8,8 +8,9 @@
 # password reset request (ok)
 # password reset confirm (ok)
 # set new password (ok)
-# change password
-# edit profile (first and last name)
+# change password (ok)
+# edit profile (first and last name) (ok)
+# edit email - requires re-verification
 
 from django.urls import reverse
 from rest_framework import status
@@ -25,7 +26,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect
 from accounts.models import CustomUser
 from django.contrib import messages
-from accounts.utils.email import send_code_to_user, send_normal_email
+from accounts.utils.email import send_code_to_user, send_normal_email, re_verify_email
 from accounts.models import OneTimePassword
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
@@ -36,7 +37,8 @@ from accounts.forms import (
     PasswordResetRequestForm,
     SetNewPasswordForm,
     UpdatePasswordForm,
-    EditProfileForm
+    EditProfileForm,
+    EmailChangeForm
 )
 
 class HTMLIndexView(GenericAPIView):
@@ -118,7 +120,8 @@ def html_logout_view(request) -> Response:
 def html_profile_page_view(request) -> Response:
     form1 = UpdatePasswordForm()
     form2 = EditProfileForm()
-    return Response({'form1': form1, 'form2': form2}, template_name='accounts/profile.html', status=status.HTTP_200_OK)
+    form3 = EmailChangeForm()
+    return Response({'form1': form1, 'form2': form2, 'form3': form3}, template_name='accounts/profile.html', status=status.HTTP_200_OK)
 
 
 # OK
@@ -307,3 +310,28 @@ def html_edit_profile(request):
             messages.success(request, "There was an error.")
             return redirect(reverse('accounts:html_profile'))
     return redirect(reverse('accounts:html_index'))
+
+
+# OK
+@login_required
+@api_view(['POST'])
+@renderer_classes([TemplateHTMLRenderer])
+def html_change_email(request):
+    if request.method == 'POST':
+        form = EmailChangeForm(data=request.POST)
+        if form.is_valid():
+            new_email = form.cleaned_data['new_email']
+            user = CustomUser.objects.get(id=request.user.id)
+            if user.is_verified:
+                user.email = new_email
+                user.is_verified = False
+                user.save()
+                re_verify_email(user.id)
+                messages.success(request, "Email changed successfully. Please check your email for verification link.")
+            else:
+                messages.error(request, "Your current email is not verified. You cannot change it.")
+                return redirect(reverse('accounts:html_index'))
+        else:
+            messages.error(request, "Form is invalid.")
+            return redirect(reverse('accounts:html_profile'))
+    return redirect(reverse('accounts:html_profile'))

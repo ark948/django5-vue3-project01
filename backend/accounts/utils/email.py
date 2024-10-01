@@ -3,6 +3,16 @@ from django.conf import settings
 from django.core.mail import EmailMessage
 from accounts.utils.otp import generateOtp
 
+def re_verify_email(id: int) -> None:
+    user = CustomUser.objects.get(id=id)
+    try:
+        old_otp = OneTimePassword.objects.get(user=user)
+    except Exception as e:
+        old_otp = None
+    if old_otp:
+        OneTimePassword.objects.get(user=user).delete()
+    send_code_to_user(user.email)
+
 def send_code_to_user(email: str) -> None:
     Subject = "One Time passcode for email verification"
     otp_code = generateOtp()

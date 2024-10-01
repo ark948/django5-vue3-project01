@@ -14,6 +14,14 @@
         <p>Last Name: (not set yet)</p>
     {% endif %}
 
+    <p>
+        Account is verified?:
+        {% if user.is_verified %}
+            Yes
+        {% else %}
+            No
+        {% endif %}
+    </p>
 
     {% if form1 %}
         <h4>Use this form to update your password:</h4>
@@ -30,6 +38,15 @@
             {% csrf_token %}
             {{ form2.as_p }}
             <input type="submit" value="Confirm">
+        </form>
+    {% endif %}
+
+    {% if form3 %}
+        <h4>If need to change email, use this form (Requires re-verification):</h4>
+        <form action="{% url 'accounts:html_change_email' %}" method="POST">
+            {% csrf_token %}
+            {{ form3.as_p }}
+            <input type="submit" value="Update">
         </form>
     {% endif %}
 {% endblock content %}

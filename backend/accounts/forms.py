@@ -132,3 +132,12 @@ class UpdatePasswordForm(forms.Form):
 class EditProfileForm(forms.Form):
     first_name = forms.CharField(label="First Name:", min_length=2, max_length=30, required=False)
     last_name = forms.CharField(label="Last Name:", min_length=2, max_length=50, required=False)
+
+
+class EmailChangeForm(forms.Form):
+    new_email = forms.EmailField(required=True)
+
+    def validate(self, attr):
+        for email in attr:
+            validate_email(email)
+        return attr
