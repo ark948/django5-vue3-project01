@@ -170,7 +170,10 @@ problem 02: bookmark item title max length too short. [FIXED]
 
 
 
-
+    18. added new model to bookmarker app: Category
+    each bookmark can have one Category
+    each category can have multiple bookmarks
+    - add Category model to admin.py
 
 
 
