@@ -24,11 +24,13 @@ from accounts.api.json_views import (
     PasswordResetRequestView,
     PasswordResetConfirmView,
     SetNewPasswordView,
-    EditProfileView
+    EditProfileView,
+    UpdatePasswordView
 )
 
 app_name = 'accounts'
 urlpatterns = [
+    path('api/update-password/', UpdatePasswordView.as_view(), name='update_password'),
     path('api/edit-profile/', EditProfileView.as_view(), name='edit_profile'),
     path('api/register/', RegisterUserView.as_view(), name='register'),
     path('api/verify-email/', VerifyUserEmail.as_view(), name='verify_email'),

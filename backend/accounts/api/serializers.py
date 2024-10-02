@@ -161,3 +161,13 @@ class SetNewPasswordSerializer(Serializer):
 class EditProfileSerializer(Serializer):
     first_name = serializers.CharField(min_length=2, max_length=30, required=False)
     last_name = serializers.CharField(min_length=2, max_length=50, required=False)
+
+class UpdatePasswordSerializer(Serializer):
+    current_password = serializers.CharField(min_length=6, required=True)
+    new_password = serializers.CharField(min_length=6, required=True)
+    repeat_password = serializers.CharField(min_length=6, required=True)
+
+    def validate(self, attrs):
+        if attrs.get('new_password') != attrs.get('repeat_password'):
+            raise serializers.ValidationError("New Passwords do not match.")
+        return attrs

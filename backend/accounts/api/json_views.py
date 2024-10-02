@@ -18,7 +18,8 @@ from accounts.api.serializers import (
     LogoutUserSerializer,
     PasswordResetRequestSerializer,
     SetNewPasswordSerializer,
-    EditProfileSerializer
+    EditProfileSerializer,
+    UpdatePasswordSerializer
 )
 
 # Create your views here.
@@ -26,16 +27,19 @@ from accounts.api.serializers import (
 # register (ok)
 # verify (ok)
 # login (ok)
-# auth-required (profile) (ok)
+# auth-required (test) (ok)
 # password reset request (ok)
 # password reset confirm (ok)
 # set new password (ok)
-# edit profile 
-# update password
+# edit profile (ok)
+# update password (ok)
+# change email
+# profile (first/last name + email)
 
 class AccountsIndexView(APIView):
     def get(self, request) -> Response:
         return Response({
+            "update-password": reverse('accounts:update_password', request=request),
             "edit-profile": reverse('accounts:edit_profile', request=request),
             "register": reverse('accounts:register', request=request),
             "verify-email": reverse('accounts:verify_email', request=request),
@@ -184,3 +188,27 @@ class EditProfileView(GenericAPIView):
                 pass
             self.user.save()
             return HttpResponseRedirect(reverse('accounts:edit_profile'))
+        
+
+class UpdatePasswordView(GenericAPIView):
+    serializer_class = UpdatePasswordSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response({'message': "Change your password."}, status=status.HTTP_200_OK)
+    
+    def post(self, request):
+        self.user = self.request.user
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            current_password = serializer.data.get('current_password')
+            if self.user.check_password(current_password):
+                new_password = serializer.data.get('new_password')
+                repeat_password = serializer.data.get('repeat_password')
+                if new_password == repeat_password:
+                    self.user.set_password(new_password)
+                    self.user.save()
+                    return Response({'message': "success"}, status=status.HTTP_200_OK)
+                return Response({'message': 'Passwords do not match.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': "Current password is incorrect."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'message': "failure"}, status=status.HTTP_400_BAD_REQUEST)
