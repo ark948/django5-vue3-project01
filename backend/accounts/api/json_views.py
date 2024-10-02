@@ -1,10 +1,11 @@
+from django.core.validators import validate_email
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.generics import GenericAPIView
 from rest_framework import status
 from django.http import HttpResponseRedirect
-from accounts.utils.email import send_code_to_user
+from accounts.utils.email import send_code_to_user, re_verify_email
 from accounts.models import OneTimePassword
 from rest_framework.permissions import IsAuthenticated
 from django.utils.encoding import smart_str, DjangoUnicodeDecodeError
@@ -19,7 +20,8 @@ from accounts.api.serializers import (
     PasswordResetRequestSerializer,
     SetNewPasswordSerializer,
     EditProfileSerializer,
-    UpdatePasswordSerializer
+    UpdatePasswordSerializer,
+    ChangeEmailSerializer
 )
 
 # Create your views here.
@@ -39,6 +41,7 @@ from accounts.api.serializers import (
 class AccountsIndexView(APIView):
     def get(self, request) -> Response:
         return Response({
+            "change-email": reverse('accounts:change_email', request=request),
             "update-password": reverse('accounts:update_password', request=request),
             "edit-profile": reverse('accounts:edit_profile', request=request),
             "register": reverse('accounts:register', request=request),
@@ -163,6 +166,7 @@ class SetNewPasswordView(GenericAPIView):
         }, status=status.HTTP_200_OK)
     
 
+# may require update on self.request.data.get to serializer.get
 class EditProfileView(GenericAPIView):
     serializer_class = EditProfileSerializer
     permission_classes = [IsAuthenticated]
@@ -190,6 +194,7 @@ class EditProfileView(GenericAPIView):
             return HttpResponseRedirect(reverse('accounts:edit_profile'))
         
 
+# OK
 class UpdatePasswordView(GenericAPIView):
     serializer_class = UpdatePasswordSerializer
     permission_classes = [IsAuthenticated]
@@ -212,3 +217,31 @@ class UpdatePasswordView(GenericAPIView):
                 return Response({'message': 'Passwords do not match.'}, status=status.HTTP_400_BAD_REQUEST)
             return Response({'message': "Current password is incorrect."}, status=status.HTTP_400_BAD_REQUEST)
         return Response({'message': "failure"}, status=status.HTTP_400_BAD_REQUEST)
+
+# validate email does not work
+class ChangeEmailView(GenericAPIView):
+    serializer_class = ChangeEmailSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response({
+            'message': "Change your email, requires re-verification.",
+            'current email': request.user.email,
+            'verified': request.user.is_verified
+        }, status=status.HTTP_200_OK)
+    
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            user = self.request.user
+            new_email = serializer.data.get('new_email')
+            if user.is_verified:
+                user.email = new_email
+                user.is_verified = False
+                user.save()
+                re_verify_email(user.id)
+                return Response({'message': 'done'}, status=status.HTTP_200_OK)
+            else:
+                return Response({'message': 'user is not verified.'}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({'messagee': 'serializer is not valid.'}, status=status.HTTP_400_BAD_REQUEST)

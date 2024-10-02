@@ -162,10 +162,11 @@ problem 02: bookmark item title max length too short. [FIXED]
 
     next url upon successful login added successfully
     
+    problem in forms>EmailChangeForm (nope, validate_email works fine html forms)
 
-
-
-
+    for change email view, in both html and json response views...
+    validate_email always returns false, for some reason.
+    i checked the same email address to register a new user, and it was fine.
 
 
 

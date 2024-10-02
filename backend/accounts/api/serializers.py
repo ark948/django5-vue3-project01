@@ -11,6 +11,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from accounts.utils.email import send_normal_email
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError
+from django.core.validators import validate_email
 
 
 class UserRegisterSerializer(ModelSerializer):
@@ -171,3 +172,13 @@ class UpdatePasswordSerializer(Serializer):
         if attrs.get('new_password') != attrs.get('repeat_password'):
             raise serializers.ValidationError("New Passwords do not match.")
         return attrs
+    
+# validate_email does not work for some reason.
+class ChangeEmailSerializer(Serializer):
+    email = serializers.EmailField(min_length=6, max_length=220, required=True)
+
+    def validate(self, attr):
+        print("\nRunning first validation from serializer\n")
+        for email in attr:
+            validate_email(email)
+        return attr

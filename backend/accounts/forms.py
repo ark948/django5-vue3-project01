@@ -138,6 +138,6 @@ class EmailChangeForm(forms.Form):
     new_email = forms.EmailField(required=True)
 
     def validate(self, attr):
-        for email in attr:
-            validate_email(email)
+        for new_email in attr:
+            validate_email(new_email)
         return attr
