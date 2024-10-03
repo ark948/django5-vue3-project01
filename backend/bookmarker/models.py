@@ -19,7 +19,7 @@ class Bookmark(models.Model):
     url = models.URLField("URL")
     icon = models.ImageField("Icon", blank=True, null=True)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='bookmarks')
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name='bookmarks')
 
     def __str__(self):
         return f'bookmark entry for {self.owner}'

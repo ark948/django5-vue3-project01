@@ -1,10 +1,11 @@
 from rest_framework.permissions import IsAuthenticated
-from bookmarker.models import Bookmark
+from bookmarker.models import Bookmark, Category
 from rest_framework import viewsets
 from rest_framework.response import Response
 from bookmarker.permissions import IsOwner
 from rest_framework.views import APIView
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view
+from django.contrib.auth.decorators import login_required
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework import status
 from rest_framework.request import Request
@@ -14,12 +15,16 @@ from bookmarker.api.serializers import (
     BookmarksSerializer, 
     BookmarkDetailsSerializer,
     BookmarkMultipleDeleteSerializer,
-    FileUploadSerializer
+    FileUploadSerializer,
+    CategorySerializer,
+    BookmarksByCategorySerializer,
+    BookmarksWithCategory
     )
 from rest_framework.generics import (
     RetrieveUpdateDestroyAPIView,
     ListCreateAPIView,
-    GenericAPIView
+    GenericAPIView,
+    ListAPIView
     )
 
 # views
@@ -144,3 +149,43 @@ class UserBookmarksCSVImport(APIView):
         return Response({'msg': "Not valid"}, status=status.HTTP_400_BAD_REQUEST)
 
 
+@login_required
+@api_view(['GET'])
+def get_categories_with_link(request):
+    categories = Category.objects.all()
+    serializer = CategorySerializer(categories, many=True)
+    return Response(serializer.data)
+
+
+# OK
+# just get categories
+class GetCategories(ListAPIView):
+    serializer_class = CategorySerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Category.objects.all()
+    
+
+# OK
+class GetBookmarksByCategory(ListAPIView):
+    serializer_class = BookmarksByCategorySerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        # return Category.objects.filter(bookmarks__owner_id=user.pk)
+        # prefetch_related is used to take care of performance issues of fetching nested database objects
+        qs = Category.objects.prefetch_related('bookmarks')
+        return qs
+
+
+
+class GetBookmarksWithCategory(ListAPIView):
+    serializer_class = BookmarksWithCategory
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Bookmark.objects.filter(owner=user)
+    

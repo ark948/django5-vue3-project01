@@ -7,6 +7,10 @@ from bookmarker.api.json_views import (
     BookmarkMultipleDeleteUsingPost,
     UserBookmarksCSVImport,
     BookmarkViewSet, # viewset
+    GetCategories,
+    get_categories_with_link,
+    GetBookmarksByCategory,
+    GetBookmarksWithCategory
 )
 from bookmarker.api.html_views import (
     BookmarkerIndexView,
@@ -20,6 +24,9 @@ app_name = 'bookmarker'
 urlpatterns = [
     
     # json
+    path('api/bookmarks-with-category/', GetBookmarksWithCategory.as_view(), name='bookmarks_with_category'),
+    path('api/bookmarks-by-category/', GetBookmarksByCategory.as_view(), name='bookmarks_by_category'),
+    path('api/category-list', get_categories_with_link, name='categories_list'), 
     path('api/file-upload/', UserBookmarksCSVImport.as_view(), name='file_upload'),
     path('api/multiple-delete/', BookmarkMultipleDeleteUsingPost.as_view(), name='multiple_delete'),
     path('api/<int:pk>/', UserBookmarkDetailView.as_view(), name='item'),
