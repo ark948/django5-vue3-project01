@@ -47,12 +47,12 @@ INSTALLED_APPS = [
 
     "rest_framework",
     "corsheaders",
-    "rest_framework_simplejwt",
-    "rest_framework_simplejwt.token_blacklist",
     "crispy_forms",
     "crispy_bootstrap5",
-    "accounts.apps.AccountsConfig",
+    "rest_framework_simplejwt",
+    "rest_framework_simplejwt.token_blacklist",
     "api.apps.ApiConfig",
+    "accounts.apps.AccountsConfig",
     "bookmarker.apps.BookmarkerConfig",
 ]
 

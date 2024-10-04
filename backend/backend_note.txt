@@ -170,13 +170,113 @@ problem 02: bookmark item title max length too short. [FIXED]
 
 
 
-    18. added new model to bookmarker app: Category
+18. added new model to bookmarker app: Category
     each bookmark can have one Category
     each category can have multiple bookmarks
     - add Category model to admin.py
 
 
 
+19. need add employee members that have permission to add category
+    regular users must not be able to do so
+    groups and permissions:
+    User object has two many-to-many fields: groups, user_permissions
+    my basic idea, with no knowledge of groups and permissions in django:
+    two groups: users and employees:
+        users can view/add/edit/delete bookmark model
+        employees can view/add/edit/delete Category model
+        special users: can access members-only features of the site (such as creating their own category)
+    - to create custom groups, i will create groups.py in accounts app
+    eventually custom groups need to be registered in admin
+    but admin.py of what app?
+    i guess, each group needs to be in the app that will directly use:
+        employees -> accounts app (or their own app later)
+        members -> bookmarker app
+        i will try to create their own app (employees)
+        added groups.py and in it, the new Custom Group called employees
+        add app to INSTALLED_APPS
+        registered it in app's admin
+        now, need to run migrations
+    Category_moderators added using admin interface
+    permissions for this group were also added.
+    now need to add certain users to this group.
+    need to divide users into members and employees.
+    need to derive from user into other types of user
+    i will create a userProfile model with one to one relationship to CustomUser
+    UserProfile will have a 'belongs_to' field and Role field
+    belongs_to will contain the list of group ids that userProfile is in
+    and role contains a choices.
+    to automatically create a user profile every time a customuser is created,
+    we use singals. add it to accounts/signals.py
+    also add UserProfile to accounts>admin.py
+
+    now a summary before running make and migrate database:
+
+    - created new app specially for employees
+    - added a new group to employees app, called EmployeesGroup
+    - added UserProfile model to accounts models
+    - added a signal to call every time a UserProfile is created, in accounts/signals.py
+    - added UserProfile to accounts/admin.py
+
+    so now every new information we need can be added to UserProfile
+    mostly anything unrelated to authentication
+    groups with different permissions will be created.
+    and UserProfiles can be in different groups.
+
+    we can create custom permission decorator to check if the UserProfile of the current user exists...
+    in a specific group, if so, then allow some action.
+    let's try migrating... (also navigating database migrations is very important)
+
+    had to add another group for regular users
+    problem: Adding users to groups not working, members section of groups not working.
+
+    need to take a few steps back.
+    first unregister all groups.
+    now need to revert back migrations.
+
+    unlisted employees app.
+    employees app has one migration. need to revert it back.
+    to reverse all migrations applied for an app:
+    > python manage.py migrate <appName> zero
+    error: in order to use this command, employees app must be listed in installed_apps
+    accounts app has 3 migrations now, 
+    0001: initial (CustomUser)
+    0002: userprofile
+    0003: regularusers
+    definitely, 0003 needs to be reverted.
+    so i will select one before that,
+    > python manage.py migrate accounts 0002
+    need to remove all code as well, everything except UserProfile,
+    all groups.py files, and all new admin registers. done
+    there are two groups visible in admin interface under Groups section:
+    Category_moderators and Regular Users, (deleting them both, done)
+    only thing that still remains is Category model. (apparently works ok)
+    now need to make UserProfile work,
+    new test signals, by adding a user and see if a new user profile is created.
+    also add userprofile to admin.
+    problem fixed by moving signal to models.py right below UserProfile model.
+    now signals.py is useless. (problem for later)
+    now that we have regular users, let's first try adding them to their own group.
+    trying to add a CustomGroup in accounts/groups.py.
+    trying to add the custom group to accounts/admin.py
+    i think i need to run migrations...
+    problem persists, users cannot be added to groups.
+    i can only see one option, reverting back even further...
+    to 0001 of accounts app, even before adding user profiles.
+    the problem may be with CustomUser, it is inheriting from abstractBaseUser
+    according to WSV, using abstractBaseUser is much more complex than using abstractuser
+    CONFIRMED, this is exactly the cause of problem. either that, or something between my customuser model,
+    or how it is registered in admin
+    can think of anything, but to remove everything new thing and even all migration files,
+    and even the database file.
+    creata new custom user from a better source.
+    this time with session authenticaction for backend views, and jwt authenticaction only for api.
+
+    deleted all accounts/ migration files
+    adding new and improved CustomUser and UserProfile right away.
+    also deleted apps folder, it was useless.
+    before moving to another CustomUser model, going to try to check if the prevoius functionality still works.
+    things work fine.
 
 
 
