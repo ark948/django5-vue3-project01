@@ -9,22 +9,11 @@
     Base
 
     {% if user.is_authenticated %}
-        <p>Welcome, {{ user.email }}</p>
-        <form action="{% url 'accounts:html_logout' %}" method="post">
-            {% csrf_token %}
-            <input type="submit" value="Logout">
-        </form>
-        <p>
-            <a href="{% url 'accounts:html_profile' %}">Profile page</a>
-        </p>
-        <a href="{% url 'accounts:html_index' %}">Index</a>
-        <a href="{% url 'accounts:html_profile' %}">Profile</a>
-        <a href="{% url 'accounts:html_verify' %}">Verify</a>
+        Hello, {{ user.email }}
+        <a href="{% url 'account_logout' %}">Logout</a>
     {% else %}
-        <a href="{% url 'accounts:html_index' %}">Index</a>
-        <a href="{% url 'accounts:html_register' %}">Register</a>
-        <a href="{% url 'accounts:html_login' %}">Login</a>
-        <a href="{% url 'accounts:html_profile' %}">Profile</a>
+        <a href="{% url 'account_login' %}">Login</a>
+        <a href="{% url 'account_signup' %}">Signup</a>
     {% endif %}
 
     {% if messages %}

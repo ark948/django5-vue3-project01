@@ -299,6 +299,30 @@ problem 02: bookmark item title max length too short. [FIXED]
     thinks look ok.
     since the entire frontend works with email/password...
     need to add django-allauth right away.
+    attempting to install django-allauth (done, download and offline installation with vpn)
+    add 'allauth' to installed apps
+    no allauth.account (no social login) (THIS WILL CAUSE PROBLEMS, IT MUST BE ADDED TO INSTALLED_APPS)
+    add SITE_ID.
+    update AUTHENTICATION_BACKEND by adding allauth to it
+    'allauth.account.auth_backends.AuthenticationBackend'
+    the default ModelBackend is needed for django admin app regardless of 'allauth'
+    two system app are also required. contrib.auth and contrib.messages
+    add allauth middleware,
+    add allauth.urls to project urls.py
+    now run migrate command
+    (at this point i'm combining allauth's doc with wsv's book)
+    add login and logout redirect
+    forgot to add  "django.contrib.sites", to installed_apps
+    problem: migration output does not appear to be enough
+    appears to be FIXED: should have added allauth.account as well (thaught this was for social stuff)
+    wsv tutorial said to add this: ACCOUNT_EMAIL_VERIFICATION
+    i don't know what it is, but apparently it can be changed later.
+    now testing actual functionality:
+    signup: ok - UserProfile created.
+    login: ok - (it's called sign in)
+    logout: ok - (called sign out)
+    commiting
+
 
     
 

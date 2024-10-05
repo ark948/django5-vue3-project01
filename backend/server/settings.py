@@ -39,23 +39,28 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'django.contrib.admin',
-    'django.contrib.auth',
+    'django.contrib.auth', # required by allauth
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.messages',
+    'django.contrib.messages', # required by allauth
     'django.contrib.staticfiles',
+    "django.contrib.sites",
 
     "rest_framework",
+    "allauth",
+    "allauth.account",
     "corsheaders",
     "crispy_forms",
     "crispy_bootstrap5",
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
     "api.apps.ApiConfig",
-    # "accounts.apps.AccountsConfig",
     "bookmarker.apps.BookmarkerConfig",
     "users.apps.UsersConfig",
+    # "accounts.apps.AccountsConfig",
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -66,6 +71,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 
@@ -181,11 +187,14 @@ CSRF_TRUSTED_ORIGINS = [
 
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
+    'allauth.account.auth_backends.AuthenticationBackend',
 )
 
-LOGIN_URL = "/auth/html-login/"
-# LOGIN_REDIRECT_URL = "accounts:html_index"
-# LOGOUT_REDIRECT_URL = "accounts:html_index"
+# LOGIN_URL = "/auth/html-login/"
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+ACCOUNT_EMAIL_VERIFICATION = "none"
