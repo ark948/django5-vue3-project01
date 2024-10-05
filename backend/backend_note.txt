@@ -321,7 +321,12 @@ problem 02: bookmark item title max length too short. [FIXED]
     signup: ok - UserProfile created.
     login: ok - (it's called sign in)
     logout: ok - (called sign out)
-    commiting
+    commiting.
+    need to enable email only login, and check out the new headless features.
+    added ACCOUNT_SESSION_REMEMBER = True
+    we can also customize the intermediary logout page.
+    accoding to wsv, actually removing username field requires using abstractBaseUser and much more work.
+    GOOD, everything seems ok. email only signup and login work.
 
 
     
