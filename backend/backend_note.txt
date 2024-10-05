@@ -278,7 +278,29 @@ problem 02: bookmark item title max length too short. [FIXED]
     before moving to another CustomUser model, going to try to check if the prevoius functionality still works.
     things work fine.
 
+20. Moving on to another CustomUser model.
+    (in new users app, keeping the old one as reference or something like legacy code)
+    (maybe later i'll move it to apps folder)
+    - after the new user model ready, update AUTH_USER_MODEL
+    error while trying to make migrations for users app, seems like some sort of conflict 
+    between accounts and users custom user.
+    deleted old database file and all references to accounts app.
+    trying to run makemigrations again, ok, errors seem to have reduced in number.
+    eventually was able to run migrations, by redefining email field as unique,
+    forgot to actually call migrate after makemigrations
+    having it declared as username field, and declaring an empty requried fields.
+    next steps are adding forms and registering in admin.
+    done and added a second migration.
+    attempting to create a superuser
+    error: missing 1 required positional arguemnt 'username'
+    can't do this anymore, will use django-allauth to enable email only login.
+    deleting migration files and database.
+    appears to be fine, admin user created successfully. user profile also appears to be created.
+    thinks look ok.
+    since the entire frontend works with email/password...
+    need to add django-allauth right away.
 
+    
 
 
 authentication note:

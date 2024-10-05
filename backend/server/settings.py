@@ -52,8 +52,9 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
     "api.apps.ApiConfig",
-    "accounts.apps.AccountsConfig",
+    # "accounts.apps.AccountsConfig",
     "bookmarker.apps.BookmarkerConfig",
+    "users.apps.UsersConfig",
 ]
 
 MIDDLEWARE = [
@@ -162,7 +163,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = "accounts.CustomUser"
+AUTH_USER_MODEL = "users.CustomUser"
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
