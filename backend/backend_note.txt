@@ -327,7 +327,20 @@ problem 02: bookmark item title max length too short. [FIXED]
     we can also customize the intermediary logout page.
     accoding to wsv, actually removing username field requires using abstractBaseUser and much more work.
     GOOD, everything seems ok. email only signup and login work.
-
+    what remains: headless authenticaction and verification
+    verification code and is_verified can be added to UserProfile instead of CustomUser.
+    let's do verification first, we'll use the UserProfile signal to send a message to user.
+    but first, let's check if allauth has a verification logic.
+    it has, but can't find any exmaple code.
+    alright, found a tutorial. going with it now.
+    email verification config can have either none, mandatory or optional.
+    if mandatory is set, user will not be able to login before verification.
+    if optional is set, user will be able to login without verification (i don't know exactly what are the )
+    (limitations of this)
+    for now, i think i should set to optional until more certain about it.
+    also, ACCOUNT_EMAIL_REQUIRED must be true for this.
+    verification email and link work fine.
+    later i can add my own verification logic as well.
 
     
 
