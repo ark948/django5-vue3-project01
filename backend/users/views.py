@@ -1,7 +1,7 @@
 # django imports
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, redirect
 
 # rest_framework imports
@@ -32,8 +32,8 @@ def index(request):
 class RootAPIView(APIView):
     def get(self, request):
         return Response({
-            'register': reverse("users:register", request=request),
-        }, status=status.HTTP_200_OK)
+            "register": reverse('users:register', request=request),
+        })
 
 
 class RegistrationView(GenericAPIView):
