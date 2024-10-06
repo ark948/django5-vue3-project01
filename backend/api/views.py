@@ -5,15 +5,18 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from api.serializers import TestPostSerializer
 from rest_framework import status
+from knox.views import LoginView as KnoxLoginView
+from rest_framework.authentication import BasicAuthentication
 
 # Create your views here.
+
+class CustomKnoxLoginView(KnoxLoginView):
+    authentication_classes = [BasicAuthentication]
 
 class RootAPIView(APIView):
     def get(self, request):
         return Response({
             "admin": reverse("admin:index", request=request),
-            "test": reverse("test", request=request),
-            "test-post": reverse("test_post", request=request),
             'bookmarker': reverse("bookmarker:index", request=request),
             "users": reverse("users:index", request=request),
         })
@@ -36,3 +39,5 @@ class TestFrontendConnectionPost(GenericAPIView):
                     "Answer": "Hidden message is correct, Thank You."
                 }, status=status.HTTP_200_OK)
         return Response({"Answer": "Wrong answer"}, status=status.HTTP_200_OK)
+    
+

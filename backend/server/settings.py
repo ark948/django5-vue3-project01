@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "django.contrib.sites",
 
     "rest_framework",
+    "knox",
     "allauth",
     "allauth.account",
     "corsheaders",
@@ -76,11 +77,9 @@ MIDDLEWARE = [
 
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'knox.auth.TokenAuthentication',
+    ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
     'DEFAULT_PARSER_CLASSES': (
@@ -207,3 +206,19 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 
 ACCOUNT_EMAIL_VERIFICATION = 'optional'
+
+# Knox settings
+from rest_framework.settings import api_settings
+REST_KNOX = {
+'SECURE_HASH_ALGORITHM': 'hashlib.sha512',
+  'AUTH_TOKEN_CHARACTER_LENGTH': 64,
+  'TOKEN_TTL': timedelta(hours=10),
+  'USER_SERIALIZER': 'users.serializers.CustomUserSerializer',
+  'TOKEN_LIMIT_PER_USER': None,
+  'AUTO_REFRESH': False,
+  'AUTO_REFRESH_MAX_TTL': None,
+  'MIN_REFRESH_INTERVAL': 60,
+  'AUTH_HEADER_PREFIX': 'Token',
+  'EXPIRY_DATETIME_FORMAT': api_settings.DATETIME_FORMAT,
+  'TOKEN_MODEL': 'knox.AuthToken',
+}
