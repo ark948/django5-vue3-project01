@@ -18,7 +18,7 @@ def send_code_to_user(email: str) -> None:
     otp_code = generateOtp()
     user = CustomUser.objects.get(email=email)
     current_site = "MyAuth.com"
-    email_body = f'Hi {user.first_name}, thanks for signing up on {current_site}. \n plese verify your email with this one time password {otp_code}'
+    email_body = f'Hi {user.email}, thanks for signing up on {current_site}. \n plese verify your email with this one time password {otp_code}'
     from_email = settings.DEFAULT_FROM_EMAIL
 
     OneTimePassword.objects.create(user=user, code=otp_code)

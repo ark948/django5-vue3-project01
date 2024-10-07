@@ -22,7 +22,7 @@ class UserRegisterSerializer(ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['email', 'first_name', 'last_name', 'password', 'password2']
+        fields = ['email', 'password', 'password2']
 
     def validate(self, attrs):
         password = attrs.get('password', '')
@@ -34,8 +34,6 @@ class UserRegisterSerializer(ModelSerializer):
     def create(self, validated_data):
         user = CustomUser.objects.create_user(
             email=validated_data['email'],
-            first_name=validated_data.get('first_name'),
-            last_name=validated_data.get('last_name'),
             password=validated_data.get('password'),
         )
         return user
@@ -48,13 +46,12 @@ class UserOTPSerializer(Serializer):
 class LoginSerializer(ModelSerializer):
     email = serializers.EmailField(max_length=225, min_length=6)
     password = serializers.CharField(max_length=68, write_only=True)
-    full_name = serializers.CharField(max_length=225, read_only=True)
     access_token = serializers.CharField(max_length=225, read_only=True)
     refresh_token = serializers.CharField(max_length=225, read_only=True)
 
     class Meta:
         model = CustomUser
-        fields = ['email', 'password', 'full_name', 'access_token', 'refresh_token']
+        fields = ['email', 'password', 'access_token', 'refresh_token']
 
     def validate(self, attrs):
         email = attrs.get('email')
@@ -72,7 +69,6 @@ class LoginSerializer(ModelSerializer):
         
         return {
             'email': user.email,
-            'full_name': user.get_full_name,
             'access_token': str(user_tokens.get('access')),
             'refresh_token': str(user_tokens.get('refresh')),
         }
