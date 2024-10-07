@@ -1,33 +1,28 @@
+from django.utils import timezone
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.contrib.auth.models import AbstractUser, PermissionsMixin, AbstractBaseUser
 from django.utils.translation import gettext_lazy as _
-from accounts.managers import UserManager
+from accounts.managers import CustomUserManager
 from rest_framework_simplejwt.tokens import RefreshToken
+
 
 # Create your models here.
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(max_length=225, unique=True, verbose_name=_("Email Address"))
-    first_name = models.CharField(max_length=100, verbose_name=_("First Name"))
-    last_name = models.CharField(max_length=100, verbose_name=_("Last Name"))
+    email = models.EmailField(_('email address'), unique=True)
     is_staff = models.BooleanField(default=False)
-    is_superuser = models.BooleanField(default=False)
-    is_verified = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-    date_joined = models.DateTimeField(auto_now_add=True)
-    last_login = models.DateTimeField(auto_now=True)
+    is_verified = models.BooleanField(default=False) # my own
+    date_joined = models.DateTimeField(default=timezone.now)
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["first_name", "last_name"]
-    objects = UserManager()
+    REQUIRED_FIELDS = []
+
+    objects = CustomUserManager()
 
     def __str__(self) -> str:
         return self.email
-
-    @property
-    def get_full_name(self):
-        return f"{self.first_name} {self.last_name}"
 
     def tokens(self):
         refresh = RefreshToken.for_user(self)

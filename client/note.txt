@@ -1,4 +1,7 @@
 1. created new frontend, after migrating to new user model in backend
 2. cd client> npm intall
 3. first step after setting up new vue project: creating router
-    - install vue-router
+    - install vue-router (npm install vue-router)
+    - instantiate the router
+    - register the router main.js
+    - use the router in either App.vue or HomePage.vue

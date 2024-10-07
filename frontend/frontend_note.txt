@@ -257,4 +257,14 @@ shadcn - shadcn-vue
     ERROR: i completely forgot that uidb64 and token will be send to email and not frontend
     we can modify the link in email body to contain a link to frontend and not the backend
 
+UPDATE:
+need to modify the entire frontend section after migrating to new user model.
+api and rouer and auth store need full revision
+
+api:
+
+authstore:
+
+router:
+
 eslint.config.js not working

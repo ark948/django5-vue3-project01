@@ -18,7 +18,7 @@ class RootAPIView(APIView):
         return Response({
             "admin": reverse("admin:index", request=request),
             'bookmarker': reverse("bookmarker:index", request=request),
-            "users": reverse("users:index", request=request),
+            'accounts': reverse("accounts:index", request=request),
         })
     
 class TestFrontendConnection(APIView):

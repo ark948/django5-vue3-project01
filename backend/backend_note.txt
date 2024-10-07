@@ -398,8 +398,29 @@ problem 02: bookmark item title max length too short. [FIXED]
     since frontend requires refresh token as well, need a way to have that as well.
     apparently, it is possible to create more than one token,
     so if i create two return two users for user, i can name the second one, refresh_token
+
+    or just for now, return the regular token, and implement the refresh token later.
+    or...
+    frontend relies on access_token and refresh_token, if i modify the backend to provide those,
+    i won't have to modify the entire frontend.
+
+    but frontend api also checks for expiry date of tokens,
+    so the structure of tokens need to be compatible as well.
     
 
+24. Migrating back to use rest_framework_simplejwt
+    need to edit CustomUser to user AbstractUser instead of abstractBaseUser
+    - remove database file
+    - remove all references to users app
+        INSTALLED_APPS
+        main url files (nothing - but removed allauth)
+        api urls.py file
+        settings.py AUTH_USER_MODEL
+    - remove all accounts migration files
+    first we make sure that groups thing will work, if so, then we will add user profile model
+
+    using the following --dry-run flag we can create a migration file without running it:
+    python manage.py makemigrations --dry-run --verbosity 3 > mig.py
     
 
 

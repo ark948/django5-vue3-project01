@@ -68,7 +68,7 @@ class CustomLoginView(KnoxLoginView):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         try:
-            access_token = AuthToken.objects.create(user)[1]
+            token = AuthToken.objects.create(user)[1]
             refresh_token = AuthToken.objects.create(user)[1]
         except Exception as e:
             print("\n==>", e)
@@ -76,7 +76,7 @@ class CustomLoginView(KnoxLoginView):
         if user:
             return Response({
                 "user": user.email,
-                "access_token": access_token,
+                "token": token,
                 "refresh_token": refresh_token,
             }, status=status.HTTP_200_OK)
         return Response({'message': "Error in user object."})
