@@ -421,6 +421,17 @@ problem 02: bookmark item title max length too short. [FIXED]
 
     using the following --dry-run flag we can create a migration file without running it:
     python manage.py makemigrations --dry-run --verbosity 3 > mig.py
+
+    - The new CustomUser model and manager working fine
+    first name and last name are removed
+    so, any view that used those views will also not work.
+    summary of everything that needs ot be updated to reflect changes in new customuser model:
+    - views (json, html)
+    - forms (no change yet)
+    - urls (removed profile urls)
+
+25. adding new UserProfile model with first and last_name
+    django docs should be studied first
     
 
 

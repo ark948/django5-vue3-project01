@@ -26,9 +26,9 @@ from accounts.api.serializers import (
 
 # Create your views here.
 
-# register (ok)
-# verify (ok)
-# login (ok)
+# register (ok) (updated)
+# verify (ok) (updated)
+# login (ok) (updated)
 # auth-required (test) (ok)
 # password reset request (ok)
 # password reset confirm (ok)
@@ -43,7 +43,6 @@ class AccountsIndexView(APIView):
         return Response({
             "change-email": reverse('accounts:change_email', request=request),
             "update-password": reverse('accounts:update_password', request=request),
-            "edit-profile": reverse('accounts:edit_profile', request=request),
             "register": reverse('accounts:register', request=request),
             "verify-email": reverse('accounts:verify_email', request=request),
             "login": reverse('accounts:login', request=request),
@@ -167,6 +166,7 @@ class SetNewPasswordView(GenericAPIView):
     
 
 # may require update on self.request.data.get to serializer.get
+# REMOVED url
 class EditProfileView(GenericAPIView):
     serializer_class = EditProfileSerializer
     permission_classes = [IsAuthenticated]

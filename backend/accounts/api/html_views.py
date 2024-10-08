@@ -114,6 +114,7 @@ def html_logout_view(request) -> Response:
     
 
 # OK
+# REMOVED url
 @login_required
 @api_view(['GET'])
 @renderer_classes([TemplateHTMLRenderer])
@@ -287,6 +288,7 @@ def html_update_password(request):
 
 
 # OK
+# REMOVED url
 @login_required
 @api_view(['POST'])
 @renderer_classes([TemplateHTMLRenderer])
