@@ -13,6 +13,7 @@ from django.dispatch import receiver
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), unique=True)
+    username = models.CharField('Username', unique=True, null=True, max_length=225)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_verified = models.BooleanField(default=False) # my own

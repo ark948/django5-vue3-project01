@@ -443,8 +443,17 @@ problem 02: bookmark item title max length too short. [FIXED]
     most tests fail.
     mistake: had accidentally delete allauth urls from main urls.py file
 
-27. adding user profile
-    
+27. adding user profile (done)
+
+28. since custom user model has no username at all, django-allauth login is not working 
+    trying to add username field (aquired from email without the @ and top-level domain)
+    mistake: not sure if there actually was a problem.
+    anyway:
+    there are 3 ways to login now:
+    using api -> 'accounts:login' => http://127.0.0.1:8000/auth/api/login/ (ok)
+    using html-api -> 'accounts:html_login' => http://127.0.0.1:8000/auth/html-login/ (ok)
+    using allauth login -> 'account_login' => http://127.0.0.1:8000/accounts/login/ (ok)
+    they all work, but this is probably a bad design
 
 authentication note:
 permission and throttling policies can use credentials to determine if request should be permitted.

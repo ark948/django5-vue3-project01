@@ -191,6 +191,8 @@ AUTHENTICATION_BACKENDS = (
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
+LOGIN_REDIRECT_URL = "accounts:index"
+
 # django-allauth configs
 ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_SESSION_REMEMBER = True # always remember
