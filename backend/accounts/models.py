@@ -40,6 +40,10 @@ class UserProfile(models.Model):
 
     def __str__(self) -> str:
         return f'Profile for: {self.user}'
+    
+    @property
+    def get_full_name(self):
+        return f'{self.first_name} {self.last_name}'
 
     class Meta:
         verbose_name = 'User Profile'
@@ -47,18 +51,14 @@ class UserProfile(models.Model):
 
 @receiver(post_save, sender=CustomUser)
 def create_or_update_user_profile(sender, instance, created, **kwargs):
-    print("\n==> Creating user profile.")
     if created:
         UserProfile.objects.create(user=instance)
-        print("\n==> User profile created successfully.\n")
     else:
         try:
             profile = UserProfile.objects.get(user=instance)
             profile.save()
-            print("\n==> User updated.\n")
         except:
             UserProfile.objects.create(user=instance)
-            print('\n==> User profile created. ok.\n')
 
 class OneTimePassword(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)

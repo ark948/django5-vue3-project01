@@ -3,6 +3,9 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse, resolve
 import unittest
 
+# local imports
+from accounts.models import UserProfile
+
 # Create your tests here.
 
 class CustomUserModelTests(TestCase):
@@ -38,3 +41,25 @@ class UserMethodTest(TestCase):
         
         self.assertEqual(user.get_full_name, "Test User")
         self.assertFalse(user.is_staff)
+
+
+class UserProfileTest(TestCase):
+    @classmethod
+    def setUpTestData(cls) -> None:
+        User = get_user_model()
+        cls.user = User.objects.create_user('testuser01@gmail.com', password='home123*')
+        cls.user.profile.first_name = 'test'
+        cls.user.profile.last_name = 'user'
+        return super().setUpTestData()
+
+    def test_profile_was_created_successfully(self):
+        self.assertIsInstance(self.user.profile, UserProfile)
+
+    def test_profile_first_name(self):
+        self.assertEqual(self.user.profile.first_name, 'test')
+
+    def test_profile_last_name(self):
+        self.assertEqual(self.user.profile.last_name, 'user')
+
+    def test_profile_has_full_name(self):
+        self.assertEqual(self.user.profile.get_full_name, 'test user')
