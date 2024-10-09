@@ -2,8 +2,7 @@ from django.db import models
 from django.conf import settings
 
 # Create your models here.
-# each bookmark can have one category
-# each category can have many bookmarks
+
 
 class Category(models.Model):
     title = models.CharField("Title", max_length=60)

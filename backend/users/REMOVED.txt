@@ -1,0 +1,2 @@
+This app is not installed
+authentication: Django Rest Knox

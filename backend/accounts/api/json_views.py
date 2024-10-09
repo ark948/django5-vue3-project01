@@ -165,7 +165,6 @@ class SetNewPasswordView(GenericAPIView):
         }, status=status.HTTP_200_OK)
     
 
-# may require update on self.request.data.get to serializer.get
 # REMOVED url
 class EditProfileView(GenericAPIView):
     serializer_class = EditProfileSerializer
@@ -181,7 +180,9 @@ class EditProfileView(GenericAPIView):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
             first_name = self.request.data.get('first_name')
+            # serializer.get('first_name')
             last_name = self.request.data.get('last_name')
+            # serializer.get('last_name')
             if first_name:
                 self.user.first_name = first_name
             else:

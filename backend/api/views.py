@@ -5,13 +5,9 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse, reverse_lazy
 from api.serializers import TestPostSerializer
 from rest_framework import status
-from knox.views import LoginView as KnoxLoginView
 from rest_framework.authentication import BasicAuthentication
 
 # Create your views here.
-
-class CustomKnoxLoginView(KnoxLoginView):
-    authentication_classes = [BasicAuthentication]
 
 class RootAPIView(APIView):
     def get(self, request):
