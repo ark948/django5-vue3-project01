@@ -6,34 +6,24 @@ import unittest
 # Create your tests here.
 
 class CustomUserModelTests(TestCase):
-    @unittest.skip
     def test_create_user(self):
         User = get_user_model()
         user = User.objects.create_user(
-            first_name="test",  
-            last_name="user",
             email="testuser@test.com", 
             password="testpass123"
         )
-        self.assertEqual(user.first_name, "test")
-        self.assertEqual(user.last_name, "user")
         self.assertEqual(user.email, "testuser@test.com")
         self.assertTrue(user.is_active)
         self.assertFalse(user.is_verified)
         self.assertFalse(user.is_staff)
         self.assertFalse(user.is_superuser)
 
-    @unittest.skip
     def test_create_superuser(self):
         User = get_user_model()
         admin_user = User.objects.create_superuser(
-            first_name="admin_first",
-            last_name="admin_last",
             email="admin@example.com", 
             password="testpass123"
         )
-        self.assertEqual(admin_user.first_name, "admin_first")
-        self.assertEqual(admin_user.last_name, "admin_last")
         self.assertEqual(admin_user.email, "admin@example.com")
         self.assertTrue(admin_user.is_active)
         self.assertTrue(admin_user.is_staff)
@@ -41,10 +31,9 @@ class CustomUserModelTests(TestCase):
 
 
 class UserMethodTest(TestCase):
-    @unittest.skip
     def test_get_full_name(self):
         User = get_user_model()
-        user = User.objects.create(email='test@example.com', first_name='Test', last_name='User')
+        user = User.objects.create(email='test@example.com')
         
         self.assertEqual(user.get_full_name, "Test User")
         self.assertFalse(user.is_staff)

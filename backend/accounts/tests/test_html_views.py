@@ -111,7 +111,7 @@ class HTMLLoginViewTestCase(TestCase):
     @classmethod
     def setUpTestData(cls) -> None:
         cls.url = reverse('accounts:html_login')
-        cls.user = CustomUser.objects.create(email='testuser01@gmail.com', first_name='', last_name='')
+        cls.user = CustomUser.objects.create(email='testuser01@gmail.com')
         cls.user.set_password('home123*')
         cls.user.save()
         return super().setUpTestData()
@@ -185,7 +185,7 @@ class HTMLProfilePageViewTestCase(TestCase):
     @classmethod
     def setUpTestData(cls) -> None:
         cls.url = reverse('accounts:html_profile')
-        cls.user = CustomUser.objects.create(email='testuser01@gmail.com', first_name='', last_name='')
+        cls.user = CustomUser.objects.create(email='testuser01@gmail.com')
         cls.user.set_password('home123*')
         cls.user.save()
         return super().setUpTestData()
