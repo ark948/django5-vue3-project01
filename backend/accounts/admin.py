@@ -1,7 +1,12 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from accounts.models import CustomUser, OneTimePassword
+from accounts.models import CustomUser, OneTimePassword, UserProfile
 from accounts.forms import CustomUserChangeForm, CustomUserCreationForm
+
+class UserProfileInline(admin.StackedInline):
+    model = UserProfile
+    can_delete = False
+    verbose_name_plural = "User Profile"
 
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
@@ -25,7 +30,9 @@ class CustomUserAdmin(UserAdmin):
     )
     search_fields = ("email",)
     ordering = ("email",)
+    inlines = [UserProfileInline]
 
 
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(OneTimePassword)
+admin.site.register(UserProfile) 

@@ -442,6 +442,8 @@ problem 02: bookmark item title max length too short. [FIXED]
 26. basically all tests relied on user having first name and last name.
     most tests fail.
     mistake: had accidentally delete allauth urls from main urls.py file
+
+27. adding user profile
     
 
 authentication note:
