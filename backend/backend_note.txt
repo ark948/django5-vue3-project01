@@ -438,6 +438,8 @@ problem 02: bookmark item title max length too short. [FIXED]
     checked AUTH_USER_MODEL
     check REST_FRAMEWORK authenticaction backends (FOUND the problem)
     it was set to knox.authenticaction, need to change it back to default
+
+26. basically all tests relied on user having first name and last name.
     
 
 authentication note:
