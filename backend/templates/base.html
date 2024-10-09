@@ -11,6 +11,7 @@
     {% if user.is_authenticated %}
         Hello, {{ user.email }}
         <a href="{% url 'account_logout' %}">Logout</a>
+        <a href="{% url 'accounts:html_profile' %}">Profile</a>
     {% else %}
         <a href="{% url 'account_login' %}">Login</a>
         <a href="{% url 'account_signup' %}">Signup</a>

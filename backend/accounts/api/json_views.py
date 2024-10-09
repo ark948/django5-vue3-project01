@@ -46,9 +46,7 @@ from accounts.api.serializers import (
 
 class AccountsIndexView(APIView):
     def get(self, request) -> Response:
-        user_id = self.request.user.pk
-        return Response({
-            "profile": reverse('accounts:user_profile', kwargs={'pk': user_id}, request=request),
+        data = {
             "change-email": reverse('accounts:change_email', request=request),
             "update-password": reverse('accounts:update_password', request=request),
             "register": reverse('accounts:register', request=request),
@@ -59,7 +57,13 @@ class AccountsIndexView(APIView):
             "password_reset_request": reverse('accounts:password_reset', request=request),
             "set_new_password": reverse('accounts:set_new_password', request=request),
             "html_index": reverse("accounts:html_index", request=request),
-        })
+        }
+        if request.user.is_authenticated:
+            user_id = self.request.user.pk
+            data['user_profile'] = reverse("accounts:user_profile", kwargs={"pk":user_id}, request=request)
+        else:
+            pass
+        return Response(data, status=status.HTTP_200_OK)
 
 
 class RegisterUserView(GenericAPIView):

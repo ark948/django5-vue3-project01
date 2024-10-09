@@ -3,13 +3,13 @@
 {% block content %}
     <h3>Your profile page</h3>
     <p>Your email:{{ user.email }}</p>
-    {% if user.first_name %}
-        <p>First Name: {{ user.first_name }}</p>
+    {% if user.profile.first_name %}
+        <p>First Name: {{ user.profile.first_name }}</p>
         {% else %}
         <p>First Name: (not set yet)</p>
     {% endif %}
-    {% if user.last_name %}
-        <p>First Name: {{ user.last_name }}</p>
+    {% if user.profile.last_name %}
+        <p>First Name: {{ user.profile.last_name }}</p>
         {% else %}
         <p>Last Name: (not set yet)</p>
     {% endif %}

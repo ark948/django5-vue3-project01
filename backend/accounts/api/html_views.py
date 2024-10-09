@@ -27,7 +27,7 @@ from django.shortcuts import redirect
 from accounts.models import CustomUser
 from django.contrib import messages
 from accounts.utils.email import send_code_to_user, send_normal_email, re_verify_email
-from accounts.models import OneTimePassword
+from accounts.models import OneTimePassword, CustomUser, UserProfile
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
 from accounts.forms import (
@@ -119,10 +119,13 @@ def html_logout_view(request) -> Response:
 @api_view(['GET'])
 @renderer_classes([TemplateHTMLRenderer])
 def html_profile_page_view(request) -> Response:
-    form1 = UpdatePasswordForm()
-    form2 = EditProfileForm()
-    form3 = EmailChangeForm()
-    return Response({'form1': form1, 'form2': form2, 'form3': form3}, template_name='accounts/profile.html', status=status.HTTP_200_OK)
+    return Response({
+        'form1': UpdatePasswordForm(),
+        'form2': EditProfileForm(),
+        'form3': EmailChangeForm()
+        }, 
+        template_name='accounts/profile.html', 
+        status=status.HTTP_200_OK)
 
 
 # OK
@@ -299,15 +302,18 @@ def html_edit_profile(request):
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
             user = CustomUser.objects.get(id=request.user.id)
+            profile = UserProfile.objects.filter(user=user).first()
             if first_name:
-                user.first_name = first_name
+                profile.first_name = first_name
             else:
-                pass
+                if not last_name:
+                    messages.warning(request, "Empty form.")
+                    return redirect(reverse('accounts:html_profile'))
             if last_name:
-                user.last_name = last_name
+                profile.last_name = last_name
             else:
                 pass
-            user.save()
+            profile.save()
             messages.success(request, "Profile successfully updated.")
             return redirect(reverse('accounts:html_profile'))
         else:
