@@ -11,7 +11,6 @@
     <div>
         <h1>Hi, {{ authEmail }}</h1>
         <h1>Hi (2), {{ authStore.email }}</h1>
-        <h1>name: {{ authStore.full_name }}</h1>
         <h6>access:{{ authStore.access_token }} </h6>
         <h6>refresh: {{ authStore.refresh_token }}</h6>
         <div class="link-container">

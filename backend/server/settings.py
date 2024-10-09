@@ -57,7 +57,6 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt.token_blacklist",
     "api.apps.ApiConfig",
     "bookmarker.apps.BookmarkerConfig",
-    # "users.apps.UsersConfig",
     "accounts.apps.AccountsConfig",
 ]
 
@@ -190,8 +189,8 @@ AUTHENTICATION_BACKENDS = (
 )
 
 # LOGIN_URL = "/auth/html-login/"
-# LOGIN_REDIRECT_URL = "users:index"
-# LOGOUT_REDIRECT_URL = "users:index"
+# LOGIN_REDIRECT_URL = "api:root"
+# LOGOUT_REDIRECT_URL = "api:root"
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"

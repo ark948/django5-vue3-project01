@@ -4,8 +4,7 @@ from api.views import (
 )
 
 urlpatterns = [
-    path('auth/', include('accounts.urls')),
+    path('auth/', include('accounts.urls', namespace='accounts')),
     path('bookmarker/', include('bookmarker.urls')),
-    # path('users/', include('users.urls')),
     path('', RootAPIView.as_view(), name='root'),
 ]

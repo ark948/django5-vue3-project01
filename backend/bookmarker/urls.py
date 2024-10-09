@@ -22,7 +22,6 @@ from bookmarker.views.views import (
 
 app_name = 'bookmarker'
 urlpatterns = [
-    
     # json
     path('api/bookmarks-with-category/', GetBookmarksWithCategory.as_view(), name='bookmarks_with_category'),
     path('api/bookmarks-by-category/', GetBookmarksByCategory.as_view(), name='bookmarks_by_category'),
