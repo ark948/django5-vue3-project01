@@ -431,9 +431,14 @@ problem 02: bookmark item title max length too short. [FIXED]
     - urls (removed profile urls)
 
 25. adding new UserProfile model with first and last_name
-    django docs should be studied first
+    django docs should be studied first (on-hold)
     
 
+26. problem: rest_framework api-auth not working:
+    checked AUTH_USER_MODEL
+    check REST_FRAMEWORK authenticaction backends (FOUND the problem)
+    it was set to knox.authenticaction, need to change it back to default
+    
 
 authentication note:
 permission and throttling policies can use credentials to determine if request should be permitted.
