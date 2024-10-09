@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     "django.contrib.sites",
 
     "rest_framework",
-    "knox",
     "allauth",
     "allauth.account",
     "corsheaders",
@@ -189,10 +188,6 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
-# LOGIN_URL = "/auth/html-login/"
-# LOGIN_REDIRECT_URL = "api:root"
-# LOGOUT_REDIRECT_URL = "api:root"
-
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
@@ -208,17 +203,4 @@ ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_VERIFICATION = 'optional'
 
 # Knox settings
-from rest_framework.settings import api_settings
-REST_KNOX = {
-'SECURE_HASH_ALGORITHM': 'hashlib.sha512',
-  'AUTH_TOKEN_CHARACTER_LENGTH': 64,
-  'TOKEN_TTL': timedelta(hours=10),
-  'USER_SERIALIZER': 'users.serializers.CustomUserSerializer',
-  'TOKEN_LIMIT_PER_USER': None,
-  'AUTO_REFRESH': False,
-  'AUTO_REFRESH_MAX_TTL': None,
-  'MIN_REFRESH_INTERVAL': 60,
-  'AUTH_HEADER_PREFIX': 'Token',
-  'EXPIRY_DATETIME_FORMAT': api_settings.DATETIME_FORMAT,
-  'TOKEN_MODEL': 'knox.AuthToken',
-}
+# Knox was removed
