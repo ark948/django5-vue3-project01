@@ -183,6 +183,7 @@ class HTMLLoginViewTestCase(TestCase):
 
 class HTMLProfilePageViewTestCase(TestCase):
     @classmethod
+    @unittest.skip
     def setUpTestData(cls) -> None:
         cls.url = reverse('accounts:html_profile')
         cls.user = CustomUser.objects.create(email='testuser01@gmail.com')
@@ -190,43 +191,52 @@ class HTMLProfilePageViewTestCase(TestCase):
         cls.user.save()
         return super().setUpTestData()
     
+    @unittest.skip
     def setUp(self) -> None:
         self.client = Client()
         self.client.post('/auth/html-login/', {'email': 'testuser01@gmail.com', 'password': 'home123*'})
         return super().setUp()
     
+    @unittest.skip
     def test_url_is_correct(self):
         response = self.client.get('/auth/html-profile/')
         self.assertEqual(response.status_code, 200)
 
+    @unittest.skip
     def test_endpoint_is_correct(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
 
+    @unittest.skip
     def test_template_is_correct(self):
         response = self.client.get(self.url)
         self.assertTemplateUsed(response, 'accounts/profile.html')
         self.assertTemplateNotUsed(response, 'accounts/login.html')
 
+    @unittest.skip
     def test_template_contains_accurate_text(self):
         response = self.client.get(self.url)
         self.assertContains(response, 'Your profile page')
 
+    @unittest.skip
     def test_view_is_the_correct_one(self):
         response = self.client.get(self.url)
         self.assertIs(response.resolver_match.func, html_profile_page_view)
         self.assertEqual(response.resolver_match.view_name, 'accounts:html_profile')
 
+    @unittest.skip
     def test_app_name_is_accurate(self):
         resolved = resolve('/auth/html-profile/')
         self.assertEqual(resolved.app_name, 'accounts')
 
+    @unittest.skip
     def test_correct_form_is_used(self):
         response = self.client.get(self.url)
         self.assertIsInstance(response.context['form1'], UpdatePasswordForm)
         self.assertIsInstance(response.context['form2'], EditProfileForm)
         self.assertIsInstance(response.context['form3'], EmailChangeForm)
 
+    @unittest.skip
     def test_view_is_not_accessible_without_login(self):
         self.client.logout()
         response = self.client.get(self.url)

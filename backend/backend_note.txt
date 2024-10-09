@@ -440,6 +440,8 @@ problem 02: bookmark item title max length too short. [FIXED]
     it was set to knox.authenticaction, need to change it back to default
 
 26. basically all tests relied on user having first name and last name.
+    most tests fail.
+    mistake: had accidentally delete allauth urls from main urls.py file
     
 
 authentication note:
