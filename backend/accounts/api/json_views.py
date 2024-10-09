@@ -1,17 +1,22 @@
-from django.core.validators import validate_email
+# django improts
+from django.utils.encoding import smart_str, DjangoUnicodeDecodeError
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+
+# rest_framework imports
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
-from rest_framework.generics import GenericAPIView
+from rest_framework.generics import GenericAPIView, RetrieveUpdateAPIView
 from rest_framework import status
-from django.http import HttpResponseRedirect
+from rest_framework.decorators import api_view
+
+# local imports
+from accounts.models import CustomUser, OneTimePassword, UserProfile
 from accounts.utils.email import send_code_to_user, re_verify_email
-from accounts.models import OneTimePassword
-from rest_framework.permissions import IsAuthenticated
-from django.utils.encoding import smart_str, DjangoUnicodeDecodeError
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from accounts.models import CustomUser
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from accounts.api.serializers import (
     UserRegisterSerializer,
     UserOTPSerializer,
@@ -21,7 +26,8 @@ from accounts.api.serializers import (
     SetNewPasswordSerializer,
     EditProfileSerializer,
     UpdatePasswordSerializer,
-    ChangeEmailSerializer
+    ChangeEmailSerializer,
+    UserProfileSerializer
 )
 
 # Create your views here.
@@ -33,14 +39,16 @@ from accounts.api.serializers import (
 # password reset request (ok)
 # password reset confirm (ok)
 # set new password (ok)
-# edit profile (ok)
+# edit profile (ok) REMOVED
 # update password (ok)
 # change email
-# profile (first/last name + email)
+# profile (first/last name + email) (ok)
 
 class AccountsIndexView(APIView):
     def get(self, request) -> Response:
+        user_id = self.request.user.pk
         return Response({
+            "profile": reverse('accounts:user_profile', kwargs={'pk': user_id}, request=request),
             "change-email": reverse('accounts:change_email', request=request),
             "update-password": reverse('accounts:update_password', request=request),
             "register": reverse('accounts:register', request=request),
@@ -246,3 +254,12 @@ class ChangeEmailView(GenericAPIView):
                 return Response({'message': 'user is not verified.'}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response({'messagee': 'serializer is not valid.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+
+class GetProfile(RetrieveUpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserProfileSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return UserProfile.objects.filter(user=user)

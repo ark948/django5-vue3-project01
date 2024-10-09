@@ -1,18 +1,24 @@
+# django imports
 from django.urls import reverse
-from rest_framework.serializers import ModelSerializer, Serializer
-from rest_framework import serializers
-from accounts.models import CustomUser
 from django.contrib.auth import authenticate
-from rest_framework.exceptions import AuthenticationFailed
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import smart_bytes, force_str
 from django.contrib.sites.shortcuts import get_current_site
-from accounts.utils.email import send_normal_email
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.exceptions import TokenError
 from django.core.validators import validate_email
 
+# rest_framework imports
+from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.serializers import ModelSerializer, Serializer
+from rest_framework import serializers
+
+# 3rd party imports
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.exceptions import TokenError
+
+# local imports
+from accounts.utils.email import send_normal_email
+from accounts.models import CustomUser, UserProfile
 
 class UserRegisterSerializer(ModelSerializer):
     password = serializers.CharField(
@@ -178,3 +184,16 @@ class ChangeEmailSerializer(Serializer):
         for email in attr:
             validate_email(email)
         return attr
+    
+
+class CustomUserSerializer(ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ('email',)
+
+
+class UserProfileSerializer(ModelSerializer):
+    user = CustomUserSerializer(read_only=True)
+    class Meta:
+        model = UserProfile
+        fields = ('user', 'first_name', 'last_name')

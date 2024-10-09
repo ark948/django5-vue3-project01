@@ -5,13 +5,11 @@ from accounts.api.html_views import (
     html_register_view,
     html_login_view,
     html_logout_view,
-    html_profile_page_view,
     html_verify_account,
     html_password_reset_request,
     html_password_reset_confirm,
     html_set_new_password,
     html_update_password,
-    html_edit_profile,
     html_change_email
 )
 from accounts.api.json_views import (
@@ -24,13 +22,14 @@ from accounts.api.json_views import (
     PasswordResetRequestView,
     PasswordResetConfirmView,
     SetNewPasswordView,
-    EditProfileView,
     UpdatePasswordView,
-    ChangeEmailView
+    ChangeEmailView,
+    GetProfile
 )
 
 app_name = 'accounts'
 urlpatterns = [
+    path('api/profile/<int:pk>/', GetProfile.as_view(), name='user_profile'),
     path('api/change-email/', ChangeEmailView.as_view(), name='change_email'),
     path('api/update-password/', UpdatePasswordView.as_view(), name='update_password'),
     path('api/register/', RegisterUserView.as_view(), name='register'),
