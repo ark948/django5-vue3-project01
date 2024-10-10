@@ -17,6 +17,8 @@
         <a href="{% url 'account_signup' %}">Signup</a>
     {% endif %}
 
+    <a href="{% url 'root' %}">API</a>
+
     {% if messages %}
         <ul class="messages">
             {% for message in messages %}
