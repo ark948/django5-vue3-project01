@@ -1,16 +1,26 @@
+# django imports
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
+
+# rest_framework imports
 from rest_framework.permissions import IsAuthenticated
-from bookmarker.models import Bookmark, Category
-from rest_framework import viewsets
 from rest_framework.response import Response
-from bookmarker.permissions import IsOwner
 from rest_framework.views import APIView
 from rest_framework.decorators import action, api_view
-from django.contrib.auth.decorators import login_required
 from rest_framework.renderers import TemplateHTMLRenderer
-from rest_framework import status
+from rest_framework import status, viewsets
 from rest_framework.request import Request
-from django.shortcuts import get_object_or_404
-from rest_framework.parsers import FormParser, MultiPartParser, FileUploadParser
+from rest_framework.parsers import FormParser, MultiPartParser
+from rest_framework.generics import (
+    RetrieveUpdateDestroyAPIView,
+    ListCreateAPIView,
+    GenericAPIView,
+    ListAPIView
+    )
+
+# local imports
+from bookmarker.permissions import IsOwner
+from bookmarker.models import Bookmark, Category
 from bookmarker.api.serializers import (
     BookmarksSerializer, 
     BookmarkDetailsSerializer,
@@ -20,12 +30,7 @@ from bookmarker.api.serializers import (
     BookmarksByCategorySerializer,
     BookmarksWithCategory
     )
-from rest_framework.generics import (
-    RetrieveUpdateDestroyAPIView,
-    ListCreateAPIView,
-    GenericAPIView,
-    ListAPIView
-    )
+
 
 # views
 

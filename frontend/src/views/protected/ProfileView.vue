@@ -13,6 +13,8 @@
         <h1>Hi (2), {{ authStore.email }}</h1>
         <h6>access:{{ authStore.access_token }} </h6>
         <h6>refresh: {{ authStore.refresh_token }}</h6>
+        <h2>First Name: {{ authStore.first_name }}</h2>
+        <h2>Last Name: {{ authStore.last_name }}</h2>
         <div class="link-container">
             <RouterLink id="back" to="/">Back to home</RouterLink>
         </div>

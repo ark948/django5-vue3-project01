@@ -1,12 +1,16 @@
+# django imports
 from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import AbstractUser, PermissionsMixin, AbstractBaseUser
 from django.utils.translation import gettext_lazy as _
-from accounts.managers import CustomUserManager
-from rest_framework_simplejwt.tokens import RefreshToken
 from django.db.models.signals import post_save 
 from django.dispatch import receiver
 
+# rest_framework imports
+from rest_framework_simplejwt.tokens import RefreshToken
+
+# local imports
+from accounts.managers import CustomUserManager
 
 # Create your models here.
 

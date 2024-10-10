@@ -12,24 +12,28 @@
 # edit profile (first and last name) (ok)
 # edit email - requires re-verification (ok)
 
+# django imports
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.sites.shortcuts import get_current_site
+from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import redirect
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.urls import reverse
-from rest_framework import status
-from django.utils.encoding import smart_bytes, smart_str, force_str
+from django.utils.encoding import smart_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.http import HttpRequest
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
+
+# rest_framework imports
+from rest_framework import status
 from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
-from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import redirect
-from accounts.models import CustomUser
-from django.contrib import messages
+
+# local imports
 from accounts.utils.email import send_code_to_user, send_normal_email, re_verify_email
 from accounts.models import OneTimePassword, CustomUser, UserProfile
-from django.contrib.auth.decorators import login_required
-from django.contrib.sites.shortcuts import get_current_site
 from accounts.forms import (
     BuiltinUserRegistrationForm,
     UserLoginForm,
