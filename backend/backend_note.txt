@@ -472,6 +472,7 @@ problem 02: bookmark item title max length too short. [FIXED]
     NOTE: JSONRenderer must come first, before TemplateHTMLRenderer
     NOTE: in rest framework, login_required is useless, and instead permission_required must be used
     NOTE: i don't think user_passes_test can work with rest api endpoints
+    NOTE: permission_required decorator works for both html and json (no need for login_requried) in function based api views
 
 30. to write a custom decorator we can use user_passes_test decorator
     this decorator will perform a callable, and redirect to another view if callable returns false

@@ -4,4 +4,10 @@
     <p>
         Employees index page
     </p>
+
+    {% if categories %}
+        {% for i in categories %}
+            <p>{{ i.title }}</p>
+        {% endfor %}
+    {% endif %}
 {% endblock content %}
