@@ -276,4 +276,18 @@ api and rouer and auth store need full revision
     now, i have to include auth header in every request to backend in bookmarksList.vue compo. done.
     things appaer to be working fine.
 
+
+23. adding frontend testing:
+    adding vitest
+    > npm install -D vitest
+    test files should contain ".test." or ".spec."
+    to run tests, add the following to package.json:
+    {
+    "scripts": {
+    "test": "vitest"
+        }
+    }
+    - finally run> npm run test
+
+
 eslint.config.js not working

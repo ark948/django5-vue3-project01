@@ -18,6 +18,9 @@ from bookmarker.api.html_views import (
 from bookmarker.views.views import (
     BookmarkerRootAPIView
 )
+from bookmarker.api.employess_views import (
+    emp_index
+)
 
 app_name = 'bookmarker'
 urlpatterns = [
@@ -34,6 +37,9 @@ urlpatterns = [
     # html
     path('html/index/', BookmarkerIndexView.as_view(), name='html_index'),
     path('html/list/', BookmarksListView.as_view(), name='html_list'),
+
+    # html/json (employees)
+    path('emp/index/', emp_index, name='emp_index'),
     
     # root
     path('', BookmarkerRootAPIView.as_view(), name='index'),

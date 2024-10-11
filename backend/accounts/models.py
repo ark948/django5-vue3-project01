@@ -56,6 +56,7 @@ class UserProfile(models.Model):
 
 @receiver(post_save, sender=CustomUser)
 def create_or_update_user_profile(sender, instance, created, **kwargs):
+    print("\n--> Profile signal called.\n")
     if created:
         UserProfile.objects.create(user=instance)
     else:

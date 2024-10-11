@@ -154,6 +154,7 @@ class UserBookmarksCSVImport(APIView):
         return Response({'msg': "Not valid"}, status=status.HTTP_400_BAD_REQUEST)
 
 
+# PROBLEM
 @login_required
 @api_view(['GET'])
 def get_categories_with_link(request):

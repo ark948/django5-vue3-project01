@@ -11,4 +11,6 @@ class BookmarkerRootAPIView(APIView):
             'categories': reverse('bookmarker:categories_list', request=request),
             'bookmarks-by-category': reverse('bookmarker:bookmarks_by_category', request=request),
             'bookmarks-with-category': reverse('bookmarker:bookmarks_with_category', request=request),
+            'employees_index': reverse('bookmarker:emp_index', request=request),
+            'employees_index_api': reverse('bookmarker:emp_index', request=request),
         })

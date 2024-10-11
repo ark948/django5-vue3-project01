@@ -455,6 +455,31 @@ problem 02: bookmark item title max length too short. [FIXED]
     using allauth login -> 'account_login' => http://127.0.0.1:8000/accounts/login/ (ok)
     they all work, but this is probably a bad design
 
+29. need a way to define user types
+    only users with employee type can add/edit/delete Category in bookmarker.
+    apparently the standard way is to just use groups.
+    e.g. a group that will represent the employees role, will have permissions to edit Category model.
+    any user profile in that employees group, will be able to edit the Category model, just have to do a per-view check,
+    to see if that user profile exists in a certain group in order to access said view.
+    i will use django admin to create a new group called Employees.
+    Employees will have permissions to add/update/delete Category model.
+    also a new app for employees do not even seem necessary, we can just create a custom decorator to check for group of a user,
+    before granting access to a route, all in bookmarker app.
+    - created new group
+    - let's create a new employee user: empuser01@gmail.com, home123*, is_staff, is_active, 
+    since, is_staff is set to true, empuser01 can login to admin panel, but the only thing that can be changed there, is Category.
+    which is good, now i don't even need to implement views to add or modify catgories. (but just for learning purposes i might try.)
+    NOTE: JSONRenderer must come first, before TemplateHTMLRenderer
+    NOTE: in rest framework, login_required is useless, and instead permission_required must be used
+    NOTE: i don't think user_passes_test can work with rest api endpoints
+
+30. to write a custom decorator we can use user_passes_test decorator
+    this decorator will perform a callable, and redirect to another view if callable returns false
+
+
+
+
+
 authentication note:
 permission and throttling policies can use credentials to determine if request should be permitted.
 
