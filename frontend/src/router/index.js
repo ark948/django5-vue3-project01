@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "@/views/public/HomeView.vue"
 import Register from "@/components/auth/Register.vue";
-import VerifyEmail_v2 from "@/components/auth/VerifyEmail_v2.vue";
+import VerifyEmail from "@/components/auth/VerifyEmail.vue";
 import { useNotification } from "@kyvg/vue3-notification";
-import Login_v4 from "@/components/auth/Login_v4.vue";
+import Login from "@/components/auth/Login.vue";
 import ProfileView from "@/views/protected/ProfileView.vue"
 import { useAuthStore } from '@/stores';
 import ManualTokenRefresh from "@/views/protected/ManualTokenRefresh.vue";
@@ -30,8 +30,8 @@ const routes = [
     { path: '/', component: HomeView, name: 'home' },
     { path: '/home', redirect: '/' },
     { path: '/register', component: Register, name: 'register' },
-    { path: '/verify-email', component: VerifyEmail_v2, name: 'verify_email' },
-    { path: '/login', component: Login_v4, name: 'login' },
+    { path: '/verify-email', component: VerifyEmail, name: 'verify_email' },
+    { path: '/login', component: Login, name: 'login' },
     { path: '/profile', component: ProfileView, name: "profile" },
     { path: '/manual-refresh', component: ManualTokenRefresh, name: 'manual_refresh' },
     { path: '/bookmarks-list', component: Bookmarks, name: 'bookmarks' },
