@@ -263,5 +263,17 @@ api and rouer and auth store need full revision
 
 22. Bookmarks list works, but it needs a refresh.
     this is a problem that needs fixing.
+    i was able to slightly improve the performance by putting the bookmarks list getter function in settimeout code.
+    but problem persists. it returns 403 UnAuthorized response.
+    i think the problem is actually with the api.
+    tested the backend using postman, and the response was fine. the problem is in the frontend.
+    i'm gonig to try to re-write the api instance.
+    re-write complete. attempting to re-map all api imports to use api v2.
+    actaully let's just try bookmarkslist compo.
+    to no avail, the problem now triggers constantly.
+    update: problem appears to be fixed, now need to know whether delete the access token from bookmarks list or not?
+    tried deleting the auth header from request in bookmark list but problem came back.
+    now, i have to include auth header in every request to backend in bookmarksList.vue compo. done.
+    things appaer to be working fine.
 
 eslint.config.js not working

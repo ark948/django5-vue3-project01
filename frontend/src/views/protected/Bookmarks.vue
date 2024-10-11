@@ -2,8 +2,19 @@
     import BookmarksList from '@/components/bookmarker/bookmarks_list/BookmarksList.vue';
 
     export default {
+        data() {
+            return {
+
+            }
+        },
         components: {
             BookmarksList
+        },
+        methods: {
+
+        },
+        mounted() {
+            console.log('Bookmark Parent mounted.');
         }
     }
 </script>

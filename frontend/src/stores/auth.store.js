@@ -37,6 +37,31 @@ export const useAuthStore = defineStore({
                 console.log('[auth.store.js] res status NOT 200', res.status);
             }
         },
+
+        login_v2(email, password) {
+            console.log('[auth.store.js] login v2 called.');
+            api.post('auth/api/login/', { email, password })
+                .then((res) => {
+                    if (res.status === 200) {
+                        console.log('200');
+                        this.email = res.data.email
+                        this.access_token = res.data.access_token
+                        this.refresh_token = res.data.refresh_token
+                        this.first_name = res.data.first_name
+                        this.last_name = res.data.last_name
+                        localStorage.setItem('email', JSON.stringify(res.data.email));
+                        localStorage.setItem('access_token', JSON.stringify(res.data.access_token));
+                        localStorage.setItem('refresh_token', JSON.stringify(res.data.refresh_token));
+                        localStorage.setItem('first_name', JSON.stringify(res.data.first_name));
+                        localStorage.setItem('last_name', JSON.stringify(res.data.last_name));
+                        console.log('[auth.store.js] localStorage Email: ', localStorage.getItem('email'), 'localStorage complete, Redirecting to next...')
+                        router.push(this.returnUrl || '/');
+                    } else {
+                        console.log('NOT 200 --> ', res.status);
+                    }
+                })
+        },
+
         logout() {
             console.log('[auth.store.js] logout called, Removing global state...')
             this.email = null;

@@ -52,6 +52,7 @@ class AccountsIndexView(APIView):
             "register": reverse('accounts:register', request=request),
             "verify-email": reverse('accounts:verify_email', request=request),
             "api-login": reverse('accounts:login', request=request),
+            "api-logout": reverse('accounts:logout', request=request),
             "html_login": reverse('accounts:html_login', request=request),
             "auth-required": reverse('accounts:auth_required', request=request),
             "refresh_token": reverse('accounts:refresh_token', request=request),
@@ -126,7 +127,7 @@ class TestAuthenticationView(GenericAPIView):
 
 class LogoutUserView(GenericAPIView):
     serializer_class = LogoutUserSerializer
-    permission_classes = [IsAuthenticated]
+    # Removed isAuthenticated permission
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)

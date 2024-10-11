@@ -1,7 +1,10 @@
 <script setup>
 // this component uses PrimeVue library
 import { ref, onMounted, reactive } from "vue";
-import api from "@/api/api";
+// import api from "@/api/api";
+import api from '@/api/api_v2';
+import { useAuthStore } from "@/stores";
+
 import { useRouter } from "vue-router";
 
 const responseHolder = ref("");
@@ -12,10 +15,6 @@ const insideRouter = useRouter();
 // primevue
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
-import ColumnGroup from "primevue/columngroup"; // optional
-import Row from "primevue/row"; // optional
-import Paginator from "primevue/paginator";
-import FileUpload from "primevue/fileupload";
 
 const selectedItem = ref();
 
@@ -56,14 +55,21 @@ watch(() => selectedItem.value, async () => {
 
 onMounted(() => {
   console.log("[BookmarksList.vue] - mounted.");
-  get_bookmarks();
+  // get_bookmarks();
+  setTimeout(() => {
+    get_bookmarks();
+  }, 300);
 });
 
-async function get_bookmarks() {
+
+// manual auth header added
+function get_bookmarks() {
   console.log("[BookmarksList.vue] Getting the list...");
   // const res = await api.get(`bookmarker/api/?page=${page_number.value}`)
-  const res = await api
-    .get("bookmarker/api/no-paginate/")
+  const authStore = useAuthStore()
+  const authStr = `Bearer ${authStore.access_token}`
+  console.log("\n\n==> ", authStr)
+  api.get('bookmarker/api/no-paginate/', { headers: {Authorization: authStr}})
     .then((response) => {
       if (response.status === 200) {
         console.log("Response 200");
@@ -84,10 +90,13 @@ async function get_bookmarks() {
     });
 };
 
+// manual auth header added
 async function handleNewBookmarkSubmit() {
+    const authStore = useAuthStore()
+    const authStr = `Bearer ${authStore.access_token}`
     console.log("[BookmarksList.vue] Adding new...");
     responseHolder.value = "";
-    const res = await api.post('bookmarker/api/no-paginate/', { title: new_item_title.value, url: new_item_url.value })
+    await api.post('bookmarker/api/no-paginate/', { title: new_item_title.value, url: new_item_url.value }, { headers: {Authorization: authStr}})
     .then((response) => {
         if (response.status === 201) {
             console.log('[BookmarksList.vue] New item successfully added.');
@@ -111,6 +120,7 @@ async function handleNewBookmarkSubmit() {
     });
 }
 
+// not used
 async function handleSingleDeletion() {
   console.log("Performing Delete request (Single)...");
   for (let i in selectedItem.value) {
@@ -137,14 +147,18 @@ async function handleSingleDeletion() {
     visible.value = false;
 }
 
+
+// manual auth header added
 async function handleMultipleDeletion() {
   console.log("Performing mulitple deletion...");
+  const authStore = useAuthStore()
+  const authStr = `Bearer ${authStore.access_token}`
   let selected = [];
   for (let i in selectedItem.value) {
     selected.push(selectedItem.value[i]['id'])
   }
   selected = selected.toString();
-  const res = api.post('bookmarker/api/multiple-delete/', { list_of_ids: selected })
+  await api.post('bookmarker/api/multiple-delete/', { list_of_ids: selected }, { headers: {Authorization: authStr}})
     .then((response) => {
       console.log("Sending request...");
       if (response.status === 200) {
@@ -173,6 +187,7 @@ const exportCSV = async () => {
 }
 
 import { useToast } from 'primevue/usetoast';
+import router from "@/router";
 
 const edit_modal_visible = ref(false);
 const edit_item = reactive({
@@ -187,9 +202,13 @@ function editItem(item) {
   edit_modal_visible.value = true;
 }
 
+
+// manual auth header added
 function handleEdit() {
   console.log("Invoking update...");
-  const res = api.put(`bookmarker/api/${edit_item.id}/`, { title: edit_item.title, url: edit_item.url})
+  const authStore = useAuthStore()
+  const authStr = `Bearer ${authStore.access_token}`
+  api.put(`bookmarker/api/${edit_item.id}/`, { title: edit_item.title, url: edit_item.url}, { headers: {Authorization: authStr}})
   .then((response) => {
     if (response.status === 200) {
       console.log("UPDATE SUCCESSFUL.");
@@ -210,8 +229,12 @@ function handleEdit() {
   });
 }
 
+
+// manual auth header added
 function confirmDeleteProduct(item) {
-  const res = api.delete(`bookmarker/api/${item['id']}/`)
+  const authStore = useAuthStore()
+  const authStr = `Bearer ${authStore.access_token}`
+  api.delete(`bookmarker/api/${item['id']}/`, { headers: {Authorization: authStr}})
     .then((response) => {
       if (response.status === 204 || response.status === 200) {
         console.log("Delete successful = 200 or 204");
@@ -236,14 +259,19 @@ function handleFileChange() {
   files.value = fileInput.value?.files
 }
 
+
+// manual auth header added
 function handleCSVImport() {
   // const file = files.value[0];
+  const authStore = useAuthStore()
+  const authStr = `Bearer ${authStore.access_token}`
   const formData = new FormData();
   formData.append("uploaded_file", files.value[0]);
   console.log("Sending file...");
-  const res = api.post('bookmarker/api/file-upload/', formData, {
+  api.post('bookmarker/api/file-upload/', formData, {
     headers: {
-      'Content-Type': 'multipart/form-data'
+      Authorization: authStr,
+      "Content-Type": 'multipart/form-data'
     }
   })
     .then((response) => {
@@ -263,7 +291,15 @@ function handleCSVImport() {
       get_bookmarks();
     })
 }
+
+
+function handleReload() {
+  console.log("Reloading ...");
+  router.push({ name: 'bookmarks' });
+}
 </script>
+
+
 
 <template>
   <div class="container">
@@ -343,8 +379,11 @@ function handleCSVImport() {
         <input type="submit" value="submit">
       </form>
     </div>
+    <Button label="Reload" @click="handleReload" />
   </div>
 </template>
+
+
 
 <style scoped>
 Button {

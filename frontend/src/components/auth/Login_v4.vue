@@ -25,9 +25,9 @@
     <div>
         <h2>Login</h2>
         <Form @submit="onSubmit" :validation-schema="schema">
-            <label for="">Email:</label>
+            <label for="email">Email:</label>
             <Field name="email" type="text" />
-            <label for="">Password</label>
+            <label for="password">Password</label>
             <Field name="password" type="password" />
             <button>Login</button>
         </Form>
