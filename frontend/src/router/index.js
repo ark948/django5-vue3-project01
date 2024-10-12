@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "@/views/public/HomeView.vue"
 import Register from "@/components/auth/Register.vue";
+import RegisterV2 from "@/components/auth/RegisterV2.vue";
 import VerifyEmail from "@/components/auth/VerifyEmail.vue";
 import { useNotification } from "@kyvg/vue3-notification";
 import Login from "@/components/auth/Login.vue";
@@ -29,7 +30,7 @@ const { notify } = useNotification();
 const routes = [
     { path: '/', component: HomeView, name: 'home' },
     { path: '/home', redirect: '/' },
-    { path: '/register', component: Register, name: 'register' },
+    { path: '/register', component: RegisterV2, name: 'register' },
     { path: '/verify-email', component: VerifyEmail, name: 'verify_email' },
     { path: '/login', component: Login, name: 'login' },
     { path: '/profile', component: ProfileView, name: "profile" },

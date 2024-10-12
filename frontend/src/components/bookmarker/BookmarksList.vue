@@ -2,7 +2,7 @@
 // this component uses PrimeVue library
 import { ref, onMounted, reactive } from "vue";
 // import api from "@/api/api";
-import api from '@/api/api_v2';
+import api from '@/api/api';
 import { useAuthStore } from "@/stores";
 
 import { useRouter } from "vue-router";
@@ -330,7 +330,7 @@ function handleReload() {
         </Column>
         <template #footer>
           <div style="text-align: right">
-            <Button icon="pi pi-external-link" label="Export" @click="exportCSV($event)" />
+            <Button class="action-button" icon="pi pi-external-link" label="Export" @click="exportCSV($event)" />
           </div>
         </template>
       </DataTable>
@@ -342,11 +342,11 @@ function handleReload() {
         <span>Add new bookmark</span>
         <div class="form-container">
             <form action="" @submit.prevent="handleNewBookmarkSubmit">
-                <label for="title">Title:</label>
-                <input v-model="new_item_title" type="text" name="title">
-                <label for="url"></label>
-                <textarea v-model="new_item_url" name="url" rows="5" cols="50"></textarea>
-                <input type="submit" value="Add">
+                <label class="form-label" for="title">Title:</label>
+                <input class="form-input" v-model="new_item_title" type="text" name="title">
+                <label class="form-label" for="url"></label>
+                <textarea class="form-input" v-model="new_item_url" name="url" rows="5" cols="50"></textarea>
+                <input class="form-button" type="submit" value="Add">
             </form>
         </div>
         <div class="flex justify-end gap-2">
@@ -363,15 +363,15 @@ function handleReload() {
     </Dialog>
     <Dialog v-model:visible="edit_modal_visible">
       <form action="" @submit.prevent="handleEdit">
-          <label for="title">Title:</label>
-          <input type="text" name="title" v-model="edit_item.title">
-          <label for="url">URL:</label>
-          <textarea name="url" id="url" rows="5" cols="50" v-model="edit_item.url"></textarea>
-          <input type="submit" value="Confirm">
+          <label class="form-label" for="title">Title:</label>
+          <input class="form-input" type="text" name="title" v-model="edit_item.title">
+          <label class="form-label" for="url">URL:</label>
+          <textarea class="form-input" name="url" id="url" rows="5" cols="50" v-model="edit_item.url"></textarea>
+          <input class="form-button" type="submit" value="Confirm">
         </form>
     </Dialog>
-    <Button label="Add" @click="visible=true" />
-    <Button @click="confirm=true" id="del_btn" label="Delete" disabled></Button>
+    <Button class="action-button" label="Add" @click="visible=true" />
+    <Button class="action-button" @click="confirm=true" id="del_btn" label="Delete" disabled></Button>
     <div class="file-upload-form-container">
       <form @submit.prevent="handleCSVImport" enctype="multipart/form-data">
         Import csv:
@@ -379,32 +379,60 @@ function handleReload() {
         <input type="submit" value="submit">
       </form>
     </div>
-    <Button label="Reload" @click="handleReload" />
+    <Button class="action-button" label="Reload" @click="handleReload" />
   </div>
 </template>
 
 
 
 <style scoped>
-Button {
-  height: 30px;
-}
-.form-container form {
-    padding: 20px;
-    margin: 30px;
-}
+    .form-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 50px auto;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        max-width: 400px;
+    }
 
-.form-container form input[type='text'] {
-    margin: 20px;
-    width: 300px;
-}
+    .form-input {
+        width: 100%;
+        padding: 8px;
+        margin: 10px 0;
+        border: 1px solid #42B883;
+        border-radius: 8px;
+        box-sizing: border-box;
+    }
 
-.form-container form input textarea {
-    margin: 20px;
-}
+    .form-label {
+        font-size: 15px;
+        padding: 10px;
+    }
 
-.form-container form input[type='submit'] {
-    margin-left: 20px;
-    width: 80px;
-}
+    .form-button {
+        width: 100%;
+        padding: 10px;
+        margin: 20px 0;
+        background-color: #42B883;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.2s ease-in-out;
+        font-size: 15px;
+    }
+
+    .form-button:hover {
+        background-color: #0056b3;
+    }
+
+    .action-button {
+      width: 70px;
+      height: 30px;
+      margin: 20px 5px;
+      padding: 10px;
+    }
 </style>

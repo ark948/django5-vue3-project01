@@ -289,5 +289,9 @@ api and rouer and auth store need full revision
     }
     - finally run> npm run test
 
+24. Improving Register component to use Yup and vee-validate
+    api_v2 has problems, going back to api v1 and fixing it, since updating all components to use api v2 is more time consuming.
+    changed BookmarksList.vue back to use api (v1)
+
 
 eslint.config.js not working

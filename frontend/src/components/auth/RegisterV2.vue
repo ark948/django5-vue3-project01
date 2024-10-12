@@ -2,13 +2,23 @@
 import { onMounted } from 'vue';
 
 onMounted(() => {
-    console.log("[Register.vue] mounted.");
+    console.log("[RegisterV2.vue] mounted.");
 });
 
 import api from '@/api/api';
 import { reactive, ref } from 'vue';
 import router from '@/router';
 import { useNotification } from '@kyvg/vue3-notification';
+import { Form, Field } from 'vee-validate';
+import * as Yup from 'yup';
+
+const schema = Yup.object().shape({
+    email: Yup.string().email().required('Email is required.'),
+    first_name: Yup.string().notRequired(),
+    last_name: Yup.string().notRequired(),
+    password: Yup.string().required('Password is required.'),
+    password2: Yup.string().required("Password is required.")
+})
 
 const errorMessage = ref("")
 const responseMessage = ref("")
@@ -21,8 +31,7 @@ const formdata = reactive({
     password2: ""
 })
 
-function handleSubmit(e) {
-    e.preventDefault()
+function handleSubmit() {
     const {email, first_name, last_name, password, password2} = formdata;
     try {
         if (!email || !first_name || !last_name || !password || !password2) {
@@ -61,25 +70,47 @@ function handleSubmit(e) {
     }
 }
 
+function handleSubmitV2(values) {
+        const { email, first_name, last_name, password, password2 } = values;
+        api.post('auth/api/register/', {email, first_name, last_name, password, password2})
+            .then((response) => {
+                if (response.status === 201) {
+                    console.log("Success");
+                    notify({
+                        title: "Registration",
+                        text: 'Successfully registered. Please check your email.'
+                    });
+                    router.push({ name: 'verify_email' });
+                }
+            })
+            .catch((e) => {
+                errorMessage.value = e;
+            })
+            .finally(() => {
+                console.log(`${'-'.repeat(30)}`)
+                values = "";
+            });
+    }
+
 </script>
 
 <template>
     <div class="container">
         <h2>Registration</h2>
         <div class="form-container">
-            <form @submit="handleSubmit" action="">
+            <Form @submit="handleSubmitV2" :validation-schema="schema">
                 <label class="form-label" for="email">Email:</label>
-                <input v-model.trim="formdata.email" class="form-input" id="email" type="text" name="email">
+                <Field class="register-input-field" name="email" type="email" />
                 <label class="form-label" for="first_name">First Name:</label>
-                <input v-model.trim="formdata.first_name" class="form-input" id="first_name" type="text" name="first_name">
+                <Field class="register-input-field" name="first_name" type="text" />
                 <label class="form-label" for="last_name">Last Name:</label>
-                <input v-model="formdata.last_name" class="form-input" id="last_name" type="text" name="last_name">
+                <Field class="register-input-field" name="last_name" type="text" />
                 <label class="form-label" for="password">Password:</label>
-                <input v-model.trim="formdata.password" class="form-input" id="password" type="password" name="password">
+                <Field class="register-input-field" name="password" type="password" />
                 <label class="form-label" for="password2">Repeat password:</label>
-                <input v-model.trim="formdata.password2" class="form-input" id="password2" type="password" name="password2">
-                <button class="form-button">Submit</button>
-            </form>
+                <Field class="register-input-field" name="password2" type="password" />
+                <button class="form-button">Sign Up</button>
+            </Form>
         </div>
         <p class="error-message">
             {{ errorMessage }}
@@ -107,22 +138,21 @@ function handleSubmit(e) {
     max-width: 400px;
 }
 
-.form-input {
-    width: 90%;
-    padding: 10px;
+.register-input-field {
+    width: 100%;
+    padding: 8px;
     margin: 10px 0;
     border: 1px solid #42B883;
-    border-radius: 8px;
+    border-radius: 6px;
     box-sizing: border-box;
 }
 
 .form-label {
     font-size: 15px;
-    padding: 10px;
 }
 
 .form-button {
-    width: 90%;
+    width: 100%;
     padding: 10px;
     margin: 20px 0;
     background-color: #42B883;

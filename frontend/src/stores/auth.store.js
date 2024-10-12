@@ -2,6 +2,9 @@ import { defineStore } from "pinia";
 import router from "@/router";
 import api from "@/api/api";
 
+import { useNotification } from "@kyvg/vue3-notification";
+const { notify } = useNotification();
+
 export const useAuthStore = defineStore({
     id: 'auth',
     state: () => ({
@@ -15,7 +18,14 @@ export const useAuthStore = defineStore({
     actions: {
         async login(email, password) {
             console.log('[auth.store.js] login called.')
-            const res = await api.post('auth/api/login/', { email, password })
+            const res = await api.post('auth/api/login/', { email: email, password: password })
+            .catch((error) => {
+                console.log("auth.store ---> ERROR");
+                notify({
+                    title: "Login Error",
+                    text: "Invalid crendentials."
+                });
+            })
             if (res.status === 200) {
                 console.log('[auth.store.js] Response 200. Setting data...');
                 console.log(`[auth.store.js] Email: ${res.data.email}`);

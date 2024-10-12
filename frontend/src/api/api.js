@@ -14,19 +14,16 @@ const api = axios.create({
 });
 
 api.interceptors.request.use(async req => {
-    console.log("[api.js] Calling interceptor...");
+    console.log("[api.js] ----> Intercept request.");
     const authStore = useAuthStore();
     if (token) {
-        console.log("[api.js] Token was found.")
         req.headers.Authorization = `Bearer ${token}`;
-        console.log("[api.js] Checking token for expiration...")
         const user = jwtDecode(token)
         const isExpired = dayjs.unix(user.exp).diff(dayjs()) < 1;
         if (!isExpired) {
             console.log('[api.js] Token is not expired.')
             return req;
         } else {
-            console.log('[api.js] Token is expired. Trying to refresh...')
             const res = await axios.post(`${baseUrl}auth/token/refresh/`, {
                 refresh: refresh_token
             })
@@ -41,7 +38,6 @@ api.interceptors.request.use(async req => {
                 localStorage.setItem('access_token', JSON.stringify(res.data.access))
                 authStore.access_token = res.data.access
                 req.headers.Authorization = `Bearer ${res.data.access}`;
-                console.log("[api.js] Token Refresh complete.")
                 return req;
             } else {
                 console.log("[api.js]: Refreshing token failed, logging out...");
