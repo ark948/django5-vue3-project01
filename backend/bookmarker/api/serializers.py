@@ -6,7 +6,7 @@ from rest_framework import serializers
 class CategorySerializer(ModelSerializer):
     class Meta:
         model = Category
-        fields = ('title', )
+        fields = "__all__"
 
 
 class BookmarksSerializer(ModelSerializer):

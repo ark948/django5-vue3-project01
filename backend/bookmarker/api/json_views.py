@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.decorators import action, api_view
+from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework import status, viewsets
 from rest_framework.request import Request
@@ -157,10 +157,18 @@ class UserBookmarksCSVImport(APIView):
 # PROBLEM
 @login_required
 @api_view(['GET'])
-def get_categories_with_link(request):
+def get_categories_with_link_ERROR(request):
     categories = Category.objects.all()
     serializer = CategorySerializer(categories, many=True)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_categories(request):
+    categories = Category.objects.all()
+    serializer = CategorySerializer(categories, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 # OK

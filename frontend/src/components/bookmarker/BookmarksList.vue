@@ -15,6 +15,7 @@ const insideRouter = useRouter();
 // primevue
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
+import Select from "primevue/select";
 
 const selectedItem = ref();
 
@@ -36,6 +37,11 @@ import { watch } from "vue";
 // delete confirm dialog
 const confirm = ref(false);
 
+// Category
+const all_categories = ref([]);
+const selectedCategory = ref();
+
+
 watch(() => selectedItem.value, async () => {
     document.getElementById('del_btn').disabled = false;
     responseHolder.value = "Selected items: ";
@@ -53,13 +59,45 @@ watch(() => selectedItem.value, async () => {
   }
 );
 
+watch(
+  () => selectedCategory.value,
+  async () => {
+    console.log("Selected category", selectedCategory.value.id);
+  }
+)
+
 onMounted(() => {
   console.log("[BookmarksList.vue] - mounted.");
   // get_bookmarks();
   setTimeout(() => {
     get_bookmarks();
+    get_categories();
   }, 300);
 });
+
+
+function get_categories() {
+  // get categories
+  api.get('bookmarker/api/category-list/')
+    .then(response => {
+      if (response.status === 200) {
+        for (let i = 0; i < response.data.length; i++) {
+          // console.log(response.data[i]);
+          all_categories.value.push(response.data[i]);
+        }
+      } else {
+        console.log("Categories list NOT 200.", response.status);
+      }
+    })
+    .catch(error => {
+      console.log("Error", error.message);
+    })
+    .finally(() => {
+      for (let i=0; i < all_categories.value.length; i++) {
+        console.log(all_categories.value[i].title)
+      }
+    })
+}
 
 
 // manual auth header added
@@ -68,7 +106,6 @@ function get_bookmarks() {
   // const res = await api.get(`bookmarker/api/?page=${page_number.value}`)
   const authStore = useAuthStore()
   const authStr = `Bearer ${authStore.access_token}`
-  console.log("\n\n==> ", authStr)
   api.get('bookmarker/api/no-paginate/', { headers: {Authorization: authStr}})
     .then((response) => {
       if (response.status === 200) {
@@ -87,6 +124,22 @@ function get_bookmarks() {
     })
     .finally(() => {
       console.log(`Total of ${all_bookmarks.value.length} items.`);
+      // replacing category ids with actual category title
+      for (let i=0; i<all_bookmarks.value.length; i++) {
+        switch (all_bookmarks.value[i].category) {
+          case 1:
+          all_bookmarks.value[i].category = 'Work';
+          break;
+          case 2:
+          all_bookmarks.value[i].category = 'Entertainment';
+          break;
+          case 3:
+          all_bookmarks.value[i].category = 'Useful';
+          break;
+          default:
+          all_bookmarks.value[i].category = "-";
+        }
+      }
     });
 };
 
@@ -120,7 +173,7 @@ async function handleNewBookmarkSubmit() {
     });
 }
 
-// not used
+// NOT USED
 async function handleSingleDeletion() {
   console.log("Performing Delete request (Single)...");
   for (let i in selectedItem.value) {
@@ -322,6 +375,7 @@ function handleReload() {
         <Column field="title" header="Title"></Column>
         <Column field="url" header="URL"></Column>
         <Column field="icon" header="Icon"></Column>
+        <Column field="category" header="Category"></Column>
         <Column :exportable="false" style="min-width: 12rem">
           <template #body="slotProps">
             <Button label="Edit" outlined rounded class="mr-2" @click="editItem(slotProps.data)" />
@@ -346,6 +400,8 @@ function handleReload() {
                 <input class="form-input" v-model="new_item_title" type="text" name="title">
                 <label class="form-label" for="url"></label>
                 <textarea class="form-input" v-model="new_item_url" name="url" rows="5" cols="50"></textarea>
+                <label class="form-input" for="category-select">Category:</label>
+                <Select v-model="selectedCategory" :options="all_categories" optionLabel="title" placeholder="Select a Category" class="w-full md:w-56" />
                 <input class="form-button" type="submit" value="Add">
             </form>
         </div>
