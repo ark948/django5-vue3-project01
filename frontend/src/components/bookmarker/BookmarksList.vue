@@ -363,6 +363,16 @@ function handleReload() {
   console.log("Reloading ...");
   router.push({ name: 'bookmarks' });
 }
+
+
+// datatable size
+import SelectButton from "primevue/selectbutton";
+const size = ref({ label: 'Normal', value: 'null' });
+const sizeOptions = ref([
+    { label: 'Small', value: 'small' },
+    { label: 'Normal', value: 'null' },
+    { label: 'Large', value: 'large' }
+]);
 </script>
 
 
@@ -370,6 +380,7 @@ function handleReload() {
 <template>
   <div class="container">
     <div class="card">
+      <SelectButton v-model="size" :options="sizeOptions" optionLabel="label" dataKey="label" />
       <DataTable
         v-model:selection="selectedItem"
         :value="all_bookmarks"
@@ -379,16 +390,17 @@ function handleReload() {
         :rowsPerPageOptions="[5, 10, 20, 50]"
         showGridlines
         stripedRows
-        :size="'small'"
+        :size="size.value"
         dataKey="id"
         tableStyle="min-width: 50rem"
         steteStorage="local"
+        removableSort
         >
         <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
-        <Column field="title" header="Title"></Column>
+        <Column field="title" header="Title" sortable></Column>
         <Column field="url" header="URL"></Column>
         <Column field="icon" header="Icon"></Column>
-        <Column field="category" header="Category"></Column>
+        <Column field="category" header="Category" sortable></Column>
         <Column :exportable="false" style="min-width: 12rem">
           <template #body="slotProps">
             <Button label="Edit" outlined rounded class="mr-2" @click="editItem(slotProps.data)" />
