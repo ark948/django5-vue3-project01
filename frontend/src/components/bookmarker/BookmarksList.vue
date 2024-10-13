@@ -368,11 +368,23 @@ function handleReload() {
 // datatable size
 import SelectButton from "primevue/selectbutton";
 const size = ref({ label: 'Normal', value: 'null' });
+const loading = ref(true);
 const sizeOptions = ref([
     { label: 'Small', value: 'small' },
     { label: 'Normal', value: 'null' },
     { label: 'Large', value: 'large' }
 ]);
+
+
+// datatable search
+import { FilterMatchMode } from '@primevue/core/api';
+import IconField from 'primevue/iconfield';
+import InputIcon from 'primevue/inputicon';
+import InputText from 'primevue/inputtext';
+
+const filters = ref({
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+});
 </script>
 
 
@@ -380,7 +392,6 @@ const sizeOptions = ref([
 <template>
   <div class="container">
     <div class="card">
-      <SelectButton v-model="size" :options="sizeOptions" optionLabel="label" dataKey="label" />
       <DataTable
         v-model:selection="selectedItem"
         :value="all_bookmarks"
@@ -390,12 +401,27 @@ const sizeOptions = ref([
         :rowsPerPageOptions="[5, 10, 20, 50]"
         showGridlines
         stripedRows
-        :size="size.value"
+        :size="'small'"
         dataKey="id"
         tableStyle="min-width: 50rem"
         steteStorage="local"
         removableSort
+        v-model:filters="filters"
+        filterDisplay="row"
+        :globalFilterFields="['title', 'url', 'category']"
         >
+        <template #header>
+        <div class="flex justify-end">
+            <IconField>
+                <InputIcon>
+                    <i class="pi pi-search" />
+                </InputIcon>
+                <InputText v-model="filters['global'].value" placeholder="Keyword Search" />
+            </IconField>
+        </div>
+        </template>
+        <template #empty> No customers found. </template>
+        <template #loading> Loading customers data. Please wait. </template>
         <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
         <Column field="title" header="Title" sortable></Column>
         <Column field="url" header="URL"></Column>
