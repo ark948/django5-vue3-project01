@@ -8,6 +8,7 @@ class BookmarkerRootAPIView(APIView):
     def get(self, request):
         return Response({
             'list': reverse('bookmarker:list', request=request),
+            'list-no-paginate': reverse('bookmarker:list_no_pagination', request=request),
             'categories': reverse('bookmarker:categories_list', request=request),
             'bookmarks-by-category': reverse('bookmarker:bookmarks_by_category', request=request),
             'bookmarks-with-category': reverse('bookmarker:bookmarks_with_category', request=request),

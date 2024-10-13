@@ -10,9 +10,11 @@ class CategorySerializer(ModelSerializer):
 
 
 class BookmarksSerializer(ModelSerializer):
+    category_id = serializers.IntegerField(required=False, min_value=1, max_value=3)
+    
     class Meta:
         model = Bookmark
-        fields = ["id", "title", "url", "category", "icon"]
+        fields = ["id", "title", "url", "category_id", "icon"]
         extra_keyworkds = { "id": { "read_only": True } }
 
     def create(self, validated_data):
@@ -21,6 +23,7 @@ class BookmarksSerializer(ModelSerializer):
             title=validated_data['title'],
             url = validated_data.get('url'),
             icon = validated_data.get('icon'),
+            category_id = validated_data.get('category_id'),
             owner = user
         )
         return bookmark_item

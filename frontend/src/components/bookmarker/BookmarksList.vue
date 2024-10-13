@@ -29,6 +29,7 @@ import Button from "primevue/button";
 const visible = ref(false);
 const new_item_title = ref("");
 const new_item_url = ref("");
+const new_item_category = ref("");
 
 // delete functionality
 const selected_items = ref([]);
@@ -126,7 +127,7 @@ function get_bookmarks() {
       console.log(`Total of ${all_bookmarks.value.length} items.`);
       // replacing category ids with actual category title
       for (let i=0; i<all_bookmarks.value.length; i++) {
-        switch (all_bookmarks.value[i].category) {
+        switch (all_bookmarks.value[i].category_id) {
           case 1:
           all_bookmarks.value[i].category = 'Work';
           break;
@@ -143,13 +144,25 @@ function get_bookmarks() {
     });
 };
 
+
+function append_http(url) {
+  if (!url.includes("http://")) {
+    return "http://" + url;
+  } else {
+    return url;
+  }
+}
+
+
 // manual auth header added
 async function handleNewBookmarkSubmit() {
     const authStore = useAuthStore()
     const authStr = `Bearer ${authStore.access_token}`
     console.log("[BookmarksList.vue] Adding new...");
     responseHolder.value = "";
-    await api.post('bookmarker/api/no-paginate/', { title: new_item_title.value, url: new_item_url.value }, { headers: {Authorization: authStr}})
+    new_item_url.value = append_http(new_item_url.value);
+    console.log("\n\n", typeof(selectedCategory.value.id), "\n\n");
+    await api.post('bookmarker/api/no-paginate/', { title: new_item_title.value, url: new_item_url.value, category_id: selectedCategory.value.id }, { headers: {Authorization: authStr}})
     .then((response) => {
         if (response.status === 201) {
             console.log('[BookmarksList.vue] New item successfully added.');
