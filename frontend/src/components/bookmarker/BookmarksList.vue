@@ -253,7 +253,7 @@ function editItem(item) {
 }
 
 
-// process: editItem -> edit_modal_visible -> 
+// process: editItem -> edit_modal_visible -> handleEdit
 // manual auth header added
 function handleEdit() {
   console.log("Invoking update...");

@@ -477,6 +477,8 @@ problem 02: bookmark item title max length too short. [FIXED]
 30. to write a custom decorator we can use user_passes_test decorator
     this decorator will perform a callable, and redirect to another view if callable returns false
 
+31. adding undo and redo features, using (django-revision)
+
 
 
 

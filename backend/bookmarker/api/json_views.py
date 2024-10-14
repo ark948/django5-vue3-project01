@@ -148,7 +148,13 @@ class UserBookmarksCSVImport(APIView):
             f = uploaded_file.read().decode('utf-8-sig')
             csv_reader = csv.DictReader(io.StringIO(f))
             for line in csv_reader:
-                Bookmark.objects.create(title=line['Title'], url=line['URL'], owner=self.request.user)
+                match line['Category']:
+                    case 'Work':
+                        Bookmark.objects.create(title=line['Title'], url=line['URL'], category_id=1, owner=self.request.user)
+                    case 'Entertainment':
+                        Bookmark.objects.create(title=line['Title'], url=line['URL'], category_id=2, owner=self.request.user)
+                    case 'Useful':
+                        Bookmark.objects.create(title=line['Title'], url=line['URL'], category_id=3, owner=self.request.user)
                 print("ITEM ADDED.")
             return Response({'msg': 'csv file successfully imported.'}, status=status.HTTP_200_OK)
         return Response({'msg': "Not valid"}, status=status.HTTP_400_BAD_REQUEST)
