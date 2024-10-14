@@ -1,48 +1,83 @@
 <script setup>
-// this component uses PrimeVue library
-import { ref, onMounted, reactive } from "vue";
-// import api from "@/api/api";
-import api from '@/api/api';
-import { useAuthStore } from "@/stores";
 
+// vue imports
+import { ref, onMounted, reactive, watch } from "vue";
+
+// 3rd party imports
 import { useRouter } from "vue-router";
-
-const responseHolder = ref("");
-const errorHolder = ref("");
-const all_bookmarks = ref([]);
-const insideRouter = useRouter();
-
-// primevue
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import Select from "primevue/select";
-
-const selectedItem = ref();
-
-// frontend pagination
-// get all data from backend, paginate in frontend
-const page_number = ref(1);
-
-// new bookmark item functionality
 import Dialog from "primevue/dialog";
 import Button from "primevue/button";
+import { useToast } from 'primevue/usetoast';
+import SelectButton from "primevue/selectbutton";
+import { FilterMatchMode } from '@primevue/core/api';
+import IconField from 'primevue/iconfield';
+import InputIcon from 'primevue/inputicon';
+import InputText from 'primevue/inputtext';
+
+// local imports
+import { useAuthStore } from "@/stores";
+import api from '@/api/api';
+import * as utils from '@/components/bookmarker/utils.js';
+import router from "@/router";
+
+// refs
+const responseHolder = ref("");
+const errorHolder = ref("");
+const all_bookmarks = ref([]);
+const selectedItem = ref();
+const single_item_selected = ref();
+// get all data from backend, paginate in frontend
+const page_number = ref(1);
+// new bookmark item functionality
 const visible = ref(false);
 const new_item_title = ref("");
 const new_item_url = ref("");
 const new_item_category = ref("");
-
 // delete functionality
 const selected_items = ref([]);
-import { watch } from "vue";
-
 // delete confirm dialog
 const confirm = ref(false);
-
 // Category
 const all_categories = ref([]);
 const selectedCategory = ref();
+// CSV export
+const dt = ref();
+const edit_modal_visible = ref(false);
+const fileInput = ref(null);
+const files = ref();
+const size = ref({ label: 'Normal', value: 'null' });
+const loading = ref(true);
+const sizeOptions = ref([
+    { label: 'Small', value: 'small' },
+    { label: 'Normal', value: 'null' },
+    { label: 'Large', value: 'large' }
+]);
+const filters = ref({
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+});
+const edit_item = reactive({
+  id: 0,
+  title: "",
+  url: "",
+  category_id: 0,
+});
+
+const insideRouter = useRouter();
 
 
+onMounted(() => {
+  console.log("[BookmarksList.vue] - mounted.");
+  // get_bookmarks();
+  setTimeout(() => {
+    get_bookmarks();
+    get_categories();
+  }, 300);
+});
+
+// watchers
 watch(() => selectedItem.value, async () => {
     document.getElementById('del_btn').disabled = false;
     responseHolder.value = "Selected items: ";
@@ -67,14 +102,6 @@ watch(
   }
 )
 
-onMounted(() => {
-  console.log("[BookmarksList.vue] - mounted.");
-  // get_bookmarks();
-  setTimeout(() => {
-    get_bookmarks();
-    get_categories();
-  }, 300);
-});
 
 
 function get_categories() {
@@ -145,22 +172,13 @@ function get_bookmarks() {
 };
 
 
-function append_http(url) {
-  if (!url.includes("http://")) {
-    return "http://" + url;
-  } else {
-    return url;
-  }
-}
-
-
 // manual auth header added
 async function handleNewBookmarkSubmit() {
     const authStore = useAuthStore()
     const authStr = `Bearer ${authStore.access_token}`
     console.log("[BookmarksList.vue] Adding new...");
     responseHolder.value = "";
-    new_item_url.value = append_http(new_item_url.value);
+    new_item_url.value = utils.append_http(new_item_url.value);
     console.log("\n\n", typeof(selectedCategory.value.id), "\n\n");
     await api.post('bookmarker/api/no-paginate/', { title: new_item_title.value, url: new_item_url.value, category_id: selectedCategory.value.id }, { headers: {Authorization: authStr}})
     .then((response) => {
@@ -184,33 +202,6 @@ async function handleNewBookmarkSubmit() {
       new_item_title.value = "";
       new_item_url.value = "";
     });
-}
-
-// NOT USED
-async function handleSingleDeletion() {
-  console.log("Performing Delete request (Single)...");
-  for (let i in selectedItem.value) {
-    console.log(`Deleting item ${selectedItem.value[i].id}`)
-    const res = await api.delete(`bookmarker/api/${selectedItem.value[i].id}/`)
-    .then((response) => {
-      if (response.status === 204) {
-        console.log("Delete OK");
-      } else {
-        console.log("Delete Not OK");
-      }
-    })
-    .catch((e) => {
-      console.log("Delete Error");
-      console.log(e.message);
-    })
-    .finally(() => {
-      console.log("Delete process complete for one item.");
-    });
-  }
-    console.log("REFRESHING THE TABLE NOW...");
-    all_bookmarks.value.length = 0;
-    get_bookmarks();
-    visible.value = false;
 }
 
 
@@ -246,35 +237,29 @@ async function handleMultipleDeletion() {
     });
 }
 
-const dt = ref();
+
 
 const exportCSV = async () => {
   dt.value.exportCSV();
 }
 
-import { useToast } from 'primevue/usetoast';
-import router from "@/router";
 
-const edit_modal_visible = ref(false);
-const edit_item = reactive({
-  id: 0,
-  title: "",
-  url: ""
-});
 function editItem(item) {
   edit_item.id = item.id;
   edit_item.title = item.title;
   edit_item.url = item.url;
+  edit_item.category_id = item.category_id;
   edit_modal_visible.value = true;
 }
 
 
+// process: editItem -> edit_modal_visible -> 
 // manual auth header added
 function handleEdit() {
   console.log("Invoking update...");
   const authStore = useAuthStore()
   const authStr = `Bearer ${authStore.access_token}`
-  api.put(`bookmarker/api/${edit_item.id}/`, { title: edit_item.title, url: edit_item.url}, { headers: {Authorization: authStr}})
+  api.put(`bookmarker/api/${edit_item.id}/`, { title: edit_item.title, url: edit_item.url, category_id: selectedCategory.value.id }, { headers: {Authorization: authStr}})
   .then((response) => {
     if (response.status === 200) {
       console.log("UPDATE SUCCESSFUL.");
@@ -319,8 +304,6 @@ function confirmDeleteProduct(item) {
     })
 }
 
-const fileInput = ref(null);
-const files = ref();
 function handleFileChange() {
   files.value = fileInput.value?.files
 }
@@ -364,27 +347,6 @@ function handleReload() {
   router.push({ name: 'bookmarks' });
 }
 
-
-// datatable size
-import SelectButton from "primevue/selectbutton";
-const size = ref({ label: 'Normal', value: 'null' });
-const loading = ref(true);
-const sizeOptions = ref([
-    { label: 'Small', value: 'small' },
-    { label: 'Normal', value: 'null' },
-    { label: 'Large', value: 'large' }
-]);
-
-
-// datatable search
-import { FilterMatchMode } from '@primevue/core/api';
-import IconField from 'primevue/iconfield';
-import InputIcon from 'primevue/inputicon';
-import InputText from 'primevue/inputtext';
-
-const filters = ref({
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-});
 </script>
 
 
@@ -452,7 +414,7 @@ const filters = ref({
                 <label class="form-label" for="url"></label>
                 <textarea class="form-input" v-model="new_item_url" name="url" rows="5" cols="50"></textarea>
                 <label class="form-input" for="category-select">Category:</label>
-                <Select v-model="selectedCategory" :options="all_categories" optionLabel="title" placeholder="Select a Category" class="w-full md:w-56" />
+                <Select name="category-select" v-model="selectedCategory" :options="all_categories" optionLabel="title" placeholder="Select a Category" class="w-full md:w-56" />
                 <input class="form-button" type="submit" value="Add">
             </form>
         </div>
@@ -474,6 +436,9 @@ const filters = ref({
           <input class="form-input" type="text" name="title" v-model="edit_item.title">
           <label class="form-label" for="url">URL:</label>
           <textarea class="form-input" name="url" id="url" rows="5" cols="50" v-model="edit_item.url"></textarea>
+          Current Category: {{ edit_item.category_id }}
+          <br>
+          Set New Category <Select name="category-select" v-model="selectedCategory" :options="all_categories" optionLabel="title" placeholder="Select a Category" class="w-full md:w-56" />
           <input class="form-button" type="submit" value="Confirm">
         </form>
     </Dialog>

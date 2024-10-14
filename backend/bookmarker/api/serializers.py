@@ -30,9 +30,18 @@ class BookmarksSerializer(ModelSerializer):
         
 
 class BookmarkDetailsSerializer(ModelSerializer):
+    category_id = serializers.IntegerField(required=False, min_value=1, max_value=3)
     class Meta:
         model = Bookmark
-        fields = ["title", "url", "icon"]
+        fields = ["title", "url", "icon", "category_id"]
+
+    def update(self, instance, validated_data):
+        instance.title = validated_data.get('title', instance.title)
+        instance.url = validated_data.get('url', instance.url)
+        instance.icon = validated_data.get('icon', instance.icon)
+        instance.category_id = validated_data.get('category_id', instance.category_id)
+        instance.save()
+        return super().update(instance, validated_data)
 
 
 class BookmarkMultipleDeleteSerializer(Serializer):
