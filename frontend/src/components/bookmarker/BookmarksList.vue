@@ -4,18 +4,10 @@
 import { ref, onMounted, reactive, watch } from "vue";
 
 // 3rd party imports
-import { useRouter, RouterLink } from "vue-router";
-import DataTable from "primevue/datatable";
-import Column from "primevue/column";
 import Select from "primevue/select";
 import Dialog from "primevue/dialog";
 import Button from "primevue/button";
 import { useToast } from 'primevue/usetoast';
-import SelectButton from "primevue/selectbutton";
-import { FilterMatchMode } from '@primevue/core/api';
-import IconField from 'primevue/iconfield';
-import InputIcon from 'primevue/inputicon';
-import InputText from 'primevue/inputtext';
 
 // local imports
 import { useAuthStore } from "@/stores";
@@ -27,17 +19,13 @@ import Table from "@/components/bookmarker/Table.vue";
 // refs
 const responseHolder = ref("");
 const refreshTableKey = ref(0);
-const errorHolder = ref("");
 const all_bookmarks = ref([]);
-const selectedItem = ref();
-const single_item_selected = ref();
 // get all data from backend, paginate in frontend
 const page_number = ref(1);
 // new bookmark item functionality
 const visible = ref(false);
 const new_item_title = ref("");
 const new_item_url = ref("");
-const new_item_category = ref("");
 // delete functionality
 const selected_items = ref([]);
 // delete confirm dialog
@@ -50,16 +38,11 @@ const dt = ref();
 const edit_modal_visible = ref(false);
 const fileInput = ref(null);
 const files = ref();
-const size = ref({ label: 'Normal', value: 'null' });
-const loading = ref(true);
 const sizeOptions = ref([
     { label: 'Small', value: 'small' },
     { label: 'Normal', value: 'null' },
     { label: 'Large', value: 'large' }
 ]);
-const filters = ref({
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-});
 const edit_item = reactive({
   id: 0,
   title: "",
@@ -67,12 +50,10 @@ const edit_item = reactive({
   category_id: 0,
 });
 
-const insideRouter = useRouter();
 
 
 onMounted(() => {
   console.log("[BookmarksList.vue] - mounted.");
-  // get_bookmarks();
   setTimeout(() => {
     get_bookmarks();
     get_categories();
@@ -80,7 +61,6 @@ onMounted(() => {
 });
 
 // watchers
-
 watch(
   () => selected_items.value,
   async () => {
@@ -98,12 +78,10 @@ const forceRerender = () => {
 
 
 function get_categories() {
-  // get categories
   api.get('bookmarker/api/category-list/')
     .then(response => {
       if (response.status === 200) {
         for (let i = 0; i < response.data.length; i++) {
-          // console.log(response.data[i]);
           all_categories.value.push(response.data[i]);
         }
       } else {
@@ -127,7 +105,6 @@ function get_bookmarks() {
       if (response.status === 200) {
         console.log("Response 200");
         for (let i = 0; i < response.data.length; i++) {
-          // console.log(response.data[i]);
           all_bookmarks.value.push(response.data[i]);
         }
       } else {
@@ -166,8 +143,7 @@ async function handleNewBookmarkSubmit() {
     const authStr = `Bearer ${authStore.access_token}`
     console.log("[BookmarksList.vue] Adding new...");
     responseHolder.value = "";
-    new_item_url.value = utils.append_http(new_item_url.value);
-    console.log("\n\n", typeof(selectedCategory.value.id), "\n\n");
+    new_item_url.value = utils.prepend_http(new_item_url.value);
     await api.post('bookmarker/api/no-paginate/', { title: new_item_title.value, url: new_item_url.value, category_id: selectedCategory.value.id }, { headers: {Authorization: authStr}})
     .then((response) => {
         if (response.status === 201) {
@@ -351,7 +327,6 @@ function clearDeleteInput() {
 <template>
   <div class="container">
     <div class="card">
-      <!-- datatable used to be here -->
       <Table
       :key="refreshTableKey"
       :data="all_bookmarks" 

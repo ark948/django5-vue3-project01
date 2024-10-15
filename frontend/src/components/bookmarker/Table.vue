@@ -6,7 +6,6 @@ import { onMounted, ref, watch } from 'vue';
 // 3rd party imports
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import { RouterLink } from 'vue-router';
 import Button from 'primevue/button';
 import { FilterMatchMode } from '@primevue/core/api';
 import IconField from 'primevue/iconfield';
