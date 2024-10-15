@@ -120,11 +120,6 @@ function get_categories() {
     .catch(error => {
       console.log("Error", error.message);
     })
-    .finally(() => {
-      for (let i=0; i < all_categories.value.length; i++) {
-        console.log(all_categories.value[i].title)
-      }
-    })
 }
 
 
@@ -365,8 +360,8 @@ function handleReload() {
         stripedRows
         :size="'small'"
         dataKey="id"
-        tableStyle="min-width: 50rem"
-        steteStorage="local"
+        tableStyle="min-width: 50rem font-size: 10px"
+        stateStorage="local"
         removableSort
         v-model:filters="filters"
         filterDisplay="row"
@@ -384,7 +379,8 @@ function handleReload() {
         </template>
         <template #empty> No customers found. </template>
         <template #loading> Loading customers data. Please wait. </template>
-        <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
+        <Column selectionMode="multiple"></Column>
+        <Column field="id" header="Id"></Column>
         <Column field="title" header="Title" sortable></Column>
         <Column field="url" header="URL"></Column>
         <Column field="icon" header="Icon"></Column>
@@ -506,5 +502,11 @@ function handleReload() {
       height: 30px;
       margin: 20px 5px;
       padding: 10px;
+    }
+
+    .p-datatable-table {
+      width: 100%;
+      border-spacing: 0;
+      font-size: 1px;
     }
 </style>

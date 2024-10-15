@@ -161,7 +161,7 @@ class UserBookmarksCSVImport(APIView):
 
 
 # PROBLEM
-@login_required
+@login_required # do not use this, use permission_classes
 @api_view(['GET'])
 def get_categories_with_link_ERROR(request):
     categories = Category.objects.all()
