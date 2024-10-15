@@ -12,6 +12,7 @@ import Bookmarks from "@/views/protected/Bookmarks.vue";
 import NotFound from "@/views/public/NotFound.vue";
 import ForgotPassword from "@/views/public/ForgotPassword.vue";
 import PasswordResetConfirm from "@/components/auth/password_reset/PasswordResetConfirm.vue";
+import Table from "@/components/bookmarker/Table.vue";
 
 function removeQueryParams(to) {
     if (Object.keys(to.query).length)
@@ -38,6 +39,7 @@ const routes = [
     { path: '/bookmarks-list', component: Bookmarks, name: 'bookmarks' },
     { path: '/forgot-password', component: ForgotPassword, nam: 'forgot_password' },
     { path: '/reset-password/:uidb64/:token/', component: PasswordResetConfirm, name: 'reset_password' },
+    
     // { path: '/bookmarks-list-v2', component: BookmarksListV2, name: 'bookmarksv2' },
 
     { path: "/:catchall(.*)*", component: NotFound, name: "not_found" },

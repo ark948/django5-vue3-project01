@@ -293,5 +293,8 @@ api and rouer and auth store need full revision
     api_v2 has problems, going back to api v1 and fixing it, since updating all components to use api v2 is more time consuming.
     changed BookmarksList.vue back to use api (v1)
 
+25. Empty row problem in bookmarks datatable
+    it was caused by filterDisplay="row" attribute in DataTable
+
 
 eslint.config.js not working

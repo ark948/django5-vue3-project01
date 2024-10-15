@@ -4,7 +4,7 @@
 import { ref, onMounted, reactive, watch } from "vue";
 
 // 3rd party imports
-import { useRouter } from "vue-router";
+import { useRouter, RouterLink } from "vue-router";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import Select from "primevue/select";
@@ -22,9 +22,11 @@ import { useAuthStore } from "@/stores";
 import api from '@/api/api';
 import * as utils from '@/components/bookmarker/utils.js';
 import router from "@/router";
+import Table from "@/components/bookmarker/Table.vue";
 
 // refs
 const responseHolder = ref("");
+const refreshTableKey = ref(0);
 const errorHolder = ref("");
 const all_bookmarks = ref([]);
 const selectedItem = ref();
@@ -78,30 +80,21 @@ onMounted(() => {
 });
 
 // watchers
-watch(() => selectedItem.value, async () => {
-    document.getElementById('del_btn').disabled = false;
-    responseHolder.value = "Selected items: ";
-    for (let i in selectedItem.value) {
-      responseHolder.value += `${selectedItem.value[i].id}, `;
-    }
-  }
-);
-
-watch(() => selectedItem.value, async () => {
-    if (selectedItem.value.length === 0) {
-      document.getElementById('del_btn').disabled = true;
-      responseHolder.value = "";
-    }
-  }
-);
 
 watch(
-  () => selectedCategory.value,
+  () => selected_items.value,
   async () => {
-    console.log("Selected category", selectedCategory.value.id);
+    document.getElementById('del_btn').disabled = false;
+    responseHolder.value = "Selected items: ";
+    for (let i in selected_items.value) {
+      responseHolder.value += `${selected_items.value[i].id}, `;
+    }
   }
 )
 
+const forceRerender = () => {
+  refreshTableKey.value += 1;
+};
 
 
 function get_categories() {
@@ -206,8 +199,8 @@ async function handleMultipleDeletion() {
   const authStore = useAuthStore()
   const authStr = `Bearer ${authStore.access_token}`
   let selected = [];
-  for (let i in selectedItem.value) {
-    selected.push(selectedItem.value[i]['id'])
+  for (let i in selected_items.value) {
+    selected.push(selected_items.value[i]['id'])
   }
   selected = selected.toString();
   await api.post('bookmarker/api/multiple-delete/', { list_of_ids: selected }, { headers: {Authorization: authStr}})
@@ -226,9 +219,11 @@ async function handleMultipleDeletion() {
     .finally(() => {
       console.log("Request complete.");
       console.log("REFRESHING THE TABLE NOW...");
-      all_bookmarks.value.length = 0;
-      get_bookmarks();
+      all_bookmarks.value.length = 0
       confirm.value = false;
+      get_bookmarks();
+      clearDeleteInput();
+      forceRerender();
     });
 }
 
@@ -342,6 +337,13 @@ function handleReload() {
   router.push({ name: 'bookmarks' });
 }
 
+
+function clearDeleteInput() {
+  document.getElementById('del_btn').disabled = true;
+  responseHolder.value = '';
+}
+
+
 </script>
 
 
@@ -349,54 +351,15 @@ function handleReload() {
 <template>
   <div class="container">
     <div class="card">
-      <DataTable
-        v-model:selection="selectedItem"
-        :value="all_bookmarks"
-        ref="dt"
-        paginator
-        :rows="10"
-        :rowsPerPageOptions="[5, 10, 20, 50]"
-        showGridlines
-        stripedRows
-        :size="'small'"
-        dataKey="id"
-        tableStyle="min-width: 50rem font-size: 10px"
-        stateStorage="local"
-        removableSort
-        v-model:filters="filters"
-        filterDisplay="row"
-        :globalFilterFields="['title', 'url', 'category']"
-        >
-        <template #header>
-        <div class="flex justify-end">
-            <IconField>
-                <InputIcon>
-                    <i class="pi pi-search" />
-                </InputIcon>
-                <InputText v-model="filters['global'].value" placeholder="Keyword Search" />
-            </IconField>
-        </div>
-        </template>
-        <template #empty> No customers found. </template>
-        <template #loading> Loading customers data. Please wait. </template>
-        <Column selectionMode="multiple"></Column>
-        <Column field="id" header="Id"></Column>
-        <Column field="title" header="Title" sortable></Column>
-        <Column field="url" header="URL"></Column>
-        <Column field="icon" header="Icon"></Column>
-        <Column field="category" header="Category" sortable></Column>
-        <Column :exportable="false" style="min-width: 12rem">
-          <template #body="slotProps">
-            <Button label="Edit" outlined rounded class="mr-2" @click="editItem(slotProps.data)" />
-            <Button label="Delete" outlined rounded severity="danger" @click="confirmDeleteProduct(slotProps.data)" />
-          </template>
-        </Column>
-        <template #footer>
-          <div style="text-align: right">
-            <Button class="action-button" icon="pi pi-external-link" label="Export" @click="exportCSV($event)" />
-          </div>
-        </template>
-      </DataTable>
+      <!-- datatable used to be here -->
+      <Table
+      :key="refreshTableKey"
+      :data="all_bookmarks" 
+      @editItem="(item) => editItem(item)" 
+      @confirmDeleteItem="(item) => confirmDeleteProduct(item)"
+      @Selected="(items) => selected_items = items"
+      @SelectedIsEmpty="() => clearDeleteInput()"
+      />
     </div>
     <div class="response-message-container">
       <p>{{ responseHolder }}</p>

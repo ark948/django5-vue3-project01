@@ -1,0 +1,48 @@
+<DataTable
+        v-model:selection="selectedItem"
+        :value="all_bookmarks"
+        ref="dt"
+        paginator
+        :rows="10"
+        :rowsPerPageOptions="[5, 10, 20, 50]"
+        showGridlines
+        stripedRows
+        :size="'small'"
+        dataKey="id"
+        tableStyle="min-width: 50rem font-size: 10px"
+        stateStorage="local"
+        removableSort
+        v-model:filters="filters"
+        filterDisplay="row"
+        :globalFilterFields="['title', 'url', 'category']"
+        >
+        <template #header>
+        <div class="flex justify-end">
+            <IconField>
+                <InputIcon>
+                    <i class="pi pi-search" />
+                </InputIcon>
+                <InputText v-model="filters['global'].value" placeholder="Keyword Search" />
+            </IconField>
+        </div>
+        </template>
+        <template #empty> No customers found. </template>
+        <template #loading> Loading customers data. Please wait. </template>
+        <Column selectionMode="multiple"></Column>
+        <Column field="id" header="Id"></Column>
+        <Column field="title" header="Title" sortable></Column>
+        <Column field="url" header="URL"></Column>
+        <Column field="icon" header="Icon"></Column>
+        <Column field="category" header="Category" sortable></Column>
+        <Column :exportable="false" style="min-width: 12rem">
+          <template #body="slotProps">
+            <Button label="Edit" outlined rounded class="mr-2" @click="editItem(slotProps.data)" />
+            <Button label="Delete" outlined rounded severity="danger" @click="confirmDeleteProduct(slotProps.data)" />
+          </template>
+        </Column>
+        <template #footer>
+          <div style="text-align: right">
+            <Button class="action-button" icon="pi pi-external-link" label="Export" @click="exportCSV($event)" />
+          </div>
+        </template>
+      </DataTable>
