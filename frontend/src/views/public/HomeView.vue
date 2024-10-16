@@ -2,14 +2,17 @@
     import { RouterLink } from 'vue-router'
     console.log("Home");
     import { useAuthStore } from '@/stores';
-
+    import Toast from 'primevue/toast';
+    import { useToast } from 'primevue/usetoast';
     const authStore = useAuthStore();
+    const toast = useToast();
     
 </script>
 
 <template>
     <div class="container">
         <h1>This is home</h1>
+        <Toast />
         <div v-if="authStore.access_token" class="link-container">
             <p><RouterLink to="/bookmarks-list">Bookmarks</RouterLink></p>
             <p><RouterLink to="/profile">Profile page</RouterLink></p>

@@ -296,5 +296,8 @@ api and rouer and auth store need full revision
 25. Empty row problem in bookmarks datatable
     it was caused by filterDisplay="row" attribute in DataTable
 
+26. using Toast component from primevue
+    needs to be installed to app instance
+
 
 eslint.config.js not working

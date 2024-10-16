@@ -10,7 +10,7 @@ class CategorySerializer(ModelSerializer):
 
 
 class BookmarksSerializer(ModelSerializer):
-    category_id = serializers.IntegerField(required=False, min_value=1, max_value=3)
+    category_id = serializers.IntegerField(required=False, min_value=0, max_value=3)
     
     class Meta:
         model = Bookmark
@@ -19,13 +19,19 @@ class BookmarksSerializer(ModelSerializer):
 
     def create(self, validated_data):
         user = self.context['request'].user
-        bookmark_item = Bookmark.objects.create(
+        if validated_data.get('category_id') == 0 or validated_data.get('category_id') == None:
+            bookmark_item = Bookmark.objects.create(
             title=validated_data['title'],
             url = validated_data.get('url'),
             icon = validated_data.get('icon'),
-            category_id = validated_data.get('category_id'),
-            owner = user
-        )
+            owner = user)
+            return bookmark_item
+        bookmark_item = Bookmark.objects.create(
+        title=validated_data['title'],
+        url = validated_data.get('url'),
+        icon = validated_data.get('icon'),
+        category_id = validated_data.get('category_id'),
+        owner = user)
         return bookmark_item
         
 

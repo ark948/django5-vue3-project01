@@ -9,12 +9,7 @@ import Notifications from '@kyvg/vue3-notification';
 // PrimeVue
 import PrimeVue from 'primevue/config';
 import Aura from '@primevue/themes/aura';
-
-// Vuetify
-// Vuetify was deleted
-
-// Vuestic UI
-// vuestic ui was removed
+import ToastService from 'primevue/toastservice'
 
 const app = createApp(App)
 
@@ -26,4 +21,5 @@ app.use(PrimeVue, {
         preset: Aura
     }
 });
+app.use(ToastService);
 app.mount('#app');

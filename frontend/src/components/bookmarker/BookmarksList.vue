@@ -15,6 +15,7 @@ import api from '@/api/api';
 import * as utils from '@/components/bookmarker/utils.js';
 import router from "@/router";
 import Table from "@/components/bookmarker/Table.vue";
+import Toast from "primevue/toast";
 
 // refs
 const responseHolder = ref("");
@@ -32,7 +33,7 @@ const selected_items = ref([]);
 const confirm = ref(false);
 // Category
 const all_categories = ref([]);
-const selectedCategory = ref();
+const selectedCategory = ref({id:0, title:''});
 // CSV export
 const dt = ref();
 const edit_modal_visible = ref(false);
@@ -50,6 +51,11 @@ const edit_item = reactive({
   category_id: 0,
 });
 
+
+const toast = useToast();
+const showSuccess = () => {
+    toast.add({ severity: 'success', summary: 'عملیات موفق', detail: 'عملیات با موفقیت انجام شد.', life: 3000 });
+};
 
 
 onMounted(() => {
@@ -148,6 +154,7 @@ async function handleNewBookmarkSubmit() {
     .then((response) => {
         if (response.status === 201) {
             console.log('[BookmarksList.vue] New item successfully added.');
+            showSuccess();
         } else {
             console.log("ERROR IN ADDING NEW ITEM.");
             visible.value = false;
@@ -326,6 +333,9 @@ function clearDeleteInput() {
 
 <template>
   <div class="container">
+    <div class="notification-container">
+      <Toast />
+    </div>
     <div class="card">
       <Table
       :key="refreshTableKey"

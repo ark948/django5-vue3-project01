@@ -18,15 +18,20 @@ const data = props.data;
 const selectedItem = ref([]);
 const infos = ref("");
 const loading = ref(true);
-const filters = ref({
+const filters = ref();
+const initFilters = () => {
+    filters.value = {
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     id: { value: null, matchMode: FilterMatchMode.EQUALS },
     title: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
     url: { value: null, matchMode: FilterMatchMode.CONTAINS },
     category: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-});
+    }
+}
 
 const emit = defineEmits(['selected', 'selectedIsEmpty']);
+
+initFilters();
 
 
 onMounted(() => {
@@ -58,6 +63,10 @@ watch(() => selectedItem.value, async () => {
     }
 })
 
+const clearFilter = () => {
+    initFilters();
+};
+
 
 </script>
 
@@ -83,7 +92,7 @@ watch(() => selectedItem.value, async () => {
             >   
                 <template #header>
                     <div class="flex justify-end">
-                        <Button type="button" icon="pi pi-filter-slash" label="Clear" outlined @click="clearFilter()" />
+                        <Button class="action-button" type="button" icon="pi pi-filter-slash" label="Clear" outlined @click="clearFilter()" />
                         <IconField>
                             <InputIcon>
                                 <i class="pi pi-search" />
@@ -129,9 +138,17 @@ watch(() => selectedItem.value, async () => {
 
 
 <style scoped>
-    .p-datatable-table {
-      width: 100%;
-      border-spacing: 0;
-      font-size: 10px;
+    .p-datatable {
+        
+    }
+
+    .action-button {
+      width: 70px;
+      height: 30px;
+      margin: 20px 5px;
+      padding: 10px;
+      background-color: #42B883;
+      color: white;
+      border: none;
     }
 </style>
