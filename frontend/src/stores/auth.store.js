@@ -43,6 +43,10 @@ export const useAuthStore = defineStore({
                 console.log('[auth.store.js] localStorage Email: ', localStorage.getItem('email'))
                 console.log('[auth.store.js] localStorage complete, Redirecting to next...')
                 router.push(this.returnUrl || '/');
+                notify({
+                    title: 'ورود موفق',
+                    text: 'با موفقیت وارد سایت شدید. خوش آمدید.'
+                });
             } else {
                 console.log('[auth.store.js] res status NOT 200', res.status);
             }
