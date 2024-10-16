@@ -13,9 +13,6 @@
         methods: {
 
         },
-        mounted() {
-            console.log('Bookmark Parent mounted.');
-        }
     }
 </script>
 

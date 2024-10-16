@@ -299,5 +299,8 @@ api and rouer and auth store need full revision
 26. using Toast component from primevue
     needs to be installed to app instance
 
+27. there is a warning for single item deletion [fixed by defining a separate signal]
+    this also happens for edit item
+
 
 eslint.config.js not working

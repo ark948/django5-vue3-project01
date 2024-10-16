@@ -16,11 +16,13 @@ import * as utils from '@/components/bookmarker/utils.js';
 import router from "@/router";
 import Table from "@/components/bookmarker/Table.vue";
 import Toast from "primevue/toast";
+import FileUpload from 'primevue/fileupload';
 
 // refs
 const responseHolder = ref("");
 const refreshTableKey = ref(0);
 const all_bookmarks = ref([]);
+const fileupload = ref();
 // get all data from backend, paginate in frontend
 const page_number = ref(1);
 // new bookmark item functionality
@@ -54,10 +56,12 @@ const toast = useToast();
 const showSuccess = () => {
     toast.add({ severity: 'success', summary: 'عملیات موفق', detail: 'عملیات با موفقیت انجام شد.', life: 3000 });
 };
+const onUpload = () => {
+    toast.add({ severity: 'info', summary: 'آپلود فایل', detail: 'فایل با موفقیت دریافت شد.', life: 3000 });
+};
 
 
 onMounted(() => {
-  console.log("[BookmarksList.vue] - mounted.");
   setTimeout(() => {
     get_bookmarks();
     get_categories();
@@ -275,12 +279,11 @@ function handleFileChange() {
 
 
 // manual auth header added
-function handleCSVImport() {
-  // const file = files.value[0];
+function handleCSVImport(file) {
   const authStore = useAuthStore()
   const authStr = `Bearer ${authStore.access_token}`
   const formData = new FormData();
-  formData.append("uploaded_file", files.value[0]);
+  formData.append("uploaded_file", file);
   console.log("Sending file...");
   api.post('bookmarker/api/file-upload/', formData, {
     headers: {
@@ -290,14 +293,13 @@ function handleCSVImport() {
   })
     .then((response) => {
       if (response.status === 200) {
-        console.log("SUCCESS");
+        toast.add({ severity: 'success', summary: 'فایل دریافت شد.', detail: 'فایل با موفقیت دریافت شد.', life: 3000});
       } else {
         console.log("NOT 200");
       }
     })
     .catch((e) => {
-      console.log("ERROR");
-      console.log(e.message);
+      toast.add({ severity: 'error', summary: 'خطا', detail: 'خطایی در دریافت فایل رخ داد.', life: 3000})
     })
     .finally(() => {
       console.log("CSV import done. Refreshing table now...");
@@ -309,14 +311,26 @@ function handleCSVImport() {
 
 function handleReload() {
   console.log("Reloading ...");
+  fileupload.value = null;
   router.push({ name: 'bookmarks' });
 }
+
+const onClearTemplatingUpload = (clear) => {
+    clear();
+    totalSize.value = 0;
+    totalSizePercent.value = 0;
+};
 
 
 function clearDeleteInput() {
   document.getElementById('del_btn').disabled = true;
   responseHolder.value = '';
 }
+
+
+const upload = () => {
+    handleCSVImport(fileupload.value.files[0]);
+};
 
 
 </script>
@@ -336,6 +350,8 @@ function clearDeleteInput() {
       @confirmDeleteItem="(item) => confirmDeleteProduct(item)"
       @Selected="(items) => selected_items = items"
       @SelectedIsEmpty="() => clearDeleteInput()"
+      @DeleteSingleItem="(item) => confirmDeleteProduct(item)"
+      @editSingleItem="(item) => editItem(item)"
       />
     </div>
     <div class="response-message-container">
@@ -381,11 +397,9 @@ function clearDeleteInput() {
     <Button class="action-button" label="Add" @click="visible=true" />
     <Button class="action-button" @click="confirm=true" id="del_btn" label="Delete" disabled></Button>
     <div class="file-upload-form-container">
-      <form @submit.prevent="handleCSVImport" enctype="multipart/form-data">
-        Import csv:
-        <input ref="fileInput" @change="handleFileChange" type="file" id="file" accept=".csv">
-        <input type="submit" value="submit">
-      </form>
+      Import csv:
+      <FileUpload ref="fileupload" mode="basic" accept=".csv" :maxFileSize="1000000" @upload="onUpload" />
+      <Button label="Upload" @click="upload" severity="secondary" />
     </div>
     <Button class="action-button" label="Reload" @click="handleReload" />
   </div>

@@ -30,13 +30,12 @@ const initFilters = () => {
     }
 }
 
-const emit = defineEmits(['selected', 'selectedIsEmpty']);
+const emit = defineEmits(['selected', 'selectedIsEmpty', 'DeleteSingleItem', 'editSingleItem']);
 
 initFilters();
 
 
 onMounted(() => {
-    console.log("[Table.vue] --> Mounted.");
     loading.value = false;
     selectedItem.value = [];
 })
@@ -70,6 +69,14 @@ const clearFilter = () => {
 
 const exportCSV = async () => {
   dt.value.exportCSV();
+}
+
+function sendDeleteSignal(item) {
+    emit('DeleteSingleItem', item);
+}
+
+function sendEditSignal(item) {
+    emit('editSingleItem', item);
 }
 
 
@@ -129,12 +136,12 @@ const exportCSV = async () => {
                 </Column>
                 <Column header="Actions" :exportable="false" style="min-width: 12rem">
                     <template #body="slotProps">
-                        <Button label="Edit" outlined rounded class="mr-2" @click="$emit('edit-item', slotProps.data)" />
-                        <Button label="Delete" outlined rounded severity="danger" @click="$emit('confirm-delete-item', slotProps.data)" />
+                        <Button label="Edit" outlined rounded class="mr-2" @click="sendEditSignal(slotProps.data)" />
+                        <Button label="Delete" outlined rounded severity="danger" @click="sendDeleteSignal(slotProps.data)" />
                     </template>
                 </Column>
                 <template #footer>
-                    <div style="text-align: right">
+                    <div class="file-download" style="text-align: right">
                         <Button class="action-button" icon="pi pi-external-link" label="Export" @click="exportCSV($event)" />
                     </div>
                 </template>
