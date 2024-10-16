@@ -34,8 +34,6 @@ const confirm = ref(false);
 // Category
 const all_categories = ref([]);
 const selectedCategory = ref({id:0, title:''});
-// CSV export
-const dt = ref();
 const edit_modal_visible = ref(false);
 const fileInput = ref(null);
 const files = ref();
@@ -208,12 +206,6 @@ async function handleMultipleDeletion() {
       clearDeleteInput();
       forceRerender();
     });
-}
-
-
-
-const exportCSV = async () => {
-  dt.value.exportCSV();
 }
 
 

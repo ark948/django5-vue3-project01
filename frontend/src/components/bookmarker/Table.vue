@@ -15,6 +15,7 @@ import InputText from 'primevue/inputtext';
 
 const props = defineProps(['data']);
 const data = props.data;
+const dt = ref()
 const selectedItem = ref([]);
 const infos = ref("");
 const loading = ref(true);
@@ -67,6 +68,10 @@ const clearFilter = () => {
     initFilters();
 };
 
+const exportCSV = async () => {
+  dt.value.exportCSV();
+}
+
 
 </script>
 
@@ -77,6 +82,7 @@ const clearFilter = () => {
         <div class="data-table-container">
             <DataTable 
             :value="data" 
+            ref="dt"
             v-model:selection="selectedItem"
             paginator
             :rows="15"
@@ -101,8 +107,8 @@ const clearFilter = () => {
                         </IconField>
                     </div>
                 </template>
-                <template #empty> No customers found. </template>
-                <template #loading> Loading customers data. Please wait. </template>
+                <template #empty> No items found. </template>
+                <template #loading> Loading items data. Please wait. </template>
                 <Column selectionMode="multiple"></Column>
                 <Column field="id" header="Id" sortable>
                 </Column>
@@ -127,6 +133,11 @@ const clearFilter = () => {
                         <Button label="Delete" outlined rounded severity="danger" @click="$emit('confirm-delete-item', slotProps.data)" />
                     </template>
                 </Column>
+                <template #footer>
+                    <div style="text-align: right">
+                        <Button class="action-button" icon="pi pi-external-link" label="Export" @click="exportCSV($event)" />
+                    </div>
+                </template>
             </DataTable>
         </div>
         <div class="infos-container">
