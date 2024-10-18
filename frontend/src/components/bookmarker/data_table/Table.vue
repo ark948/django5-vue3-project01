@@ -45,7 +45,7 @@ onMounted(() => {
 watch(
     () => selectedItem.value,
     async () => {
-        console.log("Current --> ", selectedItem.value.length);
+        // console.log("Current --> ", selectedItem.value.length);
     }
 )
 

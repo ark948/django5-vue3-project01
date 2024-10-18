@@ -3,7 +3,11 @@ import { onMounted, inject, ref, reactive, watch } from 'vue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Button from 'primevue/button';
+import Toast from 'primevue/toast';
+import { useToast } from 'primevue/usetoast';
+import { notify } from '@kyvg/vue3-notification';
 
+const toast = useToast();
 import api from '@/api/api';
 import { useAuthStore } from '@/stores';
 import router from '@/router';
@@ -13,7 +17,7 @@ const emit = defineEmits(['done'])
 
 const dialogRef = inject('dialogRef');
 const item = ref();
-const selectedItem = ref();
+const selectedItem = ref([]);
 
 const closeDialog = () => {
     dialogRef.value.close();
@@ -36,6 +40,7 @@ watch(() => selectedItem.value, async () => {
 
 
 onMounted(() => {
+    console.log(selectedItem.value);
     onFileSelect(csv_file.value);
 })
 
@@ -100,6 +105,13 @@ function loop_done() {
 
 
 function processImportRequest() {
+    if (selectedItem.value.length == 0) {
+        notify({
+            title: "خطا.",
+            text: "هیج آیتمی انتخاب نشد."
+        });
+        closeDialog();
+    }
     const authStore = useAuthStore()
     const authStr = `Bearer ${authStore.access_token}`
     for (let i = 0; i < selectedItem.value.length; i++) {
@@ -121,7 +133,7 @@ function processImportRequest() {
 }
 
 function importAll() {
-
+    return 0;
 }
 
 </script>
