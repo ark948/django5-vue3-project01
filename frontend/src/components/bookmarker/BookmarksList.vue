@@ -349,6 +349,10 @@ import CsvImport from "./data_table/CsvImport.vue";
 const dialog = useDialog();
 
 const openCsvDialog = () => {
+  if (fileupload.value.files[0] === undefined) {
+    toast.add({ severity: 'error', summary: 'خطا', detail: '.فایلی انتخاب نشده است', life: 3000});
+    return
+  }
   dialog.open(CsvImport, {
     data: {
       csv_file: fileupload.value.files[0]

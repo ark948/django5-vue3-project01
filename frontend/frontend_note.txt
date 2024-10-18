@@ -307,5 +307,7 @@ api and rouer and auth store need full revision
 29. advanced csv import (user can choose which items to import using an overlay) - DONE
     but may require some polishing later.
 
+30. next feature: disable upload button, if no file is selected
+
 
 eslint.config.js not working
