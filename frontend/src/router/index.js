@@ -12,7 +12,6 @@ import Bookmarks from "@/views/protected/Bookmarks.vue";
 import NotFound from "@/views/public/NotFound.vue";
 import ForgotPassword from "@/views/public/ForgotPassword.vue";
 import PasswordResetConfirm from "@/components/auth/password_reset/PasswordResetConfirm.vue";
-import Table from "@/components/bookmarker/Table.vue";
 
 function removeQueryParams(to) {
     if (Object.keys(to.query).length)

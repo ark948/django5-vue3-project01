@@ -302,5 +302,10 @@ api and rouer and auth store need full revision
 27. there is a warning for single item deletion [fixed by defining a separate signal]
     this also happens for edit item
 
+28. upload button should not be enabled without first uploading a file
+
+29. advanced csv import (user can choose which items to import using an overlay) - DONE
+    but may require some polishing later.
+
 
 eslint.config.js not working

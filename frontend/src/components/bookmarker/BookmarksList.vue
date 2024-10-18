@@ -1,7 +1,7 @@
 <script setup>
 
 // vue imports
-import { ref, onMounted, reactive, watch } from "vue";
+import { ref, onMounted, reactive, watch, provide } from "vue";
 
 // 3rd party imports
 import Select from "primevue/select";
@@ -14,9 +14,12 @@ import { useAuthStore } from "@/stores";
 import api from '@/api/api';
 import * as utils from '@/components/bookmarker/utils.js';
 import router from "@/router";
-import Table from "@/components/bookmarker/Table.vue";
+import Table from "@/components/bookmarker/data_table/Table.vue";
 import Toast from "primevue/toast";
 import FileUpload from 'primevue/fileupload';
+
+// events
+const emit = defineEmits(['reloadThisList']);
 
 // refs
 const responseHolder = ref("");
@@ -329,8 +332,33 @@ function clearDeleteInput() {
 
 
 const upload = () => {
-    handleCSVImport(fileupload.value.files[0]);
+    // handleCSVImport(fileupload.value.files[0]);
+    // fileupload.value = null;
+    // upload data to CsvImport by using provide and inject
+    openCsvDialog();
+
 };
+
+
+// dynammic dialog
+// can load a second component
+import DynamicDialog from 'primevue/dynamicdialog';
+import { useDialog } from 'primevue/usedialog';
+import CsvImport from "./data_table/CsvImport.vue";
+
+const dialog = useDialog();
+
+const openCsvDialog = () => {
+  dialog.open(CsvImport, {
+    data: {
+      csv_file: fileupload.value.files[0]
+    },
+    onClose: (e) => {
+      emit('reloadThisList');
+    }
+  });
+}
+
 
 
 </script>
@@ -394,14 +422,16 @@ const upload = () => {
           <input class="form-button" type="submit" value="Confirm">
         </form>
     </Dialog>
+    <DynamicDialog />
     <Button class="action-button" label="Add" @click="visible=true" />
     <Button class="action-button" @click="confirm=true" id="del_btn" label="Delete" disabled></Button>
     <div class="file-upload-form-container">
-      Import csv:
+      Import from CSV file:
       <FileUpload ref="fileupload" mode="basic" accept=".csv" :maxFileSize="1000000" @upload="onUpload" />
-      <Button label="Upload" @click="upload" severity="secondary" />
+      <Button id="fileUploadBtn" class="action-button" label="Upload" @click="upload" severity="secondary"/>
     </div>
     <Button class="action-button" label="Reload" @click="handleReload" />
+    <Button class="action-button" label="Open CSV" @click="openCsvDialog" />
   </div>
 </template>
 
