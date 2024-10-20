@@ -48,6 +48,7 @@
         width: 70px;
         padding: 10px;
         margin: 20px 0;
+        margin-left: 5px;
         background-color: #42B883;
         color: white;
         border: none;

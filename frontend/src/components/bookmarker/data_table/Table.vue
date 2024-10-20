@@ -91,6 +91,7 @@ function sendEditSignal(item) {
             :value="data" 
             ref="dt"
             v-model:selection="selectedItem"
+            selectionMode="multiple"
             paginator
             :rows="15"
             dataKey="id" 

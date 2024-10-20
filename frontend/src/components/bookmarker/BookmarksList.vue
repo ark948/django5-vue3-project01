@@ -435,7 +435,6 @@ const openCsvDialog = () => {
       <Button id="fileUploadBtn" class="action-button" label="Upload" @click="upload" severity="secondary"/>
     </div>
     <Button class="action-button" label="Reload" @click="handleReload" />
-    <Button class="action-button" label="Open CSV" @click="openCsvDialog" />
   </div>
 </template>
 

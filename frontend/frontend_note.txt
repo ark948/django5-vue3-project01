@@ -309,5 +309,7 @@ api and rouer and auth store need full revision
 
 30. next feature: disable upload button, if no file is selected
 
+31. IMPORTANT problem found. if logout immediately when app is just initialized, user won't be able to log back in.
+
 
 eslint.config.js not working
