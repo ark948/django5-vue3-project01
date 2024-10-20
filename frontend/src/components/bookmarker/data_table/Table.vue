@@ -148,7 +148,7 @@ function selectRow(item) {
                     </template>
                 </Column>
                 <template #footer>
-                    <div class="file-download" style="text-align: right">
+                    <div class="file-download" style="text-align: right;">
                         <Button class="action-button" icon="pi pi-external-link" label="Export" @click="exportCSV($event)" />
                     </div>
                 </template>
@@ -168,7 +168,7 @@ function selectRow(item) {
     }
 
     .action-button {
-      width: 70px;
+      width: 100px;
       height: 30px;
       margin: 20px 5px;
       padding: 10px;

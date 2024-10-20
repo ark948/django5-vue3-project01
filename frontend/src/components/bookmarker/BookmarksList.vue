@@ -431,7 +431,7 @@ const openCsvDialog = () => {
     <Button class="action-button" @click="confirm=true" id="del_btn" label="Delete" disabled></Button>
     <div class="file-upload-form-container">
       Import from CSV file:
-      <FileUpload ref="fileupload" mode="basic" accept=".csv" :maxFileSize="1000000" @upload="onUpload" />
+      <FileUpload ref="fileupload" mode="basic" accept=".csv" :maxFileSize="1000000" @upload="onUpload" style="height: 30px;"/>
       <Button id="fileUploadBtn" class="action-button" label="Upload" @click="upload" severity="secondary"/>
     </div>
     <Button class="action-button" label="Reload" @click="handleReload" />

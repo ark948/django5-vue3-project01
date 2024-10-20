@@ -22,7 +22,7 @@
     <div class="container">
         <div class="main-container">
             <main>
-                <p>Bookmark manager</p>
+                <h1>Bookmarks Manager</h1>
                 <div class="list-container">
                     <BookmarksList
                     @reloadThisList="() => forceRerender()"
@@ -44,7 +44,7 @@
     }
 
     button {
-        height: 35px;
+        height: 32px;
         width: 70px;
         padding: 10px;
         margin: 20px 0;
@@ -55,7 +55,7 @@
         border-radius: 4px;
         cursor: pointer;
         transition: background-color 0.2s ease-in-out;
-        font-size: 15px;
+        font-size: 13px;
         font-weight: bold
     }
 </style>
