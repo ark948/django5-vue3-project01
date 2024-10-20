@@ -78,7 +78,7 @@ watch(
     document.getElementById('del_btn').disabled = false;
     responseHolder.value = "Selected items: ";
     for (let i in selected_items.value) {
-      responseHolder.value += `${selected_items.value[i].id}, `;
+      responseHolder.value += `${selected_items.value[i].count}, `;
     }
   }
 )
@@ -131,22 +131,7 @@ function get_bookmarks() {
     })
     .finally(() => {
       console.log(`Total of ${all_bookmarks.value.length} items.`);
-      // replacing category ids with actual category title
-      for (let i=0; i<all_bookmarks.value.length; i++) {
-        switch (all_bookmarks.value[i].category_id) {
-          case 1:
-          all_bookmarks.value[i].category = 'Work';
-          break;
-          case 2:
-          all_bookmarks.value[i].category = 'Entertainment';
-          break;
-          case 3:
-          all_bookmarks.value[i].category = 'Useful';
-          break;
-          default:
-          all_bookmarks.value[i].category = "-";
-        }
-      }
+      // replacing category ids with actual category title (not anymore, this got updated)
     });
 };
 

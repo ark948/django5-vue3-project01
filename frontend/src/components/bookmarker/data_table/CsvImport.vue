@@ -40,7 +40,7 @@ watch(() => selectedItem.value, async () => {
 
 
 onMounted(() => {
-    console.log(selectedItem.value);
+    console.log("selected->", selectedItem.value);
     onFileSelect(csv_file.value);
 })
 
@@ -72,34 +72,52 @@ function loop_done() {
         // console.log(`item ${i} --> `, records.value[i].split(','));
         records.value[i] = records.value[i].split(',');
         // console.log(`item ${i} --> `, records.value[i]); removing outer string
+        console.log("item --> ",records.value[i]);
     }
 
     records.value.forEach((value, index, arr) => {
         // REMOVING OUTER STRING QUOTES
         // console.log("title: ",arr[index][1]);
-        arr[index][1] = arr[index][1].slice(1, -1); // remove outer string for title
-        arr[index][2] = arr[index][2].slice(1, -1); // and for url
-        arr[index][3] = arr[index][3].slice(1, -1); // and for category
+        arr[index][2] = arr[index][2].slice(1, -1); // remove outer string for title
+        arr[index][3] = arr[index][3].slice(1, -1); // and for url
+        arr[index][4] = arr[index][4].slice(1, -1); // and for category
     });
     // console.log("item: ", bookmarks);
 
     records.value.forEach((value, index, arr) => {
         // FIXING Category (replacing text with category id)
         // console.log("Categories: --> ", arr[index][3]);
-        switch (arr[index][3]) {
+        switch (arr[index][5]) {
             case "Work":
-                arr[index][3] = 1;
+                arr[index][5] = 1;
                 break;
             case "Entertainment":
-                arr[index][3] = 2;
+                arr[index][5] = 2;
                 break;
             case "Useful":
-                arr[index][3] = 3;
+                arr[index][5] = 3;
                 break;
             default:
-                arr[index][3] = "-";
+                arr[index][5] = "-";
         }
-    })
+    });
+
+    records.value.forEach((value, index, arr) => {
+        // console.log("item ->", arr[index]);
+        let new_array = {};
+        new_array.title = arr[index][2];
+        new_array.url = arr[index][3];
+        new_array.category_id = arr[index][4];
+        // bookmarks += new_array;
+        records2.value.push(new_array);
+    });
+
+    // console.log(records2.value);
+    let count = 1;
+    for (let i=0; i<records2.value.length; i++) {
+        records2.value[i].count = count;
+        count++;
+    }
 
 }
 
@@ -115,8 +133,7 @@ function processImportRequest() {
     const authStore = useAuthStore()
     const authStr = `Bearer ${authStore.access_token}`
     for (let i = 0; i < selectedItem.value.length; i++) {
-        console.log("Inserting item...");
-        api.post('bookmarker/api/no-paginate/', { title: selectedItem.value[i][1], url: selectedItem.value[i][2], category_id: selectedItem.value[i][3]}, { headers: {Authorization: authStr}})
+        api.post('bookmarker/api/no-paginate/', { title: selectedItem.value[i].title, url: selectedItem.value[i].url, category_id: selectedItem.value[i].category_id}, { headers: {Authorization: authStr}})
             .then((response) => {
                 if (response.status === 201) {
                     console.log("Successful.");
@@ -144,13 +161,28 @@ function importAll() {
     <div class="container">
         <h2>Select bookmarks to import</h2>
         <DataTable 
-        :value="records"
-        v-model:selection="selectedItem"
-        >
+        :value="records2"
+        v-model:selection="selectedItem">
             <Column selectionMode="multiple"></Column>
-            <Column field="1" header="Title"></Column>
-            <Column field="2" header="URL"></Column>
-            <Column field="3" header="Category"></Column>
+            <Column field="count" header="#"></Column>
+            <Column field="title" header="Title"></Column>
+            <Column field="url" header="URL"></Column>
+            <Column field="category_id" header="Category">
+                <template #body="slotProps">
+                    <div v-if="slotProps.data.category_id == 1">
+                        Work
+                    </div>
+                    <div v-else-if="slotProps.data.category_id == 2">
+                        Entertainment
+                    </div>
+                    <div v-else-if="slotProps.data.category_id == 3">
+                        Useful
+                    </div>
+                    <div v-else>
+                        -
+                    </div>
+                </template>
+            </Column>
         </DataTable>
         <Button style="height: 30px; margin: 30px;" @click="closeDialog" label="Close" />
         <Button style="height: 30px; margin: 30px" type="button" label="Confirm" @click="processImportRequest" />

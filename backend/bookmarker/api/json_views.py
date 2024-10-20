@@ -111,7 +111,7 @@ class BookmarksMultipleDelete(APIView):
 
 class BookmarkMultipleDeleteUsingPost(GenericAPIView):
     serializer_class = BookmarkMultipleDeleteSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOwner]
 
     def get(self, request):
         return Response({}, status=status.HTTP_200_OK)

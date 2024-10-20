@@ -312,6 +312,12 @@ api and rouer and auth store need full revision
 31. IMPORTANT problem found. if logout immediately when app is just initialized, user won't be able to log back in. (was unable to replicate this)
 
 32. need to add actual item count to table, and not database record ids
+    need to edit the selectedItem watch accordingly, to show item counts not ids.
+    also CsvImport require update, the entire file
+33. item selection works, but checkboxes are unresponsive
+
+34. updating all Category fields (must be category_id, use v-if and datatable template to show proper category)
+    in Table.vue, during category udpate process, filters were causing serious problems
 
 
 eslint.config.js not working

@@ -27,7 +27,6 @@ const initFilters = () => {
     id: { value: null, matchMode: FilterMatchMode.EQUALS },
     title: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
     url: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    category: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
     }
 }
 
@@ -43,13 +42,6 @@ onMounted(() => {
 
 
 // watchers
-watch(
-    () => selectedItem.value,
-    async () => {
-        // console.log("Current --> ", selectedItem.value.length);
-    }
-)
-
 watch(
     () => selectedItem.value,
     async () => {
@@ -104,10 +96,11 @@ function selectRow(item) {
             v-model:filters="filters"
             filterDisplay="row"
             :loading="loading"
-            :globalFilterFields="['title', 'url', 'category']"
+            :globalFilterFields="['title', 'url']"
             removableSort
             showGridlines
             tableStyle="width: 50rem"
+            editMode="cell"
             >   
                 <template #header>
                     <div class="flex justify-end">
@@ -135,10 +128,21 @@ function selectRow(item) {
                         <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Search in URL:" />
                     </template>
                 </Column>
-                <Column field="category" header="Category" sortable>
-                    <template #filter="{ filterModel, filterCallback }">
-                        <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Search by Category" />
-                    </template>
+                <Column field="category_id" header="Category" sortable>
+                    <template #body="slotProps">
+                    <div v-if="slotProps.data.category_id == 1">
+                    Work
+                    </div>
+                    <div v-else-if="slotProps.data.category_id == 2">
+                    Entertainment
+                    </div>
+                    <div v-else-if="slotProps.data.category_id == 3">
+                    Useful
+                    </div>
+                    <div v-else>
+                    -
+                    </div>
+                </template>
                 </Column>
                 <Column header="Actions" :exportable="false" style="min-width: 12rem">
                     <template #body="slotProps">
@@ -163,9 +167,6 @@ function selectRow(item) {
 
 
 <style scoped>
-    .p-datatable {
-        
-    }
 
     .action-button {
       width: 100px;
