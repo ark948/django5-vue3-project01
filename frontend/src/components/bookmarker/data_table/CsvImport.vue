@@ -150,7 +150,33 @@ function processImportRequest() {
 }
 
 function importAll() {
-    return 0;
+    const authStore = useAuthStore()
+    const authStr = `Bearer ${authStore.access_token}`
+    for (let i = 0; i < records2.value.length; i++) {
+        api.post('bookmarker/api/no-paginate/', 
+            { 
+                title: records2.value[i].title,
+                url: records2.value[i].url, 
+                category_id: records2.value[i].category_id
+            }, 
+                { headers: {Authorization: authStr}}
+            )
+            .then((response) => {
+                if (response.status === 201) {
+                    console.log("Successful.");
+                } else {
+                    console.log("Error");
+                }
+            })
+            .catch(e => {
+                console.log("Error: --> ", e.message);
+            });
+    }
+    notify({
+            title: "پایان عملیات.",
+            text: "آیتم های جدید اضافه شدند."
+    });
+    closeDialog();
 }
 
 </script>
@@ -162,6 +188,7 @@ function importAll() {
         <h2>Select bookmarks to import</h2>
         <DataTable 
         :value="records2"
+        selectionMode="multiple"
         v-model:selection="selectedItem">
             <Column selectionMode="multiple"></Column>
             <Column field="count" header="#"></Column>
