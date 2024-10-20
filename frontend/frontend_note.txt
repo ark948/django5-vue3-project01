@@ -309,7 +309,9 @@ api and rouer and auth store need full revision
 
 30. next feature: disable upload button, if no file is selected
 
-31. IMPORTANT problem found. if logout immediately when app is just initialized, user won't be able to log back in.
+31. IMPORTANT problem found. if logout immediately when app is just initialized, user won't be able to log back in. (was unable to replicate this)
+
+32. need to add actual item count to table, and not database record ids
 
 
 eslint.config.js not working

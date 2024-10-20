@@ -123,8 +123,8 @@ function selectRow(item) {
                 <template #empty> No items found. </template>
                 <template #loading> Loading items data. Please wait. </template>
                 <Column selectionMode="multiple"></Column>
-                <Column field="id" header="Id" sortable>
-                </Column>
+                <Column field="id" header="Id" sortable></Column>
+                <Column field="count" header="#"></Column>
                 <Column field="title" header="Title" sortable>
                     <template #filter="{ filterModel, filterCallback }">
                         <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Search by title" />

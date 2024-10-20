@@ -115,8 +115,11 @@ function get_bookmarks() {
     .then((response) => {
       if (response.status === 200) {
         console.log("Response 200");
+        let count = 1;
         for (let i = 0; i < response.data.length; i++) {
+          response.data[i].count = count;
           all_bookmarks.value.push(response.data[i]);
+          count++;
         }
       } else {
         console.log("[BookmarksList.vue] Response NOT 200", response.status);
@@ -154,7 +157,7 @@ async function handleNewBookmarkSubmit() {
     const authStr = `Bearer ${authStore.access_token}`
     console.log("[BookmarksList.vue] Adding new...");
     responseHolder.value = "";
-    new_item_url.value = utils.prepend_http(new_item_url.value);
+    new_item_url.value = utils.prepend_https(new_item_url.value);
     await api.post('bookmarker/api/no-paginate/', { title: new_item_title.value, url: new_item_url.value, category_id: selectedCategory.value.id }, { headers: {Authorization: authStr}})
     .then((response) => {
         if (response.status === 201) {
