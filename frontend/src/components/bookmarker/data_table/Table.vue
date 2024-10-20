@@ -2,6 +2,7 @@
 
 // vue imports
 import { onMounted, ref, watch } from 'vue';
+import 'primeicons/primeicons.css'
 
 // 3rd party imports
 import DataTable from 'primevue/datatable';
@@ -137,8 +138,9 @@ function sendEditSignal(item) {
                 </Column>
                 <Column header="Actions" :exportable="false" style="min-width: 12rem">
                     <template #body="slotProps">
-                        <Button label="Edit" outlined rounded class="mr-2" @click="sendEditSignal(slotProps.data)" />
-                        <Button label="Delete" outlined rounded severity="danger" @click="sendDeleteSignal(slotProps.data)" />
+                        <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="sendEditSignal(slotProps.data)" />
+                        <Button icon="pi pi-trash" outlined rounded severity="danger" @click="sendDeleteSignal(slotProps.data)" />
+                        <Button icon="pi pi-search" @click="selectRow(slotProps.data)" severity="secondary" rounded></Button>
                     </template>
                 </Column>
                 <template #footer>
