@@ -80,6 +80,10 @@ function sendEditSignal(item) {
     emit('editSingleItem', item);
 }
 
+function selectRow(item) {
+    window.open(item.url).focus();
+}
+
 
 </script>
 
