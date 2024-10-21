@@ -3,6 +3,7 @@
     export default {
         data() {
             return {
+                displayMessage: false,
                 message: "message: "
             }
         },
@@ -16,7 +17,10 @@
                     .catch(error => {
                         this.message = error
                     })
-                
+            },
+            updateMessage() {
+                this.displayMessage = true;
+                this.message = "This should exist now.";
             }
         },
     }
@@ -25,8 +29,8 @@
 
 <template>
     <div class="container">
-        <button @click="getData">Update message</button>
-        <p>{{ message }}</p>
+        <button id="btn" @click="updateMessage">Update message</button>
+        <p id="msg" v-if="displayMessage">{{ message }}</p>
     </div>
 </template>
 

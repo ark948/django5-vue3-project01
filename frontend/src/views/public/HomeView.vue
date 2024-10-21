@@ -14,7 +14,7 @@
         <h1>This is home</h1>
         <Toast />
         <div v-if="authStore.access_token" class="link-container">
-            <p><RouterLink to="/bookmarks-list">Bookmarks</RouterLink></p>
+            <p id="bookmarks_link"><RouterLink to="/bookmarks-list">Bookmarks</RouterLink></p>
             <p><RouterLink to="/profile">Profile page</RouterLink></p>
             <p><RouterLink to="/manual-refresh">Manual token refresh</RouterLink></p>
             <div class="user-logged-in-status-container">

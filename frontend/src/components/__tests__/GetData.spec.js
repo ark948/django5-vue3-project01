@@ -3,7 +3,7 @@ import { mount } from "@vue/test-utils";
 import GetData from "../GetData.vue";
 
 
-test('GetData mount test', async () => {
+test('GetData.vue mount test', async () => {
     expect(GetData).toBeTruthy();
     const wrapper = mount(GetData);
     expect(wrapper.get('[data-test="title"]').text()).toBe('Data:');
@@ -11,4 +11,5 @@ test('GetData mount test', async () => {
     expect(wrapper.get('[data-test="btn"').text()).toBe("Request data");
     await wrapper.get('[data-test="btn"]').trigger('click');
     expect(wrapper.get('[data-test="msg"]').text()).toBe("Hello");
+    expect(wrapper.find('#nonExistentElem').exists()).toBe(false);
 })
