@@ -12,6 +12,7 @@ import Bookmarks from "@/views/protected/Bookmarks.vue";
 import NotFound from "@/views/public/NotFound.vue";
 import ForgotPassword from "@/views/public/ForgotPassword.vue";
 import PasswordResetConfirm from "@/components/auth/password_reset/PasswordResetConfirm.vue";
+import GetData from "@/components/GetData.vue";
 
 function removeQueryParams(to) {
     if (Object.keys(to.query).length)
@@ -38,6 +39,7 @@ const routes = [
     { path: '/bookmarks-list', component: Bookmarks, name: 'bookmarks' },
     { path: '/forgot-password', component: ForgotPassword, nam: 'forgot_password' },
     { path: '/reset-password/:uidb64/:token/', component: PasswordResetConfirm, name: 'reset_password' },
+    { path: '/get-test-data', component: GetData, name: 'get_test_data', },
     
     // { path: '/bookmarks-list-v2', component: BookmarksListV2, name: 'bookmarksv2' },
 
@@ -55,7 +57,14 @@ router.beforeEach(async (to) => {
         return
     }
     // redirect to login page if not logged in and trying to access a restricted page
-    const publicPages = ['/', '/login', '/register', '/verify-email', '/forgot-password'];
+    const publicPages = [
+        '/', 
+        '/login', 
+        '/register', 
+        '/verify-email', 
+        '/forgot-password', 
+        '/get-test-data'
+    ];
     const authRequired = !publicPages.includes(to.path);
     const auth = useAuthStore();
 

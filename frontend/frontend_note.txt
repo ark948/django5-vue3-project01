@@ -319,5 +319,32 @@ api and rouer and auth store need full revision
 34. updating all Category fields (must be category_id, use v-if and datatable template to show proper category)
     in Table.vue, during category udpate process, filters were causing serious problems
 
+35. idea: use localStorage or sessions for undo and history, maybe also tracker component from primevue
+ or maybe a database table for deleted items.
+
+36. trying to add testing again:
+    testing tools:
+    vitest: unit test framework
+    Vue Test Utils: test utility library
+    - three levels of testing:
+    1. unit
+    2. integration
+    3. end-to-end
+    unit testing should be combined with continuous integration (CI) to ensure tests are constantly being executed, ideally on each commit.
+    Vitest provides the generic functionality to write unit tests while Vue Test Utils provides the Vue-specific test utilities.س
+    
+    by default, vitest will run the tests files in watch mode (on each save to application file). to change this...
+    update test:unit configuration in package.json
+    
+    > npm run test:unit
+
+    - these are 'test runners':
+        Vitest. Terminal based, has experimental browser UI.
+        Cypress. Browser based, supports Vite, webpack.
+        Playwright (experimental). Browser based, supports Vite.
+        WebdriverIO. Browser based, supports Vite, Webpack, cross browser support.
+    // shallowMount creates a wrapper for vue component with stubbed child components
+    // mount also creates a wrapper for vue component along with any chld component
+    // shallowMount is better for testing individual components
 
 eslint.config.js not working

@@ -1,33 +1,33 @@
 <script setup>
-import api from "@/api/api";
+import axios from "axios";
 import { ref } from "vue";
 
 const message = ref("");
 
 function get_data() {
-  try {
-    api
-      .get("test/")
-      .then((response) => {
-        console.log("Success");
+  axios.get('http://127.0.0.1:8000/test/')
+    .then((response) => {
+      if (response.status === 200) {
         message.value = response.data.info;
-      })
-      .catch((error) => console.log(error))
-      .finally(() => console.log("Done"));
-  } catch (error) {
-    console.log(error);
-  }
+      } else {
+        console.log("Error");
+      }
+    })
+    .catch(e => {
+      console.log("Internal Error");
+    })
+}
+
+function mock_message() {
+  message.value = 'Hello';
 }
 </script>
 
 <template>
   <div class="container">
-    <h2>Data:</h2>
-    <div class="data">{{ message }}</div>
-    <button @click="get_data">Request data</button>
-    <div class="link-container">
-      <RouterLink id="back" to="/">Back to home</RouterLink>
-    </div>
+    <h2 data-test="title">Data:</h2>
+    <div data-test="msg">{{ message }}</div>
+    <button data-test="btn" @click="mock_message">Request data</button>
   </div>
 </template>
 
