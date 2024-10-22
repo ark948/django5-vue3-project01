@@ -11,11 +11,9 @@ export const useBookmarksStore = defineStore({
     }),
     actions: {
         get_list() {
-            console.log("get_list called.");
-            const res = api.get('bookmarker/api/no-paginate/', { headers: { Authorization: this.access_token }})
+            api.get('bookmarker/api/no-paginate/', { headers: { Authorization: this.access_token }})
                 .then((response) => {
                     if (response.status === 200) {
-                        console.log("list - 200");
                         for (let i =0; i < response.data.length; i++) {
                             this.bookmarks_list[i] = response.data[i];
                         }
@@ -25,8 +23,10 @@ export const useBookmarksStore = defineStore({
                 })
                 .catch(e => {
                     console.log("[Bookmarks Store ERROR]", e.message);
+                })
+                .finally(() => {
+                    console.log("Total: -> ", this.bookmarks_list.length);
                 });
-            console.log("Total: -> ", this.bookmarks_list.length);
         },
 
         async add_item() {

@@ -4,7 +4,6 @@ import { useBookmarksStore } from '@/stores';
 import { onMounted, ref } from 'vue';
 
 onMounted(() => {
-    console.log("MOUNTED.");
     bookmarksStore.get_list();
     items.value = bookmarksStore.bookmarks_list;
 });
