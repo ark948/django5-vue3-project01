@@ -17,6 +17,7 @@
             <p id="bookmarks_link"><RouterLink to="/bookmarks-list">Bookmarks</RouterLink></p>
             <p><RouterLink to="/profile">Profile page</RouterLink></p>
             <p><RouterLink to="/manual-refresh">Manual token refresh</RouterLink></p>
+            <p><RouterLink to="/bmk">bmk</RouterLink></p>
             <div class="user-logged-in-status-container">
                 <p>
                     Hello, {{ authStore.full_name }}

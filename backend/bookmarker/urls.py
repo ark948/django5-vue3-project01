@@ -7,9 +7,9 @@ from bookmarker.api.json_views import (
     BookmarkMultipleDeleteUsingPost,
     UserBookmarksCSVImport,
     BookmarkViewSet,
-    get_categories,
     GetBookmarksByCategory,
-    GetBookmarksWithCategory
+    GetBookmarksWithCategory,
+    get_categories,
 )
 from bookmarker.api.html_views import (
     BookmarkerIndexView,
