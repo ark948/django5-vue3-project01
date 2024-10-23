@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import router from "@/router";
 import api from "@/api/api";
+import axios from "axios";
 
 import { useNotification } from "@kyvg/vue3-notification";
 const { notify } = useNotification();
@@ -16,6 +17,38 @@ export const useAuthStore = defineStore({
         returnUrl: null
     }),
     actions: {
+        async new_login(email, password) {
+            axios.post('http://127.0.0.1:8000/auth/api/login/', 
+                {
+                    email: email,
+                    password: password
+                },
+                { headers: {
+                    'Content-Type': "application/json",
+                }}
+            )
+                .then((res) => {
+                    if (res.status === 200) {
+                        console.log("new login ok");
+                        this.email = res.data.email;
+                        this.access_token = res.data.access_token;
+                        this.refresh_token = res.data.refresh_token;
+                        this.first_name = res.data.first_name;
+                        this.last_name = res.data.last_name;
+                        localStorage.setItem('email', JSON.stringify(res.data.email));
+                        localStorage.setItem('access_token', JSON.stringify(res.data.access_token));
+                        localStorage.setItem('refresh_token', JSON.stringify(res.data.refresh_token));
+                        localStorage.setItem('first_name', JSON.stringify(res.data.first_name));
+                        localStorage.setItem('last_name', JSON.stringify(res.data.last_name));
+                        router.push(this.returnUrl || '/')
+                    } else {
+                        console.log("new login not 200:", res.status);
+                    }
+                })
+                .catch((e) => {
+                    console.log("new login error:", e.message);
+                })
+        },
         async login(email, password) {
             console.log('[auth.store.js] login called.')
             const res = await api.post('auth/api/login/', { email: email, password: password })

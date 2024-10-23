@@ -347,6 +347,15 @@ api and rouer and auth store need full revision
     // mount also creates a wrapper for vue component along with any chld component
     // shallowMount is better for testing individual components
 
-37. trying to add bookmarks to store
+37. trying to add bookmarks to store (done)
+
+38. trying a new api config
+    list of changes:
+    auth store
+
+    api_v3 --> new one trying out (new api is not working)
+    old somewhat stable api is now api_v1
+
+    (need to figure out the flow) store -> api -> components ?
 
 eslint.config.js not working

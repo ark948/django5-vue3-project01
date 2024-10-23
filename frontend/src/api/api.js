@@ -13,6 +13,16 @@ const api = axios.create({
     headers: {'Authorization': localStorage.getItem('access_token') ? `Bearer ${token}` : null}
 });
 
+// in request:
+//      if token existsed
+//      check for exp
+//      if exp
+//      send refresh request
+//      if fail -> logout
+//      if ok -> add to store, and request
+
+// in response:
+
 api.interceptors.request.use(async req => {
     console.log("[api.js] ----> Intercept request.");
     const authStore = useAuthStore();

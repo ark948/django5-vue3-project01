@@ -15,7 +15,7 @@
         const authStore = useAuthStore();
         const { email, password } = values;
         
-        return authStore.login(email, password)
+        return authStore.new_login(email, password)
             .catch(error => console.log('[Login_v4.vue] Error: ', error))
     }
 

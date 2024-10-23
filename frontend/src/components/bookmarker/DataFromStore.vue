@@ -17,8 +17,8 @@ const items = ref();
 <template>
     <div class="container">
         list:
-        <div v-for="item in items" :key="item.id">
-            <p>item: {{ item.id }} - {{ item.title }} - {{ item.url }} - {{ item.category_id }}</p>
+        <div v-for="item in items" :key="item.count">
+            <p>item: {{ item.count }} - {{ item.title }} - {{ item.url }} - {{ item.category_id }}</p>
         </div>
         <div class="nav-container">
             <p><RouterLink to="/">Home</RouterLink></p>
