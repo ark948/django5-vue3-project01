@@ -359,4 +359,6 @@ api and rouer and auth store need full revision
     (need to figure out the flow) store -> api -> components ?
     problem was fixed. by using the correct form of authorization header (Bearer)
 
+39. using primevue modal component for BmkPage.vue, (later improve this by using pure vue stuff)
+
 eslint.config.js not working

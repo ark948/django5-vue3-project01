@@ -6,6 +6,7 @@ export const useBookmarksStore = defineStore({
     id: 'bookmarks',
     state: () => ({
         bookmarks_list: [],
+        categories_list: [],
         access_token: JSON.parse(localStorage.getItem('access_token')),
     }),
     actions: {
@@ -59,22 +60,32 @@ export const useBookmarksStore = defineStore({
             }
         },
 
-        async add_item(title, url, category_id, icon) {
-            api.post('bookmarker/api/no-paginate/', {title: title, url: url, category_id: category_id, icon: icon}, {headers: {Authorization: this.access_token}})
+        async add_item(title, url, category_id) {
+            console.log("Running add_item", title, url, category_id);
+            await api.post('bookmarker/api/no-paginate/', {title: title, url: url, category_id: category_id}, {headers: {
+                Authorization: this.access_token ? 
+                `Bearer ${this.access_token}` : 
+                `Bearer ${JSON.parse(localStorage.getItem('access_token'))}`
+            }})
                 .then((response) => {
+                    console.log("Response received");
                     if (response.status === 201) {
-                        console.log("new item.");
+                        console.log("new item added.");
                     } else {
                         console.log("new item not 201");
                     }
                 })
                 .catch((e) => {
-                    console.log("error in insertion: ", e.message);
+                    console.log("error in insertion:", e.message);
                 })
         },
         
         async get_item(id) {
-            api.get(`bookmarker/api/${id}`, {headers: {Authorization: this.access_token}})
+            api.get(`bookmarker/api/${id}`, {headers: {
+                Authorization: this.access_token ? 
+                `Bearer ${this.access_token}` : 
+                `Bearer ${JSON.parse(localStorage.getItem('access_token'))}`
+            }})
                 .then((response) => {
                     if (response.status === 200) {
                         return response.data
@@ -88,7 +99,11 @@ export const useBookmarksStore = defineStore({
         },
 
         async remove_item(id) {
-            api.delete(`bookmarker/api/${id}`, {headers: {Authorization: this.access_token}})
+            api.delete(`bookmarker/api/${id}`, {headers: {
+                Authorization: this.access_token ? 
+                `Bearer ${this.access_token}` : 
+                `Bearer ${JSON.parse(localStorage.getItem('access_token'))}`
+            }})
                 .then((response) => {
                     if (response.status === 204) {
                         console.log("item deleted.");
@@ -102,7 +117,11 @@ export const useBookmarksStore = defineStore({
         },
 
         async edit_item(id, new_title, new_url, new_category_id) {
-            api.put(`bookmarker/api/${id}/`, {title: new_title, url: new_url, category_id: new_category_id}, { headers: {Authorization: this.access_token}})
+            api.put(`bookmarker/api/${id}/`, {title: new_title, url: new_url, category_id: new_category_id}, { headers: {
+                Authorization: this.access_token ? 
+                `Bearer ${this.access_token}` : 
+                `Bearer ${JSON.parse(localStorage.getItem('access_token'))}`
+            }})
                 .then((response) => {
                     if (response.status === 200) {
                         console.log("Update successful.");
@@ -113,6 +132,25 @@ export const useBookmarksStore = defineStore({
                 .catch((e) => {
                     console.log("Error in update: ", e.message);
                 })
+        },
+        async get_categories() {
+            api.get('bookmarker/api/category-list/', { headers: {
+                Authorization: this.access_token ? 
+                `Bearer ${this.access_token}` : 
+                `Bearer ${JSON.parse(localStorage.getItem('access_token'))}`
+            }})
+            .then(response => {
+              if (response.status === 200) {
+                for (let i = 0; i < response.data.length; i++) {
+                  this.categories_list.push(response.data[i]);
+                }
+              } else {
+                console.log("Categories list NOT 200.", response.status);
+              }
+            })
+            .catch(error => {
+              console.log("Error", error.message);
+            })
         }
     }
 });

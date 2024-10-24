@@ -5,6 +5,7 @@ import { onMounted, ref } from 'vue';
 
 onMounted(() => {
     bookmarksStore.get_list();
+    bookmarksStore.get_categories();
     items.value = bookmarksStore.bookmarks_list;
 });
 
