@@ -17,7 +17,7 @@ export const useAuthStore = defineStore({
         returnUrl: null
     }),
     actions: {
-        async new_login(email, password) {
+        async new_login(email, password) { // NOT OK
             axios.post('http://127.0.0.1:8000/auth/api/login/', 
                 {
                     email: email,
@@ -40,7 +40,7 @@ export const useAuthStore = defineStore({
                         localStorage.setItem('refresh_token', JSON.stringify(res.data.refresh_token));
                         localStorage.setItem('first_name', JSON.stringify(res.data.first_name));
                         localStorage.setItem('last_name', JSON.stringify(res.data.last_name));
-                        router.push(this.returnUrl || '/')
+                        return 200;
                     } else {
                         console.log("new login not 200:", res.status);
                     }
@@ -80,6 +80,7 @@ export const useAuthStore = defineStore({
                     title: 'ورود موفق',
                     text: 'با موفقیت وارد سایت شدید. خوش آمدید.'
                 });
+                return 200;
             } else {
                 console.log('[auth.store.js] res status NOT 200', res.status);
             }

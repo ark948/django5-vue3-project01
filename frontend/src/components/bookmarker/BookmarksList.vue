@@ -88,8 +88,11 @@ const forceRerender = () => {
 };
 
 
+// manual auth header added
 function get_categories() {
-  api.get('bookmarker/api/category-list/')
+  const authStore = useAuthStore();
+  const authStr = `Bearer ${authStore.access_token}`;
+  api.get('bookmarker/api/category-list/', { headers: { Authorization: authStr}})
     .then(response => {
       if (response.status === 200) {
         for (let i = 0; i < response.data.length; i++) {

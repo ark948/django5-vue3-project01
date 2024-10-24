@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import api from "@/api/api";
+import { useAuthStore } from "./auth.store";
 
 export const useBookmarksStore = defineStore({
     id: 'bookmarks',
@@ -9,8 +10,18 @@ export const useBookmarksStore = defineStore({
     }),
     actions: {
         get_list() {
-            console.log("TOKEN --> ", this.access_token);
-            api.get('bookmarker/api/no-paginate/', { headers: { Authorization: this.access_token }})
+            if (this.access_token == "" || this.access_token == null) {
+                const authStore = useAuthStore();
+                if (authStore.access_token) {
+                    this.access_token = authStore.access_token;
+                } else {
+                    console.log("token not found");
+                }
+            }
+            try {
+                api.get('bookmarker/api/no-paginate/', { headers: {
+                    Authorization: this.access_token ? `Bearer ${this.access_token}` : `Bearer ${JSON.parse(localStorage.getItem('access_token'))}`
+                }})
                 .then((response) => {
                     if (response.status === 200) {
                         let count = 1;
@@ -23,12 +34,29 @@ export const useBookmarksStore = defineStore({
                         console.log('list - not 200', response.status);
                     };
                 })
-                .catch(e => {
-                    console.log("[Bookmarks Store ERROR]", e.message);
+            } catch (e) {
+                console.log("Retrying...");
+                api.get('bookmarker/api/no-paginate/', { headers: {
+                    Authorization: this.access_token ? `Bearer ${this.access_token}` : `Bearer ${JSON.parse(localStorage.getItem('access_token'))}`
+                }})
+                .then((response) => {
+                    if (response.status === 200) {
+                        let count = 1;
+                        for (let i =0; i < response.data.length; i++) {
+                            response.data[i].count = count;
+                            this.bookmarks_list[i] = response.data[i];
+                            count++;
+                        }
+                    } else {
+                        console.log('list - not 200', response.status);
+                    };
                 })
-                .finally(() => {
-                    console.log("Total: -> ", this.bookmarks_list.length);
-                });
+                .catch((e) => {
+                    console.log("Another error.", e.message);
+                })
+            } finally {
+                console.log("Total -->: ", this.bookmarks_list.length);
+            }
         },
 
         async add_item(title, url, category_id, icon) {

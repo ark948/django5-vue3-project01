@@ -10,12 +10,12 @@
         password: Yup.string().required('Password is required.')
     });
 
-    function onSubmit(values) {
+    async function onSubmit(values) {
         console.log('[Login_v4.vue] onSubmt called.')
         const authStore = useAuthStore();
         const { email, password } = values;
         
-        return authStore.new_login(email, password)
+        await authStore.login(email, password)
             .catch(error => console.log('[Login_v4.vue] Error: ', error))
     }
 

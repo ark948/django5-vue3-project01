@@ -13,7 +13,7 @@ import NotFound from "@/views/public/NotFound.vue";
 import ForgotPassword from "@/views/public/ForgotPassword.vue";
 import PasswordResetConfirm from "@/components/auth/password_reset/PasswordResetConfirm.vue";
 import GetData from "@/components/GetData.vue";
-import DataFromStore from "@/components/bookmarker/DataFromStore.vue";
+import BmkPage from "@/views/protected/BmkPage.vue";
 
 function removeQueryParams(to) {
     if (Object.keys(to.query).length)
@@ -41,7 +41,7 @@ const routes = [
     { path: '/forgot-password', component: ForgotPassword, nam: 'forgot_password' },
     { path: '/reset-password/:uidb64/:token/', component: PasswordResetConfirm, name: 'reset_password' },
     { path: '/get-test-data', component: GetData, name: 'get_test_data', },
-    { path: '/bmk', component: DataFromStore, name: 'bmk' },
+    { path: '/bmk', component: BmkPage, name: 'bmk' },
     
     // { path: '/bookmarks-list-v2', component: BookmarksListV2, name: 'bookmarksv2' },
 
